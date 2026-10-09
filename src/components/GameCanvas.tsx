@@ -8,7 +8,7 @@ type Props = { config: GameConfig; hud: GameHud; onHudChange: (hud: GameHud) => 
 type Projectile = { graphic: Graphics; velocityX: number; velocityY: number; remainingLife: number; owner: 'player' | 'enemy' }
 
 const PLAYER_RADIUS = 26
-const ISLAND_RADIUS = window.matchMedia('(pointer: coarse)').matches ? 56 : 88
+const ISLAND_RADIUS = window.matchMedia('(pointer: coarse)').matches ? 68 : 88
 const PLAYER_SPEED = 220
 const TURN_SPEED = 2.8
 const PROJECTILE_SPEED = 620
