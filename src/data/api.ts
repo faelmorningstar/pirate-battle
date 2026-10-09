@@ -1,1 +1,19 @@
-aW1wb3J0IGF4aW9zIGZyb20gJ2F4aW9zJwppbXBvcnQgdHlwZSB7IE1hdGNoUmVjb3JkLCBQYWdlLCBSYW5raW5nRW50cnkgfSBmcm9tICcuL2NvbnRyYWN0cycKCmNvbnN0IGNsaWVudCA9IGF4aW9zLmNyZWF0ZSh7IGJhc2VVUkw6ICcvYXBpJywgdGltZW91dDogNF8wMDAgfSkKCmV4cG9ydCBhc3luYyBmdW5jdGlvbiBnZXRSYW5raW5nKHBhZ2UgPSAxKSB7CiAgY29uc3QgcmVzcG9uc2UgPSBhd2FpdCBjbGllbnQuZ2V0PFBhZ2U8UmFua2luZ0VudHJ5Pj4oJy9yYW5raW5nJywgeyBwYXJhbXM6IHsgcGFnZSB9IH0pCiAgcmV0dXJuIHJlc3BvbnNlLmRhdGEKfQoKZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIGdldE1hdGNoSGlzdG9yeShwbGF5ZXJJZDogc3RyaW5nLCBwYWdlID0gMSkgewogIGNvbnN0IHJlc3BvbnNlID0gYXdhaXQgY2xpZW50LmdldDxQYWdlPE1hdGNoUmVjb3JkPj4oJy9tYXRjaGVzJywgeyBwYXJhbXM6IHsgcGxheWVySWQsIHBhZ2UgfSB9KQogIHJldHVybiByZXNwb25zZS5kYXRhCn0KCmV4cG9ydCBhc3luYyBmdW5jdGlvbiByZWdpc3Rlck1hdGNoKHJlY29yZDogTWF0Y2hSZWNvcmQpIHsKICBjb25zdCByZXNwb25zZSA9IGF3YWl0IGNsaWVudC5wb3N0PE1hdGNoUmVjb3JkPignL21hdGNoZXMnLCByZWNvcmQpCiAgcmV0dXJuIHJlc3BvbnNlLmRhdGEKfQo=
+import axios from 'axios'
+import type { MatchRecord, Page, RankingEntry } from './contracts'
+
+const client = axios.create({ baseURL: '/api', timeout: 4_000 })
+
+export async function getRanking(page = 1) {
+  const response = await client.get<Page<RankingEntry>>('/ranking', { params: { page } })
+  return response.data
+}
+
+export async function getMatchHistory(playerId: string, page = 1) {
+  const response = await client.get<Page<MatchRecord>>('/matches', { params: { playerId, page } })
+  return response.data
+}
+
+export async function registerMatch(record: MatchRecord) {
+  const response = await client.post<MatchRecord>('/matches', record)
+  return response.data
+}
