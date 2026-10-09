@@ -1,1 +1,17 @@
-aW1wb3J0IHsgU3RyaWN0TW9kZSB9IGZyb20gJ3JlYWN0JwppbXBvcnQgeyBRdWVyeUNsaWVudCwgUXVlcnlDbGllbnRQcm92aWRlciB9IGZyb20gJ0B0YW5zdGFjay9yZWFjdC1xdWVyeScKaW1wb3J0IHsgY3JlYXRlUm9vdCB9IGZyb20gJ3JlYWN0LWRvbS9jbGllbnQnCmltcG9ydCAnLi9pbmRleC5jc3MnCmltcG9ydCBBcHAgZnJvbSAnLi9BcHAudHN4JwoKY29uc3QgcXVlcnlDbGllbnQgPSBuZXcgUXVlcnlDbGllbnQoeyBkZWZhdWx0T3B0aW9uczogeyBxdWVyaWVzOiB7IHJldHJ5OiAxLCBzdGFsZVRpbWU6IDEwXzAwMCB9IH0gfSkKCmFzeW5jIGZ1bmN0aW9uIGJvb3RzdHJhcCgpIHsKICBjb25zdCB7IHdvcmtlciB9ID0gYXdhaXQgaW1wb3J0KCcuL21vY2tzL2Jyb3dzZXInKQogIGF3YWl0IHdvcmtlci5zdGFydCh7IG9uVW5oYW5kbGVkRnJhbWU6ICdieXBhc3MnLCBzZXJ2aWNlV29ya2VyOiB7IHVybDogJy9tb2NrU2VydmljZVdvcmtlci5qcycgfSB9KQogIGNyZWF0ZVJvb3QoZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3Jvb3QnKSEpLnJlbmRlcigKICAgIDxTdHJpY3RNb2RlPjxRdWVyeUNsaWVudFByb3ZpZGVyIGNsaWVudD17cXVlcnlDbGllbnR9PjxBcHAgLz48L1F1ZXJ5Q2xpZW50UHJvdmlkZXI+PC9TdHJpY3RNb2RlPiwKICApCn0KCnZvaWQgYm9vdHN0cmFwKCkK
+import { StrictMode } from 'react'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { createRoot } from 'react-dom/client'
+import './index.css'
+import App from './App.tsx'
+
+const queryClient = new QueryClient({ defaultOptions: { queries: { retry: 1, staleTime: 10_000 } } })
+
+async function bootstrap() {
+  const { worker } = await import('./mocks/browser')
+  await worker.start({ onUnhandledFrame: 'bypass', serviceWorker: { url: '/mockServiceWorker.js' } })
+  createRoot(document.getElementById('root')!).render(
+    <StrictMode><QueryClientProvider client={queryClient}><App /></QueryClientProvider></StrictMode>,
+  )
+}
+
+void bootstrap()
