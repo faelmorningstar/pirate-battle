@@ -1,1 +1,4 @@
-aW1wb3J0IHsgc2V0dXBXb3JrZXIgfSBmcm9tICdtc3cvYnJvd3NlcicKaW1wb3J0IHsgaGFuZGxlcnMgfSBmcm9tICcuL2hhbmRsZXJzJwoKZXhwb3J0IGNvbnN0IHdvcmtlciA9IHNldHVwV29ya2VyKC4uLmhhbmRsZXJzKQo=
+import { setupWorker } from 'msw/browser'
+import { handlers } from './handlers'
+
+export const worker = setupWorker(...handlers)
