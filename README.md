@@ -1,1 +1,112 @@
-IyBQaXJhdGUgQmF0dGxlCgpBIHRvcC1kb3duIHNpbmdsZS1wbGF5ZXIgbmF2YWwgc2hvb3RlciBidWlsdCBmb3IgdGhlIEp1bmdsZSBHYW1pbmcgRnJvbnRlbmQgR2FtZSBEZXZlbG9wZXIgY2hhbGxlbmdlLgoKVGhlIHBsYXllciBzYWlscyBhcm91bmQgYW4gaXNsYW5kLCB1c2VzIGZyb250IGFuZCBicm9hZHNpZGUgY2Fubm9ucywgZmlnaHRzIHR3byBlbmVteSBiZWhhdmlvdXJzLCBhbmQgcmVjb3JkcyBjb21wbGV0ZWQgc2Vzc2lvbnMgaW4gYSBtb2NrZWQgcmFua2luZyBhbmQgbWF0Y2ggaGlzdG9yeS4KCiMjIFN0YWNrCgotIFJlYWN0IDE5ICsgVHlwZVNjcmlwdCAoc3RyaWN0IG1vZGUpIGZvciBtZW51cywgSFVELCBmb3JtcyBhbmQgZGlhbG9ncy4KLSBQaXhpSlMgOCBmb3IgdGhlIGNvbWJhdCBhcmVuYSwgc2hpcHMsIHByb2plY3RpbGVzLCBoZWFsdGggYmFycyBhbmQgZWZmZWN0cy4KLSBBeGlvcyArIFRhblN0YWNrIFF1ZXJ5IGZvciByYW5raW5nIGFuZCBtYXRjaC1oaXN0b3J5IGRhdGEuCi0gTVNXIGZvciBicm93c2VyLXNpZGUgUkVTVCBBUEkgbW9ja3MgdGhhdCBhbHNvIHdvcmsgaW4gYSBwcm9kdWN0aW9uIGJ1aWxkLgotIFBsYXl3cmlnaHQgZm9yIEUyRSBjb3ZlcmFnZS4KLSBWaXRlIGZvciBkZXZlbG9wbWVudCBhbmQgcHJvZHVjdGlvbiBidWlsZHMuCgojIyBSdW4gbG9jYWxseQoKUmVxdWlyZW1lbnRzOiBOb2RlLmpzIDIwKyBhbmQgbnBtLgoKYGBgYmFzaApucG0gaW5zdGFsbApucG0gcnVuIGRldgpgYGAKCk9wZW4gdGhlIFVSTCBwcmludGVkIGJ5IFZpdGUuIE5vIGVudmlyb25tZW50IHZhcmlhYmxlcyBhcmUgcmVxdWlyZWQuCgojIyBDb21tYW5kcwoKYGBgYmFzaApucG0gcnVuIGRldiAgICAgICAjIGxvY2FsIGRldmVsb3BtZW50IHNlcnZlcgpucG0gcnVuIGJ1aWxkICAgICAjIFR5cGVTY3JpcHQgY2hlY2sgYW5kIHByb2R1Y3Rpb24gYnVpbGQKbnBtIHJ1biBwcmV2aWV3ICAgIyBzZXJ2ZSB0aGUgcHJvZHVjdGlvbiBidWlsZCBsb2NhbGx5Cm5wbSBydW4gbGludCAgICAgICMgT3hsaW50Cm5wbSBydW4gdGVzdDplMmUgICMgUGxheXdyaWdodCB0ZXN0cwpgYGAKCkJlZm9yZSB0aGUgZmlyc3QgRTJFIHJ1biwgaW5zdGFsbCB0aGUgYnJvd3NlcjoKCmBgYGJhc2gKbnB4IHBsYXl3cmlnaHQgaW5zdGFsbCBjaHJvbWl1bQpgYGAKCiMjIENvbnRyb2xzCgp8IEFjdGlvbiB8IEtleWJvYXJkIHwgVG91Y2ggfAp8IC0tLSB8IC0tLSB8IC0tLSB8CnwgTW92ZSBmb3J3YXJkIHwgYFdgIHwgRm9yd2FyZCBidXR0b24gfAp8IFR1cm4gfCBgQWAgLyBgRGAgfCBMZWZ0IC8gcmlnaHQgYnV0dG9ucyB8CnwgRnJvbnQgY2Fubm9uIHwgYFNwYWNlYCB8IENlbnRyZSBmaXJlIGJ1dHRvbiB8CnwgUG9ydCBicm9hZHNpZGUgfCBgUWAgfCBgUWAgYnV0dG9uIHwKfCBTdGFyYm9hcmQgYnJvYWRzaWRlIHwgYEVgIHwgYEVgIGJ1dHRvbiB8CnwgUGF1c2UgLyByZXN1bWUgfCBgUGAgfCBQYXVzZSBidXR0b24gfAoKVG91Y2ggY29udHJvbHMgc3VwcG9ydCBzaW11bHRhbmVvdXMgaG9sZHMsIHNvIG1vdmVtZW50LCB0dXJuaW5nIGFuZCBhdHRhY2tzIGNhbiBiZSBjb21iaW5lZC4KCiMjIEdhbWVwbGF5CgotIENvbmZpZ3VyYWJsZSBzZXNzaW9uIGR1cmF0aW9uOiA2MOKAkzE4MCBzZWNvbmRzLgotIENvbmZpZ3VyYWJsZSBlbmVteSBzcGF3biBpbnRlcnZhbDogMeKAkzEyIHNlY29uZHMuCi0gT25lIGlzbGFuZCBibG9ja3Mgc2hpcHMgYW5kIHByb2plY3RpbGVzLgotIENoYXNlcjogcHVyc3VlcyB0aGUgcGxheWVyIGFuZCBkYW1hZ2VzIHRoZSBzaGlwIG9uIGNvbGxpc2lvbi4KLSBTaG9vdGVyOiBtb3ZlcyBpbnRvIHJhbmdlIGFuZCBmaXJlcyBhdCB0aGUgcGxheWVyLgotIEZyb250IGNhbm5vbiBmaXJlcyBvbmUgcHJvamVjdGlsZTsgZWFjaCBicm9hZHNpZGUgZmlyZXMgdGhyZWUgcGFyYWxsZWwgcHJvamVjdGlsZXMuCi0gRW5lbWllcyByZXF1aXJlIHR3byBoaXRzIGFuZCBhd2FyZCBvbmUgcG9pbnQgd2hlbiBkZXN0cm95ZWQuCi0gQSBzZXNzaW9uIGVuZHMgd2hlbiB0aW1lIHJlYWNoZXMgemVybyBvciBwbGF5ZXIgaGVhbHRoIHJlYWNoZXMgemVyby4KLSBUaGUgc2ltdWxhdGlvbiBwYXVzZXMgb24gYFBgLCB0aGUgUGF1c2UgYnV0dG9uLCBvciB3aGVuIHRoZSBicm93c2VyIHRhYiBiZWNvbWVzIGhpZGRlbi4KCiMjIE1vY2tlZCBSRVNUIEFQSQoKTVNXIGludGVyY2VwdHMgdGhlc2UgYnJvd3NlciByZXF1ZXN0czoKCnwgRW5kcG9pbnQgfCBQdXJwb3NlIHwKfCAtLS0gfCAtLS0gfAp8IGBHRVQgL2FwaS9yYW5raW5nP3BhZ2U9bmAgfCBQYWdlZCBzY29yZSByYW5raW5nIHwKfCBgR0VUIC9hcGkvbWF0Y2hlcz9wbGF5ZXJJZD0uLi4mcGFnZT1uYCB8IFBhZ2VkIG1hdGNoIGhpc3RvcnkgfAp8IGBQT1NUIC9hcGkvbWF0Y2hlc2AgfCBSZWdpc3RlcnMgYSBjb21wbGV0ZWQgc2Vzc2lvbiBpZGVtcG90ZW50bHkgYnkgbWF0Y2ggSUQgfAoKVGhlIG1lbnUgZXhwb3NlcyBhICoqTW9jayBuZXR3b3JrIHNjZW5hcmlvKiogc2VsZWN0b3IuIEl0IGlzIHBlcnNpc3RlZCBsb2NhbGx5IGFuZCByZWxvYWRzIHRoZSBhcHBsaWNhdGlvbiB0byBrZWVwIGJlaGF2aW91ciByZXByb2R1Y2libGUuCgp8IFNjZW5hcmlvIHwgRXhwZWN0ZWQgYmVoYXZpb3VyIHwKfCAtLS0gfCAtLS0gfAp8IGBub3JtYWxgIHwgRml4dHVyZXMgYW5kIG5ld2x5IGNvbXBsZXRlZCBtYXRjaGVzIGFyZSByZXR1cm5lZCB8CnwgYHNsb3dgIHwgTWF0Y2ggaGlzdG9yeSB3YWl0cyA5MDAgbXMgYmVmb3JlIHJlc3BvbmRpbmcgfAp8IGBlbXB0eWAgfCBSYW5raW5nIGFuZCBoaXN0b3J5IHJldHVybiBubyByZWNvcmRzIHwKfCBgcmFua2luZy1lcnJvcmAgfCBSYW5raW5nIHJldHVybnMgSFRUUCA1MDMgfAp8IGBoaXN0b3J5LWVycm9yYCB8IEhpc3RvcnkgcmV0dXJucyBIVFRQIDUwMyB8CgoqKlJlc2V0IG1vY2sgZGF0YSoqIGNsZWFycyBsb2NhbGx5IHN0b3JlZCBtYXRjaGVzIGFuZCByZXN0b3JlcyB0aGUgZml4dHVyZSBzZXQuCgojIyBBY2Nlc3NpYmlsaXR5IGFuZCByZXNwb25zaXZlIGJlaGF2aW91cgoKLSBTZW1hbnRpYyBidXR0b25zLCBsYWJlbHMsIHZpc2libGUgZm9jdXMgb3V0bGluZXMgYW5kIHN0YXR1cyBtZXNzYWdlcy4KLSBNZW51IHRhYnMgdXNlIHRhYiByb2xlcyBhbmQgc2VsZWN0ZWQgc3RhdGUuCi0gU2NvcmUsIGh1bGwsIHRpbWUgYW5kIHBhdXNlIHN0YXRlIGFyZSBwcmVzZW50ZWQgaW4gdGhlIEhUTUwgSFVEIGFzIHdlbGwgYXMgdmlzdWFsbHkgaW4gdGhlIGNhbnZhcy4KLSBUaGUgUGl4aSBjYW52YXMgcmVzaXplcyB3aXRoIGl0cyBjb250YWluZXIgYW5kIGNhcHMgZGV2aWNlIHJlc29sdXRpb24gYXQgMnguCi0gRGVza3RvcCBrZXlib2FyZCBhbmQgbW9iaWxlIHRvdWNoIGNvbnRyb2xzIGFyZSBib3RoIGF2YWlsYWJsZS4KCiMjIEFzc2V0cwoKVGhlIHNoaXAgdmlzdWFscyBhcmUgbG9hZGVkIGZyb20gdGhlIG9mZmljaWFsIFtKdW5nbGUgR2FtaW5nIGNoYWxsZW5nZSBhc3NldHNdKGh0dHBzOi8vZ2l0aHViLmNvbS9qdW5nbGVnYW1pbmcvZ2FtZS1kZXZlbG9wZXItY2hhbGxlbmdlKS4gQSBQaXhpSlMgc2hhcGUgZmFsbGJhY2sga2VlcHMgdGhlIGFyZW5hIHBsYXlhYmxlIGlmIGEgdmlzdWFsIGFzc2V0IGNhbm5vdCBsb2FkLgoKIyMgQXJjaGl0ZWN0dXJlIGFuZCBkZWNpc2lvbnMKClNlZSBbQVJDSElURUNUVVJFLm1kXSguL0FSQ0hJVEVDVFVSRS5tZCkgZm9yIHRoZSBSZWFjdC9QaXhpSlMgYm91bmRhcnksIHNpbXVsYXRpb24gbGlmZWN5Y2xlLCBjb2xsaXNpb24gcnVsZXMsIHBlcnNpc3RlbmNlIGFuZCBtb2NrZWQtZGF0YSBkZXNpZ24uCgojIyBLbm93biBsaW1pdGF0aW9ucwoKLSBUaGUgY3VycmVudCB0ZXN0IHN1aXRlIGNvdmVycyB0aGUgY3JpdGljYWwgc21va2UgZmxvd3M7IGl0IGlzIG5vdCB5ZXQgdGhlIGZ1bGwgcmVxdWVzdGVkIDEyLXNjZW5hcmlvIEUyRSBtYXRyaXggb3IgdmlzdWFsLXJlZ3Jlc3Npb24gc3VpdGUuCi0gUGxheXdyaWdodCB0cmFjZXMgYXJlIGdlbmVyYXRlZCBvbiBmYWlsdXJlOyBhIGNvbW1pdHRlZCBIVE1MIHRlc3QgcmVwb3J0IGlzIG5vdCBpbmNsdWRlZC4KLSBOZXR3b3JrIHNjZW5hcmlvcyBjb3ZlciBub3JtYWwsIHNsb3csIGVtcHR5IGFuZCByZWFkIGVycm9ycy4gVGltZW91dC1hZnRlci13cml0ZSBhbmQgcGVuZGluZy13cml0ZSByZWNvdmVyeSBhcmUgcGxhbm5lZCBuZXh0LgotIFBlcmZvcm1hbmNlIGV2aWRlbmNlIGlzIGRvY3VtZW50ZWQgdGhyb3VnaCBpbXBsZW1lbnRhdGlvbiBjaG9pY2VzLCBidXQgYSByZWNvcmRlZCB0aHJlZS1taW51dGUgcHJvZmlsaW5nIHJlcG9ydCBpcyBub3QgeWV0IGluY2x1ZGVkLgotIFNvdW5kIGFzc2V0cyBhcmUgYXZhaWxhYmxlIGJ1dCBub3QgeWV0IHdpcmVkIGludG8gdGhlIGdhbWUuCg==
+# Pirate Battle
+
+A top-down single-player naval shooter built for the Jungle Gaming Frontend Game Developer challenge.
+
+The player sails around an island, uses front and broadside cannons, fights two enemy behaviours, and records completed sessions in a mocked ranking and match history.
+
+## Stack
+
+- React 19 + TypeScript (strict mode) for menus, HUD, forms and dialogs.
+- PixiJS 8 for the combat arena, ships, projectiles, health bars and effects.
+- Axios + TanStack Query for ranking and match-history data.
+- MSW for browser-side REST API mocks that also work in a production build.
+- Playwright for E2E coverage.
+- Vite for development and production builds.
+
+## Run locally
+
+Requirements: Node.js 20+ and npm.
+
+```bash
+npm install
+npm run dev
+```
+
+Open the URL printed by Vite. No environment variables are required.
+
+## Commands
+
+```bash
+npm run dev       # local development server
+npm run build     # TypeScript check and production build
+npm run preview   # serve the production build locally
+npm run lint      # Oxlint
+npm run test:e2e  # Playwright tests
+```
+
+Before the first E2E run, install the browser:
+
+```bash
+npx playwright install chromium
+```
+
+## Controls
+
+| Action | Keyboard | Touch |
+| --- | --- | --- |
+| Move forward | `W` | Forward button |
+| Turn | `A` / `D` | Left / right buttons |
+| Front cannon | `Space` | Centre fire button |
+| Port broadside | `Q` | `Q` button |
+| Starboard broadside | `E` | `E` button |
+| Pause / resume | `P` | Pause button |
+
+Touch controls support simultaneous holds, so movement, turning and attacks can be combined.
+
+## Gameplay
+
+- Configurable session duration: 60–180 seconds.
+- Configurable enemy spawn interval: 1–12 seconds.
+- One island blocks ships and projectiles.
+- Chaser: pursues the player and damages the ship on collision.
+- Shooter: moves into range and fires at the player.
+- Front cannon fires one projectile; each broadside fires three parallel projectiles.
+- Enemies require two hits and award one point when destroyed.
+- A session ends when time reaches zero or player health reaches zero.
+- The simulation pauses on `P`, the Pause button, or when the browser tab becomes hidden.
+
+## Mocked REST API
+
+MSW intercepts these browser requests:
+
+| Endpoint | Purpose |
+| --- | --- |
+| `GET /api/ranking?page=n` | Paged score ranking |
+| `GET /api/matches?playerId=...&page=n` | Paged match history |
+| `POST /api/matches` | Registers a completed session idempotently by match ID |
+
+The menu exposes a **Mock network scenario** selector. It is persisted locally and reloads the application to keep behaviour reproducible.
+
+| Scenario | Expected behaviour |
+| --- | --- |
+| `normal` | Fixtures and newly completed matches are returned |
+| `slow` | Match history waits 900 ms before responding |
+| `empty` | Ranking and history return no records |
+| `ranking-error` | Ranking returns HTTP 503 |
+| `history-error` | History returns HTTP 503 |
+
+**Reset mock data** clears locally stored matches and restores the fixture set.
+
+## Accessibility and responsive behaviour
+
+- Semantic buttons, labels, visible focus outlines and status messages.
+- Menu tabs use tab roles and selected state.
+- Score, hull, time and pause state are presented in the HTML HUD as well as visually in the canvas.
+- The Pixi canvas resizes with its container and caps device resolution at 2x.
+- Desktop keyboard and mobile touch controls are both available.
+
+## Assets
+
+The ship visuals are loaded from the official [Jungle Gaming challenge assets](https://github.com/junglegaming/game-developer-challenge). A PixiJS shape fallback keeps the arena playable if a visual asset cannot load.
+
+## Architecture and decisions
+
+See [ARCHITECTURE.md](./ARCHITECTURE.md) for the React/PixiJS boundary, simulation lifecycle, collision rules, persistence and mocked-data design.
+
+## Known limitations
+
+- The current test suite covers the critical smoke flows; it is not yet the full requested 12-scenario E2E matrix or visual-regression suite.
+- Playwright traces are generated on failure; a committed HTML test report is not included.
+- Network scenarios cover normal, slow, empty and read errors. Timeout-after-write and pending-write recovery are planned next.
+- Performance evidence is documented through implementation choices, but a recorded three-minute profiling report is not yet included.
+- Sound assets are available but not yet wired into the game.
