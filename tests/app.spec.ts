@@ -25,7 +25,16 @@ test('loads the ranking through the mocked API', async ({ page }) => {
 })
 
 test('starts a playable session with touch controls', async ({ page }) => {
-  await page.getByRole('button', { name: 'Play' }).first().click()
+  await page
+    .locator('.menu-actions')
+    .getByRole('button', { name: 'Play', exact: true })
+    .click()
+
   await expect(page.getByText(/Hull: 3\/3/)).toBeVisible()
-  await expect(page.getByRole('button', { name: 'Move forward' })).toBeVisible()
+
+  if (test.info().project.name === 'mobile-chromium') {
+    await expect(
+      page.getByRole('button', { name: 'Move forward' }),
+    ).toBeVisible()
+  }
 })

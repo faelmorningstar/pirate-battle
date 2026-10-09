@@ -24,6 +24,8 @@ const PLAYER_SHIP_ASSET = 'https://raw.githubusercontent.com/junglegaming/game-d
 const CHASER_SHIP_ASSET = 'https://raw.githubusercontent.com/junglegaming/game-developer-challenge/main/assets/png/default/ships/ship_5.png'
 const SHOOTER_SHIP_ASSET = 'https://raw.githubusercontent.com/junglegaming/game-developer-challenge/main/assets/png/default/ships/ship_20.png'
 
+const ASSET_LOAD_TIMEOUT_MS = 2500
+
 function distanceSquared(aX: number, aY: number, bX: number, bY: number) {
   const x = aX - bX
   const y = aY - bY
@@ -68,6 +70,7 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
     if (!host) return
     const canvasHost = host
     const app = new Application()
+    let initialized = false
     const pressed = new Set<string>()
     const touchPressed = touchPressedRef.current
     const isPressed = (code: string) => pressed.has(code) || touchPressed.has(code)
@@ -126,6 +129,8 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
 
     async function mount() {
       await app.init({ background: '#0b5672', resizeTo: canvasHost, antialias: true, resolution: Math.min(window.devicePixelRatio, 2) })
+      initialized = true
+
       if (!active) { app.destroy(true); return }
       canvasHost.appendChild(app.canvas)
       window.addEventListener('keydown', onKeyDown)
@@ -135,12 +140,26 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
       let playerTexture: Texture | undefined
       let chaserTexture: Texture | undefined
       let shooterTexture: Texture | undefined
-      try {
-        ;[playerTexture, chaserTexture, shooterTexture] = await Promise.all([Assets.load<Texture>(PLAYER_SHIP_ASSET), Assets.load<Texture>(CHASER_SHIP_ASSET), Assets.load<Texture>(SHOOTER_SHIP_ASSET)])
-        if (active) setAssetStatus('ready')
-      } catch {
-        if (active) setAssetStatus('fallback')
-      }
+     try {
+  const textures = await Promise.race([
+    Promise.all([
+      Assets.load<Texture>(PLAYER_SHIP_ASSET),
+      Assets.load<Texture>(CHASER_SHIP_ASSET),
+      Assets.load<Texture>(SHOOTER_SHIP_ASSET),
+    ]),
+    new Promise<never>((_, reject) => {
+      window.setTimeout(
+        () => reject(new Error('Ship assets took too long to load')),
+        ASSET_LOAD_TIMEOUT_MS,
+      )
+    }),
+  ])
+
+  ;[playerTexture, chaserTexture, shooterTexture] = textures
+  if (active) setAssetStatus('ready')
+} catch {
+  if (active) setAssetStatus('fallback')
+}
       const island = new Graphics().circle(0, 0, ISLAND_RADIUS).fill(0x79a64d).stroke({ color: 0x315923, width: 9 })
       islandX = app.screen.width * 0.52
       islandY = app.screen.height * 0.45
@@ -367,7 +386,7 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
       window.removeEventListener('keyup', onKeyUp)
       document.removeEventListener('visibilitychange', onVisibilityChange)
       touchPressed.clear()
-      app.destroy(true)
+      if (initialized) app.destroy(true)
     }
   }, [config, onHudChange, onEnd])
 
