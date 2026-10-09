@@ -1,1 +1,381 @@
-aW1wb3J0IHsgdXNlRWZmZWN0LCB1c2VSZWYsIHVzZVN0YXRlLCB0eXBlIFBvaW50ZXJFdmVudCB9IGZyb20gJ3JlYWN0JwppbXBvcnQgeyBBcHBsaWNhdGlvbiwgQXNzZXRzLCBHcmFwaGljcywgU3ByaXRlLCBUZXh0dXJlIH0gZnJvbSAncGl4aS5qcycKaW1wb3J0IHR5cGUgeyBHYW1lQ29uZmlnIH0gZnJvbSAnLi4vZ2FtZS9jb25maWcnCgpleHBvcnQgdHlwZSBHYW1lSHVkID0geyBoZWFsdGg6IG51bWJlcjsgc2NvcmU6IG51bWJlcjsgdGltZUxlZnQ6IG51bWJlcjsgcGF1c2VkOiBib29sZWFuIH0KZXhwb3J0IHR5cGUgR2FtZVJlc3VsdCA9IHsgc2NvcmU6IG51bWJlcjsgZHVyYXRpb25TZWNvbmRzOiBudW1iZXI7IHJlYXNvbjogJ3RpbWUnIHwgJ2RlYXRoJyB9CnR5cGUgUHJvcHMgPSB7IGNvbmZpZzogR2FtZUNvbmZpZzsgaHVkOiBHYW1lSHVkOyBvbkh1ZENoYW5nZTogKGh1ZDogR2FtZUh1ZCkgPT4gdm9pZDsgb25FbmQ6IChyZXN1bHQ6IEdhbWVSZXN1bHQpID0+IHZvaWQ7IG9uRXhpdDogKCkgPT4gdm9pZCB9CnR5cGUgUHJvamVjdGlsZSA9IHsgZ3JhcGhpYzogR3JhcGhpY3M7IHZlbG9jaXR5WDogbnVtYmVyOyB2ZWxvY2l0eVk6IG51bWJlcjsgcmVtYWluaW5nTGlmZTogbnVtYmVyOyBvd25lcjogJ3BsYXllcicgfCAnZW5lbXknIH0KCmNvbnN0IFBMQVlFUl9SQURJVVMgPSAyNgpjb25zdCBJU0xBTkRfUkFESVVTID0gODgKY29uc3QgUExBWUVSX1NQRUVEID0gMjIwCmNvbnN0IFRVUk5fU1BFRUQgPSAyLjgKY29uc3QgUFJPSkVDVElMRV9TUEVFRCA9IDYyMApjb25zdCBGUk9OVF9GSVJFX0NPT0xET1dOID0gMC4zNQpjb25zdCBCUk9BRFNJREVfRklSRV9DT09MRE9XTiA9IDAuOApjb25zdCBDSEFTRVJfUkFESVVTID0gMjUKY29uc3QgQ0hBU0VSX1NQRUVEID0gMTE4CmNvbnN0IFNIT09URVJfU1BFRUQgPSA5Mgpjb25zdCBTSE9PVEVSX0FUVEFDS19SQU5HRSA9IDMwMApjb25zdCBTSE9PVEVSX0ZJUkVfQ09PTERPV04gPSAxLjM1CmNvbnN0IEVORU1ZX01BWF9IRUFMVEggPSAyCmNvbnN0IFBMQVlFUl9TSElQX0FTU0VUID0gJ2h0dHBzOi8vcmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbS9qdW5nbGVnYW1pbmcvZ2FtZS1kZXZlbG9wZXItY2hhbGxlbmdlL21haW4vYXNzZXRzL3BuZy9kZWZhdWx0L3NoaXBzL3NoaXBfMTIucG5nJwpjb25zdCBDSEFTRVJfU0hJUF9BU1NFVCA9ICdodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20vanVuZ2xlZ2FtaW5nL2dhbWUtZGV2ZWxvcGVyLWNoYWxsZW5nZS9tYWluL2Fzc2V0cy9wbmcvZGVmYXVsdC9zaGlwcy9zaGlwXzUucG5nJwpjb25zdCBTSE9PVEVSX1NISVBfQVNTRVQgPSAnaHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2p1bmdsZWdhbWluZy9nYW1lLWRldmVsb3Blci1jaGFsbGVuZ2UvbWFpbi9hc3NldHMvcG5nL2RlZmF1bHQvc2hpcHMvc2hpcF8yMC5wbmcnCgpmdW5jdGlvbiBkaXN0YW5jZVNxdWFyZWQoYVg6IG51bWJlciwgYVk6IG51bWJlciwgYlg6IG51bWJlciwgYlk6IG51bWJlcikgewogIGNvbnN0IHggPSBhWCAtIGJYCiAgY29uc3QgeSA9IGFZIC0gYlkKICByZXR1cm4geCAqIHggKyB5ICogeQp9CgpmdW5jdGlvbiBjcmVhdGVTaGlwKGNvbG9yOiBudW1iZXIsIHRleHR1cmU/OiBUZXh0dXJlKSB7CiAgY29uc3Qgc2hpcCA9IG5ldyBHcmFwaGljcygpCiAgaWYgKHRleHR1cmUpIHsKICAgIGNvbnN0IHNwcml0ZSA9IG5ldyBTcHJpdGUodGV4dHVyZSkKICAgIHNwcml0ZS5hbmNob3Iuc2V0KDAuNSkKICAgIHNwcml0ZS53aWR0aCA9IDU4CiAgICBzcHJpdGUuaGVpZ2h0ID0gNzQKICAgIHNoaXAuYWRkQ2hpbGQoc3ByaXRlKQogICAgcmV0dXJuIHNoaXAKICB9CiAgc2hpcC5wb2x5KFswLCAtMzQsIDI1LCAyNywgMTAsIDM0LCAtMTAsIDM0LCAtMjUsIDI3XSkuZmlsbChjb2xvcikuc3Ryb2tlKHsgY29sb3I6IDB4M2EyNDFiLCB3aWR0aDogNSB9KQogIHNoaXAucmVjdCgtNCwgLTE4LCA4LCAzNCkuZmlsbCgweDVjMzgyNikKICBzaGlwLnBvbHkoWzIsIC0xNywgMiwgMTAsIDIzLCAxXSkuZmlsbCgweGYyZTRiYykuc3Ryb2tlKHsgY29sb3I6IDB4NmQ0ZDM3LCB3aWR0aDogMiB9KQogIHJldHVybiBzaGlwCn0KCmZ1bmN0aW9uIGNyZWF0ZUhlYWx0aEJhcigpIHsgcmV0dXJuIG5ldyBHcmFwaGljcygpIH0KZnVuY3Rpb24gZHJhd0hlYWx0aEJhcihiYXI6IEdyYXBoaWNzLCB4OiBudW1iZXIsIHk6IG51bWJlciwgaGVhbHRoOiBudW1iZXIsIG1heEhlYWx0aDogbnVtYmVyKSB7CiAgYmFyLmNsZWFyKCkucm91bmRSZWN0KC0yNCwgLTQsIDQ4LCA4LCAzKS5maWxsKDB4MmIyMDIwKQogIGJhci5yb3VuZFJlY3QoLTIyLCAtMiwgTWF0aC5tYXgoMCwgNDQgKiBoZWFsdGggLyBtYXhIZWFsdGgpLCA0LCAyKS5maWxsKGhlYWx0aCAvIG1heEhlYWx0aCA+IDAuNSA/IDB4NzVkMTZlIDogMHhlODY5NTApCiAgYmFyLnBvc2l0aW9uLnNldCh4LCB5IC0gNDgpCn0KCmZ1bmN0aW9uIG5vcm1hbGl6ZUFuZ2xlKGFuZ2xlOiBudW1iZXIpIHsKICByZXR1cm4gTWF0aC5hdGFuMihNYXRoLnNpbihhbmdsZSksIE1hdGguY29zKGFuZ2xlKSkKfQoKZXhwb3J0IGZ1bmN0aW9uIEdhbWVDYW52YXMoeyBjb25maWcsIGh1ZCwgb25IdWRDaGFuZ2UsIG9uRW5kLCBvbkV4aXQgfTogUHJvcHMpIHsKICBjb25zdCBob3N0UmVmID0gdXNlUmVmPEhUTUxEaXZFbGVtZW50PihudWxsKQogIGNvbnN0IHRvZ2dsZVBhdXNlUmVmID0gdXNlUmVmPCgpID0+IHZvaWQ+KCgpID0+IHt9KQogIGNvbnN0IHRvdWNoUHJlc3NlZFJlZiA9IHVzZVJlZihuZXcgU2V0PHN0cmluZz4oKSkKICBjb25zdCBbYXNzZXRTdGF0dXMsIHNldEFzc2V0U3RhdHVzXSA9IHVzZVN0YXRlPCdsb2FkaW5nJyB8ICdyZWFkeScgfCAnZmFsbGJhY2snPignbG9hZGluZycpCgogIHVzZUVmZmVjdCgoKSA9PiB7CiAgICBjb25zdCBob3N0ID0gaG9zdFJlZi5jdXJyZW50CiAgICBpZiAoIWhvc3QpIHJldHVybgogICAgY29uc3QgY2FudmFzSG9zdCA9IGhvc3QKICAgIGNvbnN0IGFwcCA9IG5ldyBBcHBsaWNhdGlvbigpCiAgICBjb25zdCBwcmVzc2VkID0gbmV3IFNldDxzdHJpbmc+KCkKICAgIGNvbnN0IHRvdWNoUHJlc3NlZCA9IHRvdWNoUHJlc3NlZFJlZi5jdXJyZW50CiAgICBjb25zdCBpc1ByZXNzZWQgPSAoY29kZTogc3RyaW5nKSA9PiBwcmVzc2VkLmhhcyhjb2RlKSB8fCB0b3VjaFByZXNzZWQuaGFzKGNvZGUpCiAgICBjb25zdCBwcm9qZWN0aWxlczogUHJvamVjdGlsZVtdID0gW10KICAgIGxldCBhY3RpdmUgPSB0cnVlCiAgICBsZXQgZmlyZUNvb2xkb3duID0gMAogICAgbGV0IHBvcnRGaXJlQ29vbGRvd24gPSAwCiAgICBsZXQgc3RhcmJvYXJkRmlyZUNvb2xkb3duID0gMAogICAgbGV0IGNoYXNlcjogR3JhcGhpY3MgfCBudWxsID0gbnVsbAogICAgbGV0IHNob290ZXI6IEdyYXBoaWNzIHwgbnVsbCA9IG51bGwKICAgIGxldCBjaGFzZXJIZWFsdGhCYXI6IEdyYXBoaWNzIHwgbnVsbCA9IG51bGwKICAgIGxldCBzaG9vdGVySGVhbHRoQmFyOiBHcmFwaGljcyB8IG51bGwgPSBudWxsCiAgICBsZXQgY2hhc2VyUmVzcGF3biA9IDEKICAgIGxldCBuZXh0RW5lbXk6ICdjaGFzZXInIHwgJ3Nob290ZXInID0gJ2NoYXNlcicKICAgIGxldCBzaG9vdGVyRmlyZUNvb2xkb3duID0gMAogICAgbGV0IHBsYXllckhlYWx0aCA9IDMKICAgIGxldCBzY29yZSA9IDAKICAgIGxldCBjaGFzZXJIZWFsdGggPSBFTkVNWV9NQVhfSEVBTFRICiAgICBsZXQgc2hvb3RlckhlYWx0aCA9IEVORU1ZX01BWF9IRUFMVEgKICAgIGxldCByZW1haW5pbmdUaW1lID0gY29uZmlnLnNlc3Npb25EdXJhdGlvblNlY29uZHMKICAgIGxldCByZXBvcnRlZFNlY29uZCA9IE1hdGguY2VpbChyZW1haW5pbmdUaW1lKQogICAgbGV0IHBhdXNlZCA9IGZhbHNlCiAgICBsZXQgZW5kZWQgPSBmYWxzZQogICAgbGV0IGlzbGFuZFggPSAwCiAgICBsZXQgaXNsYW5kWSA9IDAKCiAgICBjb25zdCByZXBvcnRIdWQgPSAoKSA9PiBvbkh1ZENoYW5nZSh7IGhlYWx0aDogcGxheWVySGVhbHRoLCBzY29yZSwgdGltZUxlZnQ6IE1hdGgubWF4KDAsIE1hdGguY2VpbChyZW1haW5pbmdUaW1lKSksIHBhdXNlZCB9KQogICAgY29uc3QgZmluaXNoID0gKHJlYXNvbjogR2FtZVJlc3VsdFsncmVhc29uJ10pID0+IHsKICAgICAgaWYgKGVuZGVkKSByZXR1cm4KICAgICAgZW5kZWQgPSB0cnVlCiAgICAgIHByZXNzZWQuY2xlYXIoKQogICAgICBvbkVuZCh7IHNjb3JlLCBkdXJhdGlvblNlY29uZHM6IE1hdGgucm91bmQoY29uZmlnLnNlc3Npb25EdXJhdGlvblNlY29uZHMgLSByZW1haW5pbmdUaW1lKSwgcmVhc29uIH0pCiAgICB9CiAgICBjb25zdCB0b2dnbGVQYXVzZSA9ICgpID0+IHsKICAgICAgaWYgKGVuZGVkKSByZXR1cm4KICAgICAgcGF1c2VkID0gIXBhdXNlZAogICAgICBwcmVzc2VkLmNsZWFyKCkKICAgICAgcmVwb3J0SHVkKCkKICAgIH0KICAgIGNvbnN0IG9uVmlzaWJpbGl0eUNoYW5nZSA9ICgpID0+IHsKICAgICAgaWYgKGRvY3VtZW50LmhpZGRlbiAmJiAhcGF1c2VkICYmICFlbmRlZCkgdG9nZ2xlUGF1c2UoKQogICAgfQogICAgdG9nZ2xlUGF1c2VSZWYuY3VycmVudCA9IHRvZ2dsZVBhdXNlCiAgICBjb25zdCBvbktleURvd24gPSAoZXZlbnQ6IEtleWJvYXJkRXZlbnQpID0+IHsKICAgICAgY29uc3QgYWNjZXB0ZWQgPSBbJ0tleVcnLCAnS2V5QScsICdLZXlEJywgJ0tleVEnLCAnS2V5RScsICdTcGFjZScsICdLZXlQJ10KICAgICAgaWYgKGFjY2VwdGVkLmluY2x1ZGVzKGV2ZW50LmNvZGUpKSBldmVudC5wcmV2ZW50RGVmYXVsdCgpCiAgICAgIGlmIChldmVudC5jb2RlID09PSAnS2V5UCcgJiYgIWV2ZW50LnJlcGVhdCkgdG9nZ2xlUGF1c2UoKQogICAgICBwcmVzc2VkLmFkZChldmVudC5jb2RlKQogICAgfQogICAgY29uc3Qgb25LZXlVcCA9IChldmVudDogS2V5Ym9hcmRFdmVudCkgPT4gcHJlc3NlZC5kZWxldGUoZXZlbnQuY29kZSkKICAgIGNvbnN0IHJlbW92ZVByb2plY3RpbGUgPSAocHJvamVjdGlsZTogUHJvamVjdGlsZSkgPT4gewogICAgICBwcm9qZWN0aWxlLmdyYXBoaWMucmVtb3ZlRnJvbVBhcmVudCgpCiAgICAgIHByb2plY3RpbGUuZ3JhcGhpYy5kZXN0cm95KCkKICAgICAgcHJvamVjdGlsZXMuc3BsaWNlKHByb2plY3RpbGVzLmluZGV4T2YocHJvamVjdGlsZSksIDEpCiAgICB9CgogICAgYXN5bmMgZnVuY3Rpb24gbW91bnQoKSB7CiAgICAgIGF3YWl0IGFwcC5pbml0KHsgYmFja2dyb3VuZDogJyMwYjU2NzInLCByZXNpemVUbzogY2FudmFzSG9zdCwgYW50aWFsaWFzOiB0cnVlLCByZXNvbHV0aW9uOiBNYXRoLm1pbih3aW5kb3cuZGV2aWNlUGl4ZWxSYXRpbywgMikgfSkKICAgICAgaWYgKCFhY3RpdmUpIHsgYXBwLmRlc3Ryb3kodHJ1ZSk7IHJldHVybiB9CiAgICAgIGNhbnZhc0hvc3QuYXBwZW5kQ2hpbGQoYXBwLmNhbnZhcykKICAgICAgd2luZG93LmFkZEV2ZW50TGlzdGVuZXIoJ2tleWRvd24nLCBvbktleURvd24pCiAgICAgIHdpbmRvdy5hZGRFdmVudExpc3RlbmVyKCdrZXl1cCcsIG9uS2V5VXApCiAgICAgIGRvY3VtZW50LmFkZEV2ZW50TGlzdGVuZXIoJ3Zpc2liaWxpdHljaGFuZ2UnLCBvblZpc2liaWxpdHlDaGFuZ2UpCgogICAgICBsZXQgcGxheWVyVGV4dHVyZTogVGV4dHVyZSB8IHVuZGVmaW5lZAogICAgICBsZXQgY2hhc2VyVGV4dHVyZTogVGV4dHVyZSB8IHVuZGVmaW5lZAogICAgICBsZXQgc2hvb3RlclRleHR1cmU6IFRleHR1cmUgfCB1bmRlZmluZWQKICAgICAgdHJ5IHsKICAgICAgICA7W3BsYXllclRleHR1cmUsIGNoYXNlclRleHR1cmUsIHNob290ZXJUZXh0dXJlXSA9IGF3YWl0IFByb21pc2UuYWxsKFtBc3NldHMubG9hZDxUZXh0dXJlPihQTEFZRVJfU0hJUF9BU1NFVCksIEFzc2V0cy5sb2FkPFRleHR1cmU+KENIQVNFUl9TSElQX0FTU0VUKSwgQXNzZXRzLmxvYWQ8VGV4dHVyZT4oU0hPT1RFUl9TSElQX0FTU0VUKV0pCiAgICAgICAgaWYgKGFjdGl2ZSkgc2V0QXNzZXRTdGF0dXMoJ3JlYWR5JykKICAgICAgfSBjYXRjaCB7CiAgICAgICAgaWYgKGFjdGl2ZSkgc2V0QXNzZXRTdGF0dXMoJ2ZhbGxiYWNrJykKICAgICAgfQogICAgICBjb25zdCBpc2xhbmQgPSBuZXcgR3JhcGhpY3MoKS5jaXJjbGUoMCwgMCwgSVNMQU5EX1JBRElVUykuZmlsbCgweDc5YTY0ZCkuc3Ryb2tlKHsgY29sb3I6IDB4MzE1OTIzLCB3aWR0aDogOSB9KQogICAgICBpc2xhbmRYID0gYXBwLnNjcmVlbi53aWR0aCAqIDAuNTIKICAgICAgaXNsYW5kWSA9IGFwcC5zY3JlZW4uaGVpZ2h0ICogMC40NQogICAgICBpc2xhbmQucG9zaXRpb24uc2V0KGlzbGFuZFgsIGlzbGFuZFkpCiAgICAgIGFwcC5zdGFnZS5hZGRDaGlsZChpc2xhbmQpCgogICAgICBjb25zdCBwbGF5ZXIgPSBjcmVhdGVTaGlwKDB4ZjJjMzVlLCBwbGF5ZXJUZXh0dXJlKQogICAgICBwbGF5ZXIucG9zaXRpb24uc2V0KGFwcC5zY3JlZW4ud2lkdGggKiAwLjUsIGFwcC5zY3JlZW4uaGVpZ2h0ICogMC43OCkKICAgICAgYXBwLnN0YWdlLmFkZENoaWxkKHBsYXllcikKICAgICAgY29uc3QgcGxheWVySGVhbHRoQmFyID0gY3JlYXRlSGVhbHRoQmFyKCkKICAgICAgYXBwLnN0YWdlLmFkZENoaWxkKHBsYXllckhlYWx0aEJhcikKICAgICAgcmVwb3J0SHVkKCkKCiAgICAgIGNvbnN0IHNwYXduQ2hhc2VyID0gKCkgPT4gewogICAgICAgIGNvbnN0IHNwYXduUG9pbnRzID0gWwogICAgICAgICAgeyB4OiA1NiwgeTogNTYgfSwKICAgICAgICAgIHsgeDogYXBwLnNjcmVlbi53aWR0aCAtIDU2LCB5OiA1NiB9LAogICAgICAgICAgeyB4OiA1NiwgeTogYXBwLnNjcmVlbi5oZWlnaHQgLSA1NiB9LAogICAgICAgICAgeyB4OiBhcHAuc2NyZWVuLndpZHRoIC0gNTYsIHk6IGFwcC5zY3JlZW4uaGVpZ2h0IC0gNTYgfSwKICAgICAgICBdCiAgICAgICAgY29uc3QgcG9pbnQgPSBzcGF3blBvaW50cy5zb3J0KChhLCBiKSA9PiBkaXN0YW5jZVNxdWFyZWQoYi54LCBiLnksIHBsYXllci54LCBwbGF5ZXIueSkgLSBkaXN0YW5jZVNxdWFyZWQoYS54LCBhLnksIHBsYXllci54LCBwbGF5ZXIueSkpWzBdCiAgICAgICAgY2hhc2VySGVhbHRoID0gRU5FTVlfTUFYX0hFQUxUSAogICAgICAgIGNoYXNlciA9IGNyZWF0ZVNoaXAoMHhkNjVjNGIsIGNoYXNlclRleHR1cmUpCiAgICAgICAgY2hhc2VyLnBvc2l0aW9uLnNldChwb2ludC54LCBwb2ludC55KQogICAgICAgIGFwcC5zdGFnZS5hZGRDaGlsZChjaGFzZXIpCiAgICAgICAgY2hhc2VySGVhbHRoQmFyID0gY3JlYXRlSGVhbHRoQmFyKCkKICAgICAgICBhcHAuc3RhZ2UuYWRkQ2hpbGQoY2hhc2VySGVhbHRoQmFyKQogICAgICB9CgogICAgICBjb25zdCBzcGF3blNob290ZXIgPSAoKSA9PiB7CiAgICAgICAgY29uc3Qgc3Bhd25Qb2ludHMgPSBbCiAgICAgICAgICB7IHg6IDU2LCB5OiA1NiB9LCB7IHg6IGFwcC5zY3JlZW4ud2lkdGggLSA1NiwgeTogNTYgfSwKICAgICAgICAgIHsgeDogNTYsIHk6IGFwcC5zY3JlZW4uaGVpZ2h0IC0gNTYgfSwgeyB4OiBhcHAuc2NyZWVuLndpZHRoIC0gNTYsIHk6IGFwcC5zY3JlZW4uaGVpZ2h0IC0gNTYgfSwKICAgICAgICBdCiAgICAgICAgY29uc3QgcG9pbnQgPSBzcGF3blBvaW50cy5zb3J0KChhLCBiKSA9PiBkaXN0YW5jZVNxdWFyZWQoYi54LCBiLnksIHBsYXllci54LCBwbGF5ZXIueSkgLSBkaXN0YW5jZVNxdWFyZWQoYS54LCBhLnksIHBsYXllci54LCBwbGF5ZXIueSkpWzBdCiAgICAgICAgc2hvb3RlckhlYWx0aCA9IEVORU1ZX01BWF9IRUFMVEgKICAgICAgICBzaG9vdGVyID0gY3JlYXRlU2hpcCgweDZiYzRkNCwgc2hvb3RlclRleHR1cmUpCiAgICAgICAgc2hvb3Rlci5wb3NpdGlvbi5zZXQocG9pbnQueCwgcG9pbnQueSkKICAgICAgICBhcHAuc3RhZ2UuYWRkQ2hpbGQoc2hvb3RlcikKICAgICAgICBzaG9vdGVySGVhbHRoQmFyID0gY3JlYXRlSGVhbHRoQmFyKCkKICAgICAgICBhcHAuc3RhZ2UuYWRkQ2hpbGQoc2hvb3RlckhlYWx0aEJhcikKICAgICAgfQoKICAgICAgY29uc3QgZXhwbG9kZSA9ICh4OiBudW1iZXIsIHk6IG51bWJlcikgPT4gewogICAgICAgIGNvbnN0IGVmZmVjdCA9IG5ldyBHcmFwaGljcygpLmNpcmNsZSgwLCAwLCAxMikuZmlsbCgweGZmYjY0OCkKICAgICAgICBlZmZlY3QucG9zaXRpb24uc2V0KHgsIHkpCiAgICAgICAgYXBwLnN0YWdlLmFkZENoaWxkKGVmZmVjdCkKICAgICAgICBsZXQgZWxhcHNlZCA9IDAKICAgICAgICBjb25zdCBhbmltYXRlID0gKHRpY2tlcjogeyBkZWx0YU1TOiBudW1iZXIgfSkgPT4gewogICAgICAgICAgZWxhcHNlZCArPSB0aWNrZXIuZGVsdGFNUyAvIDEwMDAKICAgICAgICAgIGVmZmVjdC5zY2FsZS5zZXQoMSArIGVsYXBzZWQgKiA0KQogICAgICAgICAgZWZmZWN0LmFscGhhID0gTWF0aC5tYXgoMCwgMSAtIGVsYXBzZWQgKiAyKQogICAgICAgICAgaWYgKGVsYXBzZWQgPj0gMC41KSB7CiAgICAgICAgICAgIGFwcC50aWNrZXIucmVtb3ZlKGFuaW1hdGUpCiAgICAgICAgICAgIGVmZmVjdC5kZXN0cm95KCkKICAgICAgICAgIH0KICAgICAgICB9CiAgICAgICAgYXBwLnRpY2tlci5hZGQoYW5pbWF0ZSkKICAgICAgfQoKICAgICAgY29uc3QgZmlyZUZyb250ID0gKCkgPT4gewogICAgICAgIGlmIChmaXJlQ29vbGRvd24gPiAwKSByZXR1cm4KICAgICAgICBmaXJlQ29vbGRvd24gPSBGUk9OVF9GSVJFX0NPT0xET1dOCiAgICAgICAgY29uc3QgZ3JhcGhpYyA9IG5ldyBHcmFwaGljcygpLmNpcmNsZSgwLCAwLCA2KS5maWxsKDB4MTcxMjBkKS5zdHJva2UoeyBjb2xvcjogMHhmZmUyYTQsIHdpZHRoOiAyIH0pCiAgICAgICAgY29uc3QgZGlyZWN0aW9uWCA9IE1hdGguc2luKHBsYXllci5yb3RhdGlvbikKICAgICAgICBjb25zdCBkaXJlY3Rpb25ZID0gLU1hdGguY29zKHBsYXllci5yb3RhdGlvbikKICAgICAgICBncmFwaGljLnBvc2l0aW9uLnNldChwbGF5ZXIueCArIGRpcmVjdGlvblggKiAzOCwgcGxheWVyLnkgKyBkaXJlY3Rpb25ZICogMzgpCiAgICAgICAgYXBwLnN0YWdlLmFkZENoaWxkKGdyYXBoaWMpCiAgICAgICAgcHJvamVjdGlsZXMucHVzaCh7IGdyYXBoaWMsIHZlbG9jaXR5WDogZGlyZWN0aW9uWCAqIFBST0pFQ1RJTEVfU1BFRUQsIHZlbG9jaXR5WTogZGlyZWN0aW9uWSAqIFBST0pFQ1RJTEVfU1BFRUQsIHJlbWFpbmluZ0xpZmU6IDEuMSwgb3duZXI6ICdwbGF5ZXInIH0pCiAgICAgIH0KCiAgICAgIGNvbnN0IGZpcmVCcm9hZHNpZGUgPSAoc2lkZTogJ3BvcnQnIHwgJ3N0YXJib2FyZCcpID0+IHsKICAgICAgICBjb25zdCBpc1BvcnQgPSBzaWRlID09PSAncG9ydCcKICAgICAgICBpZiAoaXNQb3J0ID8gcG9ydEZpcmVDb29sZG93biA+IDAgOiBzdGFyYm9hcmRGaXJlQ29vbGRvd24gPiAwKSByZXR1cm4KICAgICAgICBpZiAoaXNQb3J0KSBwb3J0RmlyZUNvb2xkb3duID0gQlJPQURTSURFX0ZJUkVfQ09PTERPV04KICAgICAgICBlbHNlIHN0YXJib2FyZEZpcmVDb29sZG93biA9IEJST0FEU0lERV9GSVJFX0NPT0xET1dOCiAgICAgICAgY29uc3QgYnJvYWRzaWRlQW5nbGUgPSBwbGF5ZXIucm90YXRpb24gKyAoaXNQb3J0ID8gLU1hdGguUEkgLyAyIDogTWF0aC5QSSAvIDIpCiAgICAgICAgY29uc3QgZGlyZWN0aW9uWCA9IE1hdGguc2luKGJyb2Fkc2lkZUFuZ2xlKQogICAgICAgIGNvbnN0IGRpcmVjdGlvblkgPSAtTWF0aC5jb3MoYnJvYWRzaWRlQW5nbGUpCiAgICAgICAgY29uc3QgZm9yd2FyZFggPSBNYXRoLnNpbihwbGF5ZXIucm90YXRpb24pCiAgICAgICAgY29uc3QgZm9yd2FyZFkgPSAtTWF0aC5jb3MocGxheWVyLnJvdGF0aW9uKQogICAgICAgIGZvciAoY29uc3Qgb2Zmc2V0IG9mIFstMTUsIDAsIDE1XSkgewogICAgICAgICAgY29uc3QgZ3JhcGhpYyA9IG5ldyBHcmFwaGljcygpLmNpcmNsZSgwLCAwLCA1KS5maWxsKDB4MTcxMjBkKS5zdHJva2UoeyBjb2xvcjogMHhmZmUyYTQsIHdpZHRoOiAyIH0pCiAgICAgICAgICBncmFwaGljLnBvc2l0aW9uLnNldChwbGF5ZXIueCArIGRpcmVjdGlvblggKiAzMyArIGZvcndhcmRYICogb2Zmc2V0LCBwbGF5ZXIueSArIGRpcmVjdGlvblkgKiAzMyArIGZvcndhcmRZICogb2Zmc2V0KQogICAgICAgICAgYXBwLnN0YWdlLmFkZENoaWxkKGdyYXBoaWMpCiAgICAgICAgICBwcm9qZWN0aWxlcy5wdXNoKHsgZ3JhcGhpYywgdmVsb2NpdHlYOiBkaXJlY3Rpb25YICogUFJPSkVDVElMRV9TUEVFRCwgdmVsb2NpdHlZOiBkaXJlY3Rpb25ZICogUFJPSkVDVElMRV9TUEVFRCwgcmVtYWluaW5nTGlmZTogMC45LCBvd25lcjogJ3BsYXllcicgfSkKICAgICAgICB9CiAgICAgIH0KCiAgICAgIGNvbnN0IGZpcmVFbmVteSA9ICgpID0+IHsKICAgICAgICBpZiAoIXNob290ZXIgfHwgc2hvb3RlckZpcmVDb29sZG93biA+IDApIHJldHVybgogICAgICAgIHNob290ZXJGaXJlQ29vbGRvd24gPSBTSE9PVEVSX0ZJUkVfQ09PTERPV04KICAgICAgICBjb25zdCBncmFwaGljID0gbmV3IEdyYXBoaWNzKCkuY2lyY2xlKDAsIDAsIDYpLmZpbGwoMHg3MzJjMjUpLnN0cm9rZSh7IGNvbG9yOiAweGZmYjA3MCwgd2lkdGg6IDIgfSkKICAgICAgICBjb25zdCBkaXJlY3Rpb25YID0gTWF0aC5zaW4oc2hvb3Rlci5yb3RhdGlvbikKICAgICAgICBjb25zdCBkaXJlY3Rpb25ZID0gLU1hdGguY29zKHNob290ZXIucm90YXRpb24pCiAgICAgICAgZ3JhcGhpYy5wb3NpdGlvbi5zZXQoc2hvb3Rlci54ICsgZGlyZWN0aW9uWCAqIDM4LCBzaG9vdGVyLnkgKyBkaXJlY3Rpb25ZICogMzgpCiAgICAgICAgYXBwLnN0YWdlLmFkZENoaWxkKGdyYXBoaWMpCiAgICAgICAgcHJvamVjdGlsZXMucHVzaCh7IGdyYXBoaWMsIHZlbG9jaXR5WDogZGlyZWN0aW9uWCAqIChQUk9KRUNUSUxFX1NQRUVEICogMC43MiksIHZlbG9jaXR5WTogZGlyZWN0aW9uWSAqIChQUk9KRUNUSUxFX1NQRUVEICogMC43MiksIHJlbWFpbmluZ0xpZmU6IDEuNCwgb3duZXI6ICdlbmVteScgfSkKICAgICAgfQoKICAgICAgYXBwLnRpY2tlci5hZGQoKHRpY2tlcikgPT4gewogICAgICAgIGlmIChlbmRlZCB8fCBwYXVzZWQpIHJldHVybgogICAgICAgIGNvbnN0IHNlY29uZHMgPSB0aWNrZXIuZGVsdGFNUyAvIDEwMDAKICAgICAgICByZW1haW5pbmdUaW1lID0gTWF0aC5tYXgoMCwgcmVtYWluaW5nVGltZSAtIHNlY29uZHMpCiAgICAgICAgY29uc3QgbmV4dFNlY29uZCA9IE1hdGguY2VpbChyZW1haW5pbmdUaW1lKQogICAgICAgIGlmIChuZXh0U2Vjb25kICE9PSByZXBvcnRlZFNlY29uZCkgeyByZXBvcnRlZFNlY29uZCA9IG5leHRTZWNvbmQ7IHJlcG9ydEh1ZCgpIH0KICAgICAgICBpZiAocmVtYWluaW5nVGltZSA8PSAwKSB7IGZpbmlzaCgndGltZScpOyByZXR1cm4gfQogICAgICAgIGZpcmVDb29sZG93biA9IE1hdGgubWF4KDAsIGZpcmVDb29sZG93biAtIHNlY29uZHMpCiAgICAgICAgcG9ydEZpcmVDb29sZG93biA9IE1hdGgubWF4KDAsIHBvcnRGaXJlQ29vbGRvd24gLSBzZWNvbmRzKQogICAgICAgIHN0YXJib2FyZEZpcmVDb29sZG93biA9IE1hdGgubWF4KDAsIHN0YXJib2FyZEZpcmVDb29sZG93biAtIHNlY29uZHMpCiAgICAgICAgY2hhc2VyUmVzcGF3biAtPSBzZWNvbmRzCiAgICAgICAgc2hvb3RlckZpcmVDb29sZG93biA9IE1hdGgubWF4KDAsIHNob290ZXJGaXJlQ29vbGRvd24gLSBzZWNvbmRzKQogICAgICAgIGlmICghY2hhc2VyICYmICFzaG9vdGVyICYmIGNoYXNlclJlc3Bhd24gPD0gMCAmJiBwbGF5ZXJIZWFsdGggPiAwKSB7CiAgICAgICAgICBpZiAobmV4dEVuZW15ID09PSAnY2hhc2VyJykgc3Bhd25DaGFzZXIoKQogICAgICAgICAgZWxzZSBzcGF3blNob290ZXIoKQogICAgICAgIH0KICAgICAgICBpZiAoaXNQcmVzc2VkKCdLZXlBJykpIHBsYXllci5yb3RhdGlvbiAtPSBUVVJOX1NQRUVEICogc2Vjb25kcwogICAgICAgIGlmIChpc1ByZXNzZWQoJ0tleUQnKSkgcGxheWVyLnJvdGF0aW9uICs9IFRVUk5fU1BFRUQgKiBzZWNvbmRzCiAgICAgICAgaWYgKGlzUHJlc3NlZCgnS2V5VycpKSB7CiAgICAgICAgICBjb25zdCBuZXh0WCA9IHBsYXllci54ICsgTWF0aC5zaW4ocGxheWVyLnJvdGF0aW9uKSAqIFBMQVlFUl9TUEVFRCAqIHNlY29uZHMKICAgICAgICAgIGNvbnN0IG5leHRZID0gcGxheWVyLnkgLSBNYXRoLmNvcyhwbGF5ZXIucm90YXRpb24pICogUExBWUVSX1NQRUVEICogc2Vjb25kcwogICAgICAgICAgY29uc3QgaGl0c0lzbGFuZCA9IGRpc3RhbmNlU3F1YXJlZChuZXh0WCwgbmV4dFksIGlzbGFuZFgsIGlzbGFuZFkpIDwgKFBMQVlFUl9SQURJVVMgKyBJU0xBTkRfUkFESVVTKSAqKiAyCiAgICAgICAgICBpZiAoIWhpdHNJc2xhbmQpIHsKICAgICAgICAgICAgcGxheWVyLnggPSBNYXRoLm1heChQTEFZRVJfUkFESVVTLCBNYXRoLm1pbihhcHAuc2NyZWVuLndpZHRoIC0gUExBWUVSX1JBRElVUywgbmV4dFgpKQogICAgICAgICAgICBwbGF5ZXIueSA9IE1hdGgubWF4KFBMQVlFUl9SQURJVVMsIE1hdGgubWluKGFwcC5zY3JlZW4uaGVpZ2h0IC0gUExBWUVSX1JBRElVUywgbmV4dFkpKQogICAgICAgICAgfQogICAgICAgIH0KICAgICAgICBpZiAoaXNQcmVzc2VkKCdTcGFjZScpKSBmaXJlRnJvbnQoKQogICAgICAgIGlmIChpc1ByZXNzZWQoJ0tleVEnKSkgZmlyZUJyb2Fkc2lkZSgncG9ydCcpCiAgICAgICAgaWYgKGlzUHJlc3NlZCgnS2V5RScpKSBmaXJlQnJvYWRzaWRlKCdzdGFyYm9hcmQnKQoKICAgICAgICBpZiAoY2hhc2VyKSB7CiAgICAgICAgICBjb25zdCB0YXJnZXRBbmdsZSA9IE1hdGguYXRhbjIocGxheWVyLnggLSBjaGFzZXIueCwgLShwbGF5ZXIueSAtIGNoYXNlci55KSkKICAgICAgICAgIGNoYXNlci5yb3RhdGlvbiArPSBub3JtYWxpemVBbmdsZSh0YXJnZXRBbmdsZSAtIGNoYXNlci5yb3RhdGlvbikgKiBNYXRoLm1pbigxLCBzZWNvbmRzICogMykKICAgICAgICAgIGNvbnN0IG5leHRYID0gY2hhc2VyLnggKyBNYXRoLnNpbihjaGFzZXIucm90YXRpb24pICogQ0hBU0VSX1NQRUVEICogc2Vjb25kcwogICAgICAgICAgY29uc3QgbmV4dFkgPSBjaGFzZXIueSAtIE1hdGguY29zKGNoYXNlci5yb3RhdGlvbikgKiBDSEFTRVJfU1BFRUQgKiBzZWNvbmRzCiAgICAgICAgICBjb25zdCBoaXRzSXNsYW5kID0gZGlzdGFuY2VTcXVhcmVkKG5leHRYLCBuZXh0WSwgaXNsYW5kWCwgaXNsYW5kWSkgPCAoQ0hBU0VSX1JBRElVUyArIElTTEFORF9SQURJVVMpICoqIDIKICAgICAgICAgIGlmICghaGl0c0lzbGFuZCkgewogICAgICAgICAgICBjaGFzZXIueCA9IE1hdGgubWF4KENIQVNFUl9SQURJVVMsIE1hdGgubWluKGFwcC5zY3JlZW4ud2lkdGggLSBDSEFTRVJfUkFESVVTLCBuZXh0WCkpCiAgICAgICAgICAgIGNoYXNlci55ID0gTWF0aC5tYXgoQ0hBU0VSX1JBRElVUywgTWF0aC5taW4oYXBwLnNjcmVlbi5oZWlnaHQgLSBDSEFTRVJfUkFESVVTLCBuZXh0WSkpCiAgICAgICAgICB9IGVsc2UgewogICAgICAgICAgICBjaGFzZXIucm90YXRpb24gKz0gTWF0aC5QSSAvIDIKICAgICAgICAgIH0KICAgICAgICAgIGlmIChkaXN0YW5jZVNxdWFyZWQoY2hhc2VyLngsIGNoYXNlci55LCBwbGF5ZXIueCwgcGxheWVyLnkpIDwgKENIQVNFUl9SQURJVVMgKyBQTEFZRVJfUkFESVVTKSAqKiAyKSB7CiAgICAgICAgICAgIGV4cGxvZGUoY2hhc2VyLngsIGNoYXNlci55KQogICAgICAgICAgICBjaGFzZXIuZGVzdHJveSgpCiAgICAgICAgICAgIGNoYXNlciA9IG51bGwKICAgICAgICAgICAgY2hhc2VySGVhbHRoQmFyPy5kZXN0cm95KCkKICAgICAgICAgICAgY2hhc2VySGVhbHRoQmFyID0gbnVsbAogICAgICAgICAgICBwbGF5ZXJIZWFsdGggLT0gMQogICAgICAgICAgICBwbGF5ZXIudGludCA9IHBsYXllckhlYWx0aCA9PT0gMiA/IDB4ZmZkMTdmIDogcGxheWVySGVhbHRoID09PSAxID8gMHhmZjdmN2YgOiAweDU1NTU1NQogICAgICAgICAgICByZXBvcnRIdWQoKQogICAgICAgICAgICBjaGFzZXJSZXNwYXduID0gY29uZmlnLmVuZW15U3Bhd25JbnRlcnZhbFNlY29uZHMKICAgICAgICAgICAgbmV4dEVuZW15ID0gJ3Nob290ZXInCiAgICAgICAgICAgIGlmIChwbGF5ZXJIZWFsdGggPD0gMCkgZmluaXNoKCdkZWF0aCcpCiAgICAgICAgICB9CiAgICAgICAgfQogICAgICAgIGlmIChzaG9vdGVyKSB7CiAgICAgICAgICBjb25zdCB0YXJnZXRBbmdsZSA9IE1hdGguYXRhbjIocGxheWVyLnggLSBzaG9vdGVyLngsIC0ocGxheWVyLnkgLSBzaG9vdGVyLnkpKQogICAgICAgICAgc2hvb3Rlci5yb3RhdGlvbiArPSBub3JtYWxpemVBbmdsZSh0YXJnZXRBbmdsZSAtIHNob290ZXIucm90YXRpb24pICogTWF0aC5taW4oMSwgc2Vjb25kcyAqIDIuNCkKICAgICAgICAgIGNvbnN0IGRpc3RhbmNlVG9QbGF5ZXIgPSBNYXRoLnNxcnQoZGlzdGFuY2VTcXVhcmVkKHNob290ZXIueCwgc2hvb3Rlci55LCBwbGF5ZXIueCwgcGxheWVyLnkpKQogICAgICAgICAgaWYgKGRpc3RhbmNlVG9QbGF5ZXIgPiBTSE9PVEVSX0FUVEFDS19SQU5HRSkgewogICAgICAgICAgICBjb25zdCBuZXh0WCA9IHNob290ZXIueCArIE1hdGguc2luKHNob290ZXIucm90YXRpb24pICogU0hPT1RFUl9TUEVFRCAqIHNlY29uZHMKICAgICAgICAgICAgY29uc3QgbmV4dFkgPSBzaG9vdGVyLnkgLSBNYXRoLmNvcyhzaG9vdGVyLnJvdGF0aW9uKSAqIFNIT09URVJfU1BFRUQgKiBzZWNvbmRzCiAgICAgICAgICAgIGNvbnN0IGhpdHNJc2xhbmQgPSBkaXN0YW5jZVNxdWFyZWQobmV4dFgsIG5leHRZLCBpc2xhbmRYLCBpc2xhbmRZKSA8IChDSEFTRVJfUkFESVVTICsgSVNMQU5EX1JBRElVUykgKiogMgogICAgICAgICAgICBpZiAoIWhpdHNJc2xhbmQpIHsgc2hvb3Rlci54ID0gTWF0aC5tYXgoQ0hBU0VSX1JBRElVUywgTWF0aC5taW4oYXBwLnNjcmVlbi53aWR0aCAtIENIQVNFUl9SQURJVVMsIG5leHRYKSk7IHNob290ZXIueSA9IE1hdGgubWF4KENIQVNFUl9SQURJVVMsIE1hdGgubWluKGFwcC5zY3JlZW4uaGVpZ2h0IC0gQ0hBU0VSX1JBRElVUywgbmV4dFkpKSB9CiAgICAgICAgICB9IGVsc2UgZmlyZUVuZW15KCkKICAgICAgICB9CiAgICAgICAgZm9yIChjb25zdCBwcm9qZWN0aWxlIG9mIFsuLi5wcm9qZWN0aWxlc10pIHsKICAgICAgICAgIHByb2plY3RpbGUuZ3JhcGhpYy54ICs9IHByb2plY3RpbGUudmVsb2NpdHlYICogc2Vjb25kcwogICAgICAgICAgcHJvamVjdGlsZS5ncmFwaGljLnkgKz0gcHJvamVjdGlsZS52ZWxvY2l0eVkgKiBzZWNvbmRzCiAgICAgICAgICBwcm9qZWN0aWxlLnJlbWFpbmluZ0xpZmUgLT0gc2Vjb25kcwogICAgICAgICAgY29uc3QgaGl0c0lzbGFuZCA9IGRpc3RhbmNlU3F1YXJlZChwcm9qZWN0aWxlLmdyYXBoaWMueCwgcHJvamVjdGlsZS5ncmFwaGljLnksIGlzbGFuZFgsIGlzbGFuZFkpIDwgSVNMQU5EX1JBRElVUyAqKiAyCiAgICAgICAgICBjb25zdCBvdXRzaWRlID0gcHJvamVjdGlsZS5ncmFwaGljLnggPCAwIHx8IHByb2plY3RpbGUuZ3JhcGhpYy54ID4gYXBwLnNjcmVlbi53aWR0aCB8fCBwcm9qZWN0aWxlLmdyYXBoaWMueSA8IDAgfHwgcHJvamVjdGlsZS5ncmFwaGljLnkgPiBhcHAuc2NyZWVuLmhlaWdodAogICAgICAgICAgY29uc3QgaGl0c0NoYXNlciA9IHByb2plY3RpbGUub3duZXIgPT09ICdwbGF5ZXInICYmIGNoYXNlciAmJiBkaXN0YW5jZVNxdWFyZWQocHJvamVjdGlsZS5ncmFwaGljLngsIHByb2plY3RpbGUuZ3JhcGhpYy55LCBjaGFzZXIueCwgY2hhc2VyLnkpIDwgKENIQVNFUl9SQURJVVMgKyA2KSAqKiAyCiAgICAgICAgICBjb25zdCBoaXRzU2hvb3RlciA9IHByb2plY3RpbGUub3duZXIgPT09ICdwbGF5ZXInICYmIHNob290ZXIgJiYgZGlzdGFuY2VTcXVhcmVkKHByb2plY3RpbGUuZ3JhcGhpYy54LCBwcm9qZWN0aWxlLmdyYXBoaWMueSwgc2hvb3Rlci54LCBzaG9vdGVyLnkpIDwgKENIQVNFUl9SQURJVVMgKyA2KSAqKiAyCiAgICAgICAgICBjb25zdCBoaXRzUGxheWVyID0gcHJvamVjdGlsZS5vd25lciA9PT0gJ2VuZW15JyAmJiBkaXN0YW5jZVNxdWFyZWQocHJvamVjdGlsZS5ncmFwaGljLngsIHByb2plY3RpbGUuZ3JhcGhpYy55LCBwbGF5ZXIueCwgcGxheWVyLnkpIDwgKFBMQVlFUl9SQURJVVMgKyA2KSAqKiAyCiAgICAgICAgICBpZiAoaGl0c0NoYXNlciAmJiBjaGFzZXIpIHsKICAgICAgICAgICAgY2hhc2VySGVhbHRoIC09IDEKICAgICAgICAgICAgaWYgKGNoYXNlckhlYWx0aCA8PSAwKSB7CiAgICAgICAgICAgICAgZXhwbG9kZShjaGFzZXIueCwgY2hhc2VyLnkpCiAgICAgICAgICAgICAgY2hhc2VyLmRlc3Ryb3koKQogICAgICAgICAgICAgIGNoYXNlciA9IG51bGwKICAgICAgICAgICAgICBjaGFzZXJIZWFsdGhCYXI/LmRlc3Ryb3koKQogICAgICAgICAgICAgIGNoYXNlckhlYWx0aEJhciA9IG51bGwKICAgICAgICAgICAgICBzY29yZSArPSAxCiAgICAgICAgICAgICAgcmVwb3J0SHVkKCkKICAgICAgICAgICAgICBjaGFzZXJSZXNwYXduID0gY29uZmlnLmVuZW15U3Bhd25JbnRlcnZhbFNlY29uZHMKICAgICAgICAgICAgICBuZXh0RW5lbXkgPSAnc2hvb3RlcicKICAgICAgICAgICAgfSBlbHNlIGNoYXNlci50aW50ID0gMHhmZmFhYTAKICAgICAgICAgIH0KICAgICAgICAgIGlmIChoaXRzU2hvb3RlciAmJiBzaG9vdGVyKSB7CiAgICAgICAgICAgIHNob290ZXJIZWFsdGggLT0gMQogICAgICAgICAgICBpZiAoc2hvb3RlckhlYWx0aCA8PSAwKSB7CiAgICAgICAgICAgICAgZXhwbG9kZShzaG9vdGVyLngsIHNob290ZXIueSkKICAgICAgICAgICAgICBzaG9vdGVyLmRlc3Ryb3koKQogICAgICAgICAgICAgIHNob290ZXIgPSBudWxsCiAgICAgICAgICAgICAgc2hvb3RlckhlYWx0aEJhcj8uZGVzdHJveSgpCiAgICAgICAgICAgICAgc2hvb3RlckhlYWx0aEJhciA9IG51bGwKICAgICAgICAgICAgICBzY29yZSArPSAxCiAgICAgICAgICAgICAgcmVwb3J0SHVkKCkKICAgICAgICAgICAgICBjaGFzZXJSZXNwYXduID0gY29uZmlnLmVuZW15U3Bhd25JbnRlcnZhbFNlY29uZHMKICAgICAgICAgICAgICBuZXh0RW5lbXkgPSAnY2hhc2VyJwogICAgICAgICAgICB9IGVsc2Ugc2hvb3Rlci50aW50ID0gMHhmZmFhYTAKICAgICAgICAgIH0KICAgICAgICAgIGlmIChoaXRzUGxheWVyKSB7CiAgICAgICAgICAgIHBsYXllckhlYWx0aCAtPSAxCiAgICAgICAgICAgIHBsYXllci50aW50ID0gcGxheWVySGVhbHRoID09PSAyID8gMHhmZmQxN2YgOiBwbGF5ZXJIZWFsdGggPT09IDEgPyAweGZmN2Y3ZiA6IDB4NTU1NTU1CiAgICAgICAgICAgIHJlcG9ydEh1ZCgpCiAgICAgICAgICAgIGlmIChwbGF5ZXJIZWFsdGggPD0gMCkgZmluaXNoKCdkZWF0aCcpCiAgICAgICAgICB9CiAgICAgICAgICBpZiAocHJvamVjdGlsZS5yZW1haW5pbmdMaWZlIDw9IDAgfHwgaGl0c0lzbGFuZCB8fCBvdXRzaWRlIHx8IGhpdHNDaGFzZXIgfHwgaGl0c1Nob290ZXIgfHwgaGl0c1BsYXllcikgcmVtb3ZlUHJvamVjdGlsZShwcm9qZWN0aWxlKQogICAgICAgIH0KICAgICAgICBkcmF3SGVhbHRoQmFyKHBsYXllckhlYWx0aEJhciwgcGxheWVyLngsIHBsYXllci55LCBwbGF5ZXJIZWFsdGgsIDMpCiAgICAgICAgaWYgKGNoYXNlciAmJiBjaGFzZXJIZWFsdGhCYXIpIGRyYXdIZWFsdGhCYXIoY2hhc2VySGVhbHRoQmFyLCBjaGFzZXIueCwgY2hhc2VyLnksIGNoYXNlckhlYWx0aCwgRU5FTVlfTUFYX0hFQUxUSCkKICAgICAgICBpZiAoc2hvb3RlciAmJiBzaG9vdGVySGVhbHRoQmFyKSBkcmF3SGVhbHRoQmFyKHNob290ZXJIZWFsdGhCYXIsIHNob290ZXIueCwgc2hvb3Rlci55LCBzaG9vdGVySGVhbHRoLCBFTkVNWV9NQVhfSEVBTFRIKQogICAgICB9KQogICAgfQoKICAgIHZvaWQgbW91bnQoKQogICAgcmV0dXJuICgpID0+IHsKICAgICAgYWN0aXZlID0gZmFsc2UKICAgICAgd2luZG93LnJlbW92ZUV2ZW50TGlzdGVuZXIoJ2tleWRvd24nLCBvbktleURvd24pCiAgICAgIHdpbmRvdy5yZW1vdmVFdmVudExpc3RlbmVyKCdrZXl1cCcsIG9uS2V5VXApCiAgICAgIGRvY3VtZW50LnJlbW92ZUV2ZW50TGlzdGVuZXIoJ3Zpc2liaWxpdHljaGFuZ2UnLCBvblZpc2liaWxpdHlDaGFuZ2UpCiAgICAgIHRvdWNoUHJlc3NlZC5jbGVhcigpCiAgICAgIGFwcC5kZXN0cm95KHRydWUpCiAgICB9CiAgfSwgW2NvbmZpZywgb25IdWRDaGFuZ2UsIG9uRW5kXSkKCiAgY29uc3QgdG91Y2hDb250cm9sID0gKGNvZGU6IHN0cmluZykgPT4gKHsKICAgIG9uUG9pbnRlckRvd246IChldmVudDogUG9pbnRlckV2ZW50PEhUTUxCdXR0b25FbGVtZW50PikgPT4geyBldmVudC5wcmV2ZW50RGVmYXVsdCgpOyB0b3VjaFByZXNzZWRSZWYuY3VycmVudC5hZGQoY29kZSkgfSwKICAgIG9uUG9pbnRlclVwOiAoKSA9PiB0b3VjaFByZXNzZWRSZWYuY3VycmVudC5kZWxldGUoY29kZSksCiAgICBvblBvaW50ZXJDYW5jZWw6ICgpID0+IHRvdWNoUHJlc3NlZFJlZi5jdXJyZW50LmRlbGV0ZShjb2RlKSwKICAgIG9uUG9pbnRlckxlYXZlOiAoKSA9PiB0b3VjaFByZXNzZWRSZWYuY3VycmVudC5kZWxldGUoY29kZSksCiAgfSkKICByZXR1cm4gPG1haW4gY2xhc3NOYW1lPSJnYW1lLXNjcmVlbiI+PGhlYWRlciBjbGFzc05hbWU9ImdhbWUtaGVhZGVyIj48c3Bhbj5IdWxsOiB7aHVkLmhlYWx0aH0vMyDCtyBTY29yZToge2h1ZC5zY29yZX0gwrcgVGltZToge2h1ZC50aW1lTGVmdH1zPC9zcGFuPjxkaXYgY2xhc3NOYW1lPSJnYW1lLWFjdGlvbnMiPjxidXR0b24gdHlwZT0iYnV0dG9uIiBjbGFzc05hbWU9ImJ1dHRvbiBidXR0b24tc2Vjb25kYXJ5IiBvbkNsaWNrPXsoKSA9PiB0b2dnbGVQYXVzZVJlZi5jdXJyZW50KCl9PntodWQucGF1c2VkID8gJ1Jlc3VtZScgOiAnUGF1c2UnfTwvYnV0dG9uPjxidXR0b24gdHlwZT0iYnV0dG9uIiBjbGFzc05hbWU9ImJ1dHRvbiBidXR0b24tc2Vjb25kYXJ5IiBvbkNsaWNrPXtvbkV4aXR9PkV4aXQgZ2FtZTwvYnV0dG9uPjwvZGl2PjwvaGVhZGVyPnthc3NldFN0YXR1cyAhPT0gJ3JlYWR5JyAmJiA8ZGl2IGNsYXNzTmFtZT0iYXNzZXQtbWVzc2FnZSIgcm9sZT0ic3RhdHVzIj57YXNzZXRTdGF0dXMgPT09ICdsb2FkaW5nJyA/ICdMb2FkaW5nIGJhdHRsZSBhc3NldHPigKYnIDogJ0Fzc2V0IGZhbGxiYWNrIGVuYWJsZWQuJ308L2Rpdj59e2h1ZC5wYXVzZWQgJiYgPGRpdiBjbGFzc05hbWU9InBhdXNlLW1lc3NhZ2UiIHJvbGU9InN0YXR1cyI+UGF1c2VkIOKAlCBwcmVzcyBQIG9yIFJlc3VtZSB0byBjb250aW51ZS48L2Rpdj59PGRpdiBjbGFzc05hbWU9ImdhbWUtY2FudmFzIiByZWY9e2hvc3RSZWZ9IGFyaWEtbGFiZWw9IlBpcmF0ZSBCYXR0bGUgZ2FtZSBhcmVuYSIgLz48bmF2IGNsYXNzTmFtZT0idG91Y2gtY29udHJvbHMiIGFyaWEtbGFiZWw9IlRvdWNoIGNvbnRyb2xzIj48ZGl2PjxidXR0b24gdHlwZT0iYnV0dG9uIiBhcmlhLWxhYmVsPSJUdXJuIGxlZnQiIHsuLi50b3VjaENvbnRyb2woJ0tleUEnKX0+4oa2PC9idXR0b24+PGJ1dHRvbiB0eXBlPSJidXR0b24iIGFyaWEtbGFiZWw9Ik1vdmUgZm9yd2FyZCIgey4uLnRvdWNoQ29udHJvbCgnS2V5VycpfT7ilrI8L2J1dHRvbj48YnV0dG9uIHR5cGU9ImJ1dHRvbiIgYXJpYS1sYWJlbD0iVHVybiByaWdodCIgey4uLnRvdWNoQ29udHJvbCgnS2V5RCcpfT7ihrc8L2J1dHRvbj48L2Rpdj48ZGl2PjxidXR0b24gdHlwZT0iYnV0dG9uIiBhcmlhLWxhYmVsPSJGaXJlIHBvcnQgYnJvYWRzaWRlIiB7Li4udG91Y2hDb250cm9sKCdLZXlRJyl9PlE8L2J1dHRvbj48YnV0dG9uIHR5cGU9ImJ1dHRvbiIgYXJpYS1sYWJlbD0iRmlyZSBmcm9udCBjYW5ub24iIHsuLi50b3VjaENvbnRyb2woJ1NwYWNlJyl9PuKXjzwvYnV0dG9uPjxidXR0b24gdHlwZT0iYnV0dG9uIiBhcmlhLWxhYmVsPSJGaXJlIHN0YXJib2FyZCBicm9hZHNpZGUiIHsuLi50b3VjaENvbnRyb2woJ0tleUUnKX0+RTwvYnV0dG9uPjwvZGl2PjwvbmF2PjwvbWFpbj4KfQo=
+import { useEffect, useRef, useState, type PointerEvent } from 'react'
+import { Application, Assets, Graphics, Sprite, Texture } from 'pixi.js'
+import type { GameConfig } from '../game/config'
+
+export type GameHud = { health: number; score: number; timeLeft: number; paused: boolean }
+export type GameResult = { score: number; durationSeconds: number; reason: 'time' | 'death' }
+type Props = { config: GameConfig; hud: GameHud; onHudChange: (hud: GameHud) => void; onEnd: (result: GameResult) => void; onExit: () => void }
+type Projectile = { graphic: Graphics; velocityX: number; velocityY: number; remainingLife: number; owner: 'player' | 'enemy' }
+
+const PLAYER_RADIUS = 26
+const ISLAND_RADIUS = 88
+const PLAYER_SPEED = 220
+const TURN_SPEED = 2.8
+const PROJECTILE_SPEED = 620
+const FRONT_FIRE_COOLDOWN = 0.35
+const BROADSIDE_FIRE_COOLDOWN = 0.8
+const CHASER_RADIUS = 25
+const CHASER_SPEED = 118
+const SHOOTER_SPEED = 92
+const SHOOTER_ATTACK_RANGE = 300
+const SHOOTER_FIRE_COOLDOWN = 1.35
+const ENEMY_MAX_HEALTH = 2
+const PLAYER_SHIP_ASSET = 'https://raw.githubusercontent.com/junglegaming/game-developer-challenge/main/assets/png/default/ships/ship_12.png'
+const CHASER_SHIP_ASSET = 'https://raw.githubusercontent.com/junglegaming/game-developer-challenge/main/assets/png/default/ships/ship_5.png'
+const SHOOTER_SHIP_ASSET = 'https://raw.githubusercontent.com/junglegaming/game-developer-challenge/main/assets/png/default/ships/ship_20.png'
+
+function distanceSquared(aX: number, aY: number, bX: number, bY: number) {
+  const x = aX - bX
+  const y = aY - bY
+  return x * x + y * y
+}
+
+function createShip(color: number, texture?: Texture) {
+  const ship = new Graphics()
+  if (texture) {
+    const sprite = new Sprite(texture)
+    sprite.anchor.set(0.5)
+    sprite.width = 58
+    sprite.height = 74
+    ship.addChild(sprite)
+    return ship
+  }
+  ship.poly([0, -34, 25, 27, 10, 34, -10, 34, -25, 27]).fill(color).stroke({ color: 0x3a241b, width: 5 })
+  ship.rect(-4, -18, 8, 34).fill(0x5c3826)
+  ship.poly([2, -17, 2, 10, 23, 1]).fill(0xf2e4bc).stroke({ color: 0x6d4d37, width: 2 })
+  return ship
+}
+
+function createHealthBar() { return new Graphics() }
+function drawHealthBar(bar: Graphics, x: number, y: number, health: number, maxHealth: number) {
+  bar.clear().roundRect(-24, -4, 48, 8, 3).fill(0x2b2020)
+  bar.roundRect(-22, -2, Math.max(0, 44 * health / maxHealth), 4, 2).fill(health / maxHealth > 0.5 ? 0x75d16e : 0xe86950)
+  bar.position.set(x, y - 48)
+}
+
+function normalizeAngle(angle: number) {
+  return Math.atan2(Math.sin(angle), Math.cos(angle))
+}
+
+export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
+  const hostRef = useRef<HTMLDivElement>(null)
+  const togglePauseRef = useRef<() => void>(() => {})
+  const touchPressedRef = useRef(new Set<string>())
+  const [assetStatus, setAssetStatus] = useState<'loading' | 'ready' | 'fallback'>('loading')
+
+  useEffect(() => {
+    const host = hostRef.current
+    if (!host) return
+    const canvasHost = host
+    const app = new Application()
+    const pressed = new Set<string>()
+    const touchPressed = touchPressedRef.current
+    const isPressed = (code: string) => pressed.has(code) || touchPressed.has(code)
+    const projectiles: Projectile[] = []
+    let active = true
+    let fireCooldown = 0
+    let portFireCooldown = 0
+    let starboardFireCooldown = 0
+    let chaser: Graphics | null = null
+    let shooter: Graphics | null = null
+    let chaserHealthBar: Graphics | null = null
+    let shooterHealthBar: Graphics | null = null
+    let chaserRespawn = 1
+    let nextEnemy: 'chaser' | 'shooter' = 'chaser'
+    let shooterFireCooldown = 0
+    let playerHealth = 3
+    let score = 0
+    let chaserHealth = ENEMY_MAX_HEALTH
+    let shooterHealth = ENEMY_MAX_HEALTH
+    let remainingTime = config.sessionDurationSeconds
+    let reportedSecond = Math.ceil(remainingTime)
+    let paused = false
+    let ended = false
+    let islandX = 0
+    let islandY = 0
+
+    const reportHud = () => onHudChange({ health: playerHealth, score, timeLeft: Math.max(0, Math.ceil(remainingTime)), paused })
+    const finish = (reason: GameResult['reason']) => {
+      if (ended) return
+      ended = true
+      pressed.clear()
+      onEnd({ score, durationSeconds: Math.round(config.sessionDurationSeconds - remainingTime), reason })
+    }
+    const togglePause = () => {
+      if (ended) return
+      paused = !paused
+      pressed.clear()
+      reportHud()
+    }
+    const onVisibilityChange = () => {
+      if (document.hidden && !paused && !ended) togglePause()
+    }
+    togglePauseRef.current = togglePause
+    const onKeyDown = (event: KeyboardEvent) => {
+      const accepted = ['KeyW', 'KeyA', 'KeyD', 'KeyQ', 'KeyE', 'Space', 'KeyP']
+      if (accepted.includes(event.code)) event.preventDefault()
+      if (event.code === 'KeyP' && !event.repeat) togglePause()
+      pressed.add(event.code)
+    }
+    const onKeyUp = (event: KeyboardEvent) => pressed.delete(event.code)
+    const removeProjectile = (projectile: Projectile) => {
+      projectile.graphic.removeFromParent()
+      projectile.graphic.destroy()
+      projectiles.splice(projectiles.indexOf(projectile), 1)
+    }
+
+    async function mount() {
+      await app.init({ background: '#0b5672', resizeTo: canvasHost, antialias: true, resolution: Math.min(window.devicePixelRatio, 2) })
+      if (!active) { app.destroy(true); return }
+      canvasHost.appendChild(app.canvas)
+      window.addEventListener('keydown', onKeyDown)
+      window.addEventListener('keyup', onKeyUp)
+      document.addEventListener('visibilitychange', onVisibilityChange)
+
+      let playerTexture: Texture | undefined
+      let chaserTexture: Texture | undefined
+      let shooterTexture: Texture | undefined
+      try {
+        ;[playerTexture, chaserTexture, shooterTexture] = await Promise.all([Assets.load<Texture>(PLAYER_SHIP_ASSET), Assets.load<Texture>(CHASER_SHIP_ASSET), Assets.load<Texture>(SHOOTER_SHIP_ASSET)])
+        if (active) setAssetStatus('ready')
+      } catch {
+        if (active) setAssetStatus('fallback')
+      }
+      const island = new Graphics().circle(0, 0, ISLAND_RADIUS).fill(0x79a64d).stroke({ color: 0x315923, width: 9 })
+      islandX = app.screen.width * 0.52
+      islandY = app.screen.height * 0.45
+      island.position.set(islandX, islandY)
+      app.stage.addChild(island)
+
+      const player = createShip(0xf2c35e, playerTexture)
+      player.position.set(app.screen.width * 0.5, app.screen.height * 0.78)
+      app.stage.addChild(player)
+      const playerHealthBar = createHealthBar()
+      app.stage.addChild(playerHealthBar)
+      reportHud()
+
+      const spawnChaser = () => {
+        const spawnPoints = [
+          { x: 56, y: 56 },
+          { x: app.screen.width - 56, y: 56 },
+          { x: 56, y: app.screen.height - 56 },
+          { x: app.screen.width - 56, y: app.screen.height - 56 },
+        ]
+        const point = spawnPoints.sort((a, b) => distanceSquared(b.x, b.y, player.x, player.y) - distanceSquared(a.x, a.y, player.x, player.y))[0]
+        chaserHealth = ENEMY_MAX_HEALTH
+        chaser = createShip(0xd65c4b, chaserTexture)
+        chaser.position.set(point.x, point.y)
+        app.stage.addChild(chaser)
+        chaserHealthBar = createHealthBar()
+        app.stage.addChild(chaserHealthBar)
+      }
+
+      const spawnShooter = () => {
+        const spawnPoints = [
+          { x: 56, y: 56 }, { x: app.screen.width - 56, y: 56 },
+          { x: 56, y: app.screen.height - 56 }, { x: app.screen.width - 56, y: app.screen.height - 56 },
+        ]
+        const point = spawnPoints.sort((a, b) => distanceSquared(b.x, b.y, player.x, player.y) - distanceSquared(a.x, a.y, player.x, player.y))[0]
+        shooterHealth = ENEMY_MAX_HEALTH
+        shooter = createShip(0x6bc4d4, shooterTexture)
+        shooter.position.set(point.x, point.y)
+        app.stage.addChild(shooter)
+        shooterHealthBar = createHealthBar()
+        app.stage.addChild(shooterHealthBar)
+      }
+
+      const explode = (x: number, y: number) => {
+        const effect = new Graphics().circle(0, 0, 12).fill(0xffb648)
+        effect.position.set(x, y)
+        app.stage.addChild(effect)
+        let elapsed = 0
+        const animate = (ticker: { deltaMS: number }) => {
+          elapsed += ticker.deltaMS / 1000
+          effect.scale.set(1 + elapsed * 4)
+          effect.alpha = Math.max(0, 1 - elapsed * 2)
+          if (elapsed >= 0.5) {
+            app.ticker.remove(animate)
+            effect.destroy()
+          }
+        }
+        app.ticker.add(animate)
+      }
+
+      const fireFront = () => {
+        if (fireCooldown > 0) return
+        fireCooldown = FRONT_FIRE_COOLDOWN
+        const graphic = new Graphics().circle(0, 0, 6).fill(0x17120d).stroke({ color: 0xffe2a4, width: 2 })
+        const directionX = Math.sin(player.rotation)
+        const directionY = -Math.cos(player.rotation)
+        graphic.position.set(player.x + directionX * 38, player.y + directionY * 38)
+        app.stage.addChild(graphic)
+        projectiles.push({ graphic, velocityX: directionX * PROJECTILE_SPEED, velocityY: directionY * PROJECTILE_SPEED, remainingLife: 1.1, owner: 'player' })
+      }
+
+      const fireBroadside = (side: 'port' | 'starboard') => {
+        const isPort = side === 'port'
+        if (isPort ? portFireCooldown > 0 : starboardFireCooldown > 0) return
+        if (isPort) portFireCooldown = BROADSIDE_FIRE_COOLDOWN
+        else starboardFireCooldown = BROADSIDE_FIRE_COOLDOWN
+        const broadsideAngle = player.rotation + (isPort ? -Math.PI / 2 : Math.PI / 2)
+        const directionX = Math.sin(broadsideAngle)
+        const directionY = -Math.cos(broadsideAngle)
+        const forwardX = Math.sin(player.rotation)
+        const forwardY = -Math.cos(player.rotation)
+        for (const offset of [-15, 0, 15]) {
+          const graphic = new Graphics().circle(0, 0, 5).fill(0x17120d).stroke({ color: 0xffe2a4, width: 2 })
+          graphic.position.set(player.x + directionX * 33 + forwardX * offset, player.y + directionY * 33 + forwardY * offset)
+          app.stage.addChild(graphic)
+          projectiles.push({ graphic, velocityX: directionX * PROJECTILE_SPEED, velocityY: directionY * PROJECTILE_SPEED, remainingLife: 0.9, owner: 'player' })
+        }
+      }
+
+      const fireEnemy = () => {
+        if (!shooter || shooterFireCooldown > 0) return
+        shooterFireCooldown = SHOOTER_FIRE_COOLDOWN
+        const graphic = new Graphics().circle(0, 0, 6).fill(0x732c25).stroke({ color: 0xffb070, width: 2 })
+        const directionX = Math.sin(shooter.rotation)
+        const directionY = -Math.cos(shooter.rotation)
+        graphic.position.set(shooter.x + directionX * 38, shooter.y + directionY * 38)
+        app.stage.addChild(graphic)
+        projectiles.push({ graphic, velocityX: directionX * (PROJECTILE_SPEED * 0.72), velocityY: directionY * (PROJECTILE_SPEED * 0.72), remainingLife: 1.4, owner: 'enemy' })
+      }
+
+      app.ticker.add((ticker) => {
+        if (ended || paused) return
+        const seconds = ticker.deltaMS / 1000
+        remainingTime = Math.max(0, remainingTime - seconds)
+        const nextSecond = Math.ceil(remainingTime)
+        if (nextSecond !== reportedSecond) { reportedSecond = nextSecond; reportHud() }
+        if (remainingTime <= 0) { finish('time'); return }
+        fireCooldown = Math.max(0, fireCooldown - seconds)
+        portFireCooldown = Math.max(0, portFireCooldown - seconds)
+        starboardFireCooldown = Math.max(0, starboardFireCooldown - seconds)
+        chaserRespawn -= seconds
+        shooterFireCooldown = Math.max(0, shooterFireCooldown - seconds)
+        if (!chaser && !shooter && chaserRespawn <= 0 && playerHealth > 0) {
+          if (nextEnemy === 'chaser') spawnChaser()
+          else spawnShooter()
+        }
+        if (isPressed('KeyA')) player.rotation -= TURN_SPEED * seconds
+        if (isPressed('KeyD')) player.rotation += TURN_SPEED * seconds
+        if (isPressed('KeyW')) {
+          const nextX = player.x + Math.sin(player.rotation) * PLAYER_SPEED * seconds
+          const nextY = player.y - Math.cos(player.rotation) * PLAYER_SPEED * seconds
+          const hitsIsland = distanceSquared(nextX, nextY, islandX, islandY) < (PLAYER_RADIUS + ISLAND_RADIUS) ** 2
+          if (!hitsIsland) {
+            player.x = Math.max(PLAYER_RADIUS, Math.min(app.screen.width - PLAYER_RADIUS, nextX))
+            player.y = Math.max(PLAYER_RADIUS, Math.min(app.screen.height - PLAYER_RADIUS, nextY))
+          }
+        }
+        if (isPressed('Space')) fireFront()
+        if (isPressed('KeyQ')) fireBroadside('port')
+        if (isPressed('KeyE')) fireBroadside('starboard')
+
+        if (chaser) {
+          const targetAngle = Math.atan2(player.x - chaser.x, -(player.y - chaser.y))
+          chaser.rotation += normalizeAngle(targetAngle - chaser.rotation) * Math.min(1, seconds * 3)
+          const nextX = chaser.x + Math.sin(chaser.rotation) * CHASER_SPEED * seconds
+          const nextY = chaser.y - Math.cos(chaser.rotation) * CHASER_SPEED * seconds
+          const hitsIsland = distanceSquared(nextX, nextY, islandX, islandY) < (CHASER_RADIUS + ISLAND_RADIUS) ** 2
+          if (!hitsIsland) {
+            chaser.x = Math.max(CHASER_RADIUS, Math.min(app.screen.width - CHASER_RADIUS, nextX))
+            chaser.y = Math.max(CHASER_RADIUS, Math.min(app.screen.height - CHASER_RADIUS, nextY))
+          } else {
+            chaser.rotation += Math.PI / 2
+          }
+          if (distanceSquared(chaser.x, chaser.y, player.x, player.y) < (CHASER_RADIUS + PLAYER_RADIUS) ** 2) {
+            explode(chaser.x, chaser.y)
+            chaser.destroy()
+            chaser = null
+            chaserHealthBar?.destroy()
+            chaserHealthBar = null
+            playerHealth -= 1
+            player.tint = playerHealth === 2 ? 0xffd17f : playerHealth === 1 ? 0xff7f7f : 0x555555
+            reportHud()
+            chaserRespawn = config.enemySpawnIntervalSeconds
+            nextEnemy = 'shooter'
+            if (playerHealth <= 0) finish('death')
+          }
+        }
+        if (shooter) {
+          const targetAngle = Math.atan2(player.x - shooter.x, -(player.y - shooter.y))
+          shooter.rotation += normalizeAngle(targetAngle - shooter.rotation) * Math.min(1, seconds * 2.4)
+          const distanceToPlayer = Math.sqrt(distanceSquared(shooter.x, shooter.y, player.x, player.y))
+          if (distanceToPlayer > SHOOTER_ATTACK_RANGE) {
+            const nextX = shooter.x + Math.sin(shooter.rotation) * SHOOTER_SPEED * seconds
+            const nextY = shooter.y - Math.cos(shooter.rotation) * SHOOTER_SPEED * seconds
+            const hitsIsland = distanceSquared(nextX, nextY, islandX, islandY) < (CHASER_RADIUS + ISLAND_RADIUS) ** 2
+            if (!hitsIsland) { shooter.x = Math.max(CHASER_RADIUS, Math.min(app.screen.width - CHASER_RADIUS, nextX)); shooter.y = Math.max(CHASER_RADIUS, Math.min(app.screen.height - CHASER_RADIUS, nextY)) }
+          } else fireEnemy()
+        }
+        for (const projectile of [...projectiles]) {
+          projectile.graphic.x += projectile.velocityX * seconds
+          projectile.graphic.y += projectile.velocityY * seconds
+          projectile.remainingLife -= seconds
+          const hitsIsland = distanceSquared(projectile.graphic.x, projectile.graphic.y, islandX, islandY) < ISLAND_RADIUS ** 2
+          const outside = projectile.graphic.x < 0 || projectile.graphic.x > app.screen.width || projectile.graphic.y < 0 || projectile.graphic.y > app.screen.height
+          const hitsChaser = projectile.owner === 'player' && chaser && distanceSquared(projectile.graphic.x, projectile.graphic.y, chaser.x, chaser.y) < (CHASER_RADIUS + 6) ** 2
+          const hitsShooter = projectile.owner === 'player' && shooter && distanceSquared(projectile.graphic.x, projectile.graphic.y, shooter.x, shooter.y) < (CHASER_RADIUS + 6) ** 2
+          const hitsPlayer = projectile.owner === 'enemy' && distanceSquared(projectile.graphic.x, projectile.graphic.y, player.x, player.y) < (PLAYER_RADIUS + 6) ** 2
+          if (hitsChaser && chaser) {
+            chaserHealth -= 1
+            if (chaserHealth <= 0) {
+              explode(chaser.x, chaser.y)
+              chaser.destroy()
+              chaser = null
+              chaserHealthBar?.destroy()
+              chaserHealthBar = null
+              score += 1
+              reportHud()
+              chaserRespawn = config.enemySpawnIntervalSeconds
+              nextEnemy = 'shooter'
+            } else chaser.tint = 0xffaaa0
+          }
+          if (hitsShooter && shooter) {
+            shooterHealth -= 1
+            if (shooterHealth <= 0) {
+              explode(shooter.x, shooter.y)
+              shooter.destroy()
+              shooter = null
+              shooterHealthBar?.destroy()
+              shooterHealthBar = null
+              score += 1
+              reportHud()
+              chaserRespawn = config.enemySpawnIntervalSeconds
+              nextEnemy = 'chaser'
+            } else shooter.tint = 0xffaaa0
+          }
+          if (hitsPlayer) {
+            playerHealth -= 1
+            player.tint = playerHealth === 2 ? 0xffd17f : playerHealth === 1 ? 0xff7f7f : 0x555555
+            reportHud()
+            if (playerHealth <= 0) finish('death')
+          }
+          if (projectile.remainingLife <= 0 || hitsIsland || outside || hitsChaser || hitsShooter || hitsPlayer) removeProjectile(projectile)
+        }
+        drawHealthBar(playerHealthBar, player.x, player.y, playerHealth, 3)
+        if (chaser && chaserHealthBar) drawHealthBar(chaserHealthBar, chaser.x, chaser.y, chaserHealth, ENEMY_MAX_HEALTH)
+        if (shooter && shooterHealthBar) drawHealthBar(shooterHealthBar, shooter.x, shooter.y, shooterHealth, ENEMY_MAX_HEALTH)
+      })
+    }
+
+    void mount()
+    return () => {
+      active = false
+      window.removeEventListener('keydown', onKeyDown)
+      window.removeEventListener('keyup', onKeyUp)
+      document.removeEventListener('visibilitychange', onVisibilityChange)
+      touchPressed.clear()
+      app.destroy(true)
+    }
+  }, [config, onHudChange, onEnd])
+
+  const touchControl = (code: string) => ({
+    onPointerDown: (event: PointerEvent<HTMLButtonElement>) => { event.preventDefault(); touchPressedRef.current.add(code) },
+    onPointerUp: () => touchPressedRef.current.delete(code),
+    onPointerCancel: () => touchPressedRef.current.delete(code),
+    onPointerLeave: () => touchPressedRef.current.delete(code),
+  })
+  return <main className="game-screen"><header className="game-header"><span>Hull: {hud.health}/3 · Score: {hud.score} · Time: {hud.timeLeft}s</span><div className="game-actions"><button type="button" className="button button-secondary" onClick={() => togglePauseRef.current()}>{hud.paused ? 'Resume' : 'Pause'}</button><button type="button" className="button button-secondary" onClick={onExit}>Exit game</button></div></header>{assetStatus !== 'ready' && <div className="asset-message" role="status">{assetStatus === 'loading' ? 'Loading battle assets…' : 'Asset fallback enabled.'}</div>}{hud.paused && <div className="pause-message" role="status">Paused — press P or Resume to continue.</div>}<div className="game-canvas" ref={hostRef} aria-label="Pirate Battle game arena" /><nav className="touch-controls" aria-label="Touch controls"><div><button type="button" aria-label="Turn left" {...touchControl('KeyA')}>↶</button><button type="button" aria-label="Move forward" {...touchControl('KeyW')}>▲</button><button type="button" aria-label="Turn right" {...touchControl('KeyD')}>↷</button></div><div><button type="button" aria-label="Fire port broadside" {...touchControl('KeyQ')}>Q</button><button type="button" aria-label="Fire front cannon" {...touchControl('Space')}>●</button><button type="button" aria-label="Fire starboard broadside" {...touchControl('KeyE')}>E</button></div></nav></main>
+}
