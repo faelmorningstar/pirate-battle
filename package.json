@@ -1,1 +1,36 @@
-ewogICJuYW1lIjogInBpcmF0ZS1iYXR0bGUiLAogICJwcml2YXRlIjogdHJ1ZSwKICAidmVyc2lvbiI6ICIwLjAuMCIsCiAgInR5cGUiOiAibW9kdWxlIiwKICAic2NyaXB0cyI6IHsKICAgICJkZXYiOiAidml0ZSIsCiAgICAiYnVpbGQiOiAidHNjIC1iICYmIHZpdGUgYnVpbGQiLAogICAgImxpbnQiOiAib3hsaW50IiwKICAgICJwcmV2aWV3IjogInZpdGUgcHJldmlldyIsCiAgICAidGVzdDplMmUiOiAicGxheXdyaWdodCB0ZXN0IgogIH0sCiAgImRlcGVuZGVuY2llcyI6IHsKICAgICJAdGFuc3RhY2svcmVhY3QtcXVlcnkiOiAiXjUuMTA0LjEiLAogICAgImF4aW9zIjogIl4xLjIwLjAiLAogICAgIm1zdyI6ICJeMy4wLjIiLAogICAgInBpeGkuanMiOiAiXjguMjIuMCIsCiAgICAicmVhY3QiOiAiXjE5LjIuOCIsCiAgICAicmVhY3QtZG9tIjogIl4xOS4yLjgiCiAgfSwKICAiZGV2RGVwZW5kZW5jaWVzIjogewogICAgIkBwbGF5d3JpZ2h0L3Rlc3QiOiAiXjEuNjQuMCIsCiAgICAiQHR5cGVzL25vZGUiOiAiXjI0LjEzLjMiLAogICAgIkB0eXBlcy9yZWFjdCI6ICJeMTkuMi4xOCIsCiAgICAiQHR5cGVzL3JlYWN0LWRvbSI6ICJeMTkuMi43IiwKICAgICJAdml0ZWpzL3BsdWdpbi1yZWFjdCI6ICJeNi4xLjEiLAogICAgIm94bGludCI6ICJeMS44MS4wIiwKICAgICJ0eXBlc2NyaXB0IjogIn42LjAuMiIsCiAgICAidml0ZSI6ICJeOC4zLjAiCiAgfSwKICAibXN3IjogewogICAgIndvcmtlckRpcmVjdG9yeSI6IFsKICAgICAgInB1YmxpYyIKICAgIF0KICB9Cn0K
+{
+  "name": "pirate-battle",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "oxlint",
+    "preview": "vite preview",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.104.1",
+    "axios": "^1.20.0",
+    "msw": "^3.0.2",
+    "pixi.js": "^8.22.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.0",
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "oxlint": "^1.81.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.3.0"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
+  }
+}
