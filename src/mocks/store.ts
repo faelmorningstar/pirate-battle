@@ -1,1 +1,27 @@
-aW1wb3J0IHR5cGUgeyBNYXRjaFJlY29yZCB9IGZyb20gJy4uL2RhdGEvY29udHJhY3RzJwoKY29uc3QgU1RPUkFHRV9LRVkgPSAncGlyYXRlLWJhdHRsZTptYXRjaGVzJwoKY29uc3QgZml4dHVyZXM6IE1hdGNoUmVjb3JkW10gPSBbCiAgeyBpZDogJ2ZpeHR1cmUtMScsIHBsYXllcklkOiAnY2FwdGFpbi1hZGEnLCBwbGF5ZXJOYW1lOiAnQ2FwdGFpbiBBZGEnLCBjb21wbGV0ZWRBdDogJzIwMjYtMTAtMDFUMTA6MDA6MDAuMDAwWicsIHNjb3JlOiAxMiwgZHVyYXRpb25TZWNvbmRzOiA5MCwgZW5kUmVhc29uOiAndGltZScsIGNvbmZpZ3VyYXRpb246IHsgc2Vzc2lvbkR1cmF0aW9uU2Vjb25kczogOTAsIGVuZW15U3Bhd25JbnRlcnZhbFNlY29uZHM6IDQgfSB9LAogIHsgaWQ6ICdmaXh0dXJlLTInLCBwbGF5ZXJJZDogJ2NhcHRhaW4tbGluJywgcGxheWVyTmFtZTogJ0NhcHRhaW4gTGluJywgY29tcGxldGVkQXQ6ICcyMDI2LTEwLTAyVDEwOjAwOjAwLjAwMFonLCBzY29yZTogOSwgZHVyYXRpb25TZWNvbmRzOiA3NSwgZW5kUmVhc29uOiAnZGVhdGgnLCBjb25maWd1cmF0aW9uOiB7IHNlc3Npb25EdXJhdGlvblNlY29uZHM6IDkwLCBlbmVteVNwYXduSW50ZXJ2YWxTZWNvbmRzOiA0IH0gfSwKICB7IGlkOiAnZml4dHVyZS0zJywgcGxheWVySWQ6ICdjYXB0YWluLWpvJywgcGxheWVyTmFtZTogJ0NhcHRhaW4gSm8nLCBjb21wbGV0ZWRBdDogJzIwMjYtMTAtMDNUMTA6MDA6MDAuMDAwWicsIHNjb3JlOiA3LCBkdXJhdGlvblNlY29uZHM6IDkwLCBlbmRSZWFzb246ICd0aW1lJywgY29uZmlndXJhdGlvbjogeyBzZXNzaW9uRHVyYXRpb25TZWNvbmRzOiA5MCwgZW5lbXlTcGF3bkludGVydmFsU2Vjb25kczogNCB9IH0sCl0KCmV4cG9ydCBmdW5jdGlvbiByZWFkTWF0Y2hlcygpIHsKICB0cnkgewogICAgY29uc3Qgc2F2ZWQgPSBsb2NhbFN0b3JhZ2UuZ2V0SXRlbShTVE9SQUdFX0tFWSkKICAgIHJldHVybiBzYXZlZCA/IEpTT04ucGFyc2Uoc2F2ZWQpIGFzIE1hdGNoUmVjb3JkW10gOiBmaXh0dXJlcwogIH0gY2F0Y2ggeyByZXR1cm4gZml4dHVyZXMgfQp9CgpleHBvcnQgZnVuY3Rpb24gc2F2ZU1hdGNoKHJlY29yZDogTWF0Y2hSZWNvcmQpIHsKICBjb25zdCBtYXRjaGVzID0gcmVhZE1hdGNoZXMoKQogIGNvbnN0IGV4aXN0aW5nID0gbWF0Y2hlcy5maW5kKChtYXRjaCkgPT4gbWF0Y2guaWQgPT09IHJlY29yZC5pZCkKICBpZiAoZXhpc3RpbmcpIHJldHVybiBleGlzdGluZwogIGNvbnN0IG5leHQgPSBbLi4ubWF0Y2hlcywgcmVjb3JkXQogIGxvY2FsU3RvcmFnZS5zZXRJdGVtKFNUT1JBR0VfS0VZLCBKU09OLnN0cmluZ2lmeShuZXh0KSkKICByZXR1cm4gcmVjb3JkCn0KCmV4cG9ydCBmdW5jdGlvbiByZXNldE1hdGNoZXMoKSB7IGxvY2FsU3RvcmFnZS5yZW1vdmVJdGVtKFNUT1JBR0VfS0VZKSB9Cg==
+import type { MatchRecord } from '../data/contracts'
+
+const STORAGE_KEY = 'pirate-battle:matches'
+
+const fixtures: MatchRecord[] = [
+  { id: 'fixture-1', playerId: 'captain-ada', playerName: 'Captain Ada', completedAt: '2026-10-01T10:00:00.000Z', score: 12, durationSeconds: 90, endReason: 'time', configuration: { sessionDurationSeconds: 90, enemySpawnIntervalSeconds: 4 } },
+  { id: 'fixture-2', playerId: 'captain-lin', playerName: 'Captain Lin', completedAt: '2026-10-02T10:00:00.000Z', score: 9, durationSeconds: 75, endReason: 'death', configuration: { sessionDurationSeconds: 90, enemySpawnIntervalSeconds: 4 } },
+  { id: 'fixture-3', playerId: 'captain-jo', playerName: 'Captain Jo', completedAt: '2026-10-03T10:00:00.000Z', score: 7, durationSeconds: 90, endReason: 'time', configuration: { sessionDurationSeconds: 90, enemySpawnIntervalSeconds: 4 } },
+]
+
+export function readMatches() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY)
+    return saved ? JSON.parse(saved) as MatchRecord[] : fixtures
+  } catch { return fixtures }
+}
+
+export function saveMatch(record: MatchRecord) {
+  const matches = readMatches()
+  const existing = matches.find((match) => match.id === record.id)
+  if (existing) return existing
+  const next = [...matches, record]
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
+  return record
+}
+
+export function resetMatches() { localStorage.removeItem(STORAGE_KEY) }
