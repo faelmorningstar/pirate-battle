@@ -1,1 +1,13 @@
-aW1wb3J0IHsgZGVmaW5lQ29uZmlnLCBkZXZpY2VzIH0gZnJvbSAnQHBsYXl3cmlnaHQvdGVzdCcKCmV4cG9ydCBkZWZhdWx0IGRlZmluZUNvbmZpZyh7CiAgdGVzdERpcjogJy4vdGVzdHMnLAogIGZ1bGx5UGFyYWxsZWw6IHRydWUsCiAgcmV0cmllczogMCwKICB1c2U6IHsgYmFzZVVSTDogJ2h0dHA6Ly8xMjcuMC4wLjE6NDE3MycsIHRyYWNlOiAncmV0YWluLW9uLWZhaWx1cmUnIH0sCiAgcHJvamVjdHM6IFsKICAgIHsgbmFtZTogJ2Nocm9taXVtJywgdXNlOiB7IC4uLmRldmljZXNbJ0Rlc2t0b3AgQ2hyb21lJ10gfSB9LAogICAgeyBuYW1lOiAnbW9iaWxlLWNocm9taXVtJywgdXNlOiB7IC4uLmRldmljZXNbJ1BpeGVsIDUnXSB9IH0sCiAgXSwKICB3ZWJTZXJ2ZXI6IHsgY29tbWFuZDogJ25wbSBydW4gZGV2IC0tIC0taG9zdCAxMjcuMC4wLjEgLS1wb3J0IDQxNzMnLCB1cmw6ICdodHRwOi8vMTI3LjAuMC4xOjQxNzMnLCByZXVzZUV4aXN0aW5nU2VydmVyOiB0cnVlIH0sCn0pCg==
+import { defineConfig, devices } from '@playwright/test'
+
+export default defineConfig({
+  testDir: './tests',
+  fullyParallel: true,
+  retries: 0,
+  use: { baseURL: 'http://127.0.0.1:4173', trace: 'retain-on-failure' },
+  projects: [
+    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    { name: 'mobile-chromium', use: { ...devices['Pixel 5'] } },
+  ],
+  webServer: { command: 'npm run dev -- --host 127.0.0.1 --port 4173', url: 'http://127.0.0.1:4173', reuseExistingServer: true },
+})
