@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState, type PointerEvent } from 'react'
-import { Application, Assets, Graphics, Sprite, Texture } from 'pixi.js'
+import { Application, Assets, Graphics, Sprite, Text, Texture } from 'pixi.js'
+import { HealthMeter, OfficialIcon } from './OfficialUi'
+import { pirateAsset } from '../game/assets'
 import type { GameConfig } from '../game/config'
 
 export type GameHud = { health: number; score: number; timeLeft: number; paused: boolean }
@@ -20,11 +22,86 @@ const SHOOTER_SPEED = 92
 const SHOOTER_ATTACK_RANGE = 300
 const SHOOTER_FIRE_COOLDOWN = 1.35
 const ENEMY_MAX_HEALTH = 2
-const PLAYER_SHIP_ASSET = 'https://raw.githubusercontent.com/junglegaming/game-developer-challenge/main/assets/png/default/ships/ship_12.png'
-const CHASER_SHIP_ASSET = 'https://raw.githubusercontent.com/junglegaming/game-developer-challenge/main/assets/png/default/ships/ship_5.png'
-const SHOOTER_SHIP_ASSET = 'https://raw.githubusercontent.com/junglegaming/game-developer-challenge/main/assets/png/default/ships/ship_20.png'
+const PLAYER_SHIP_ASSET = pirateAsset('ships/ship_12.png')
+const CHASER_SHIP_ASSET = pirateAsset('ships/ship_5.png')
+const SHOOTER_SHIP_ASSET = pirateAsset('ships/ship_20.png')
 
 const ASSET_LOAD_TIMEOUT_MS = 2500
+
+function drawSea(sea: Graphics, width: number, height: number) {
+  sea.clear().rect(0, 0, width, height).fill(0x09364d)
+  // Faixas suaves de profundidade e linhas desenhadas apenas na montagem ou resize.
+  for (let band = 0; band < 16; band += 1) {
+    sea.rect(0, height * band / 16, width, height / 16)
+      .fill({ color: 0x1a7685, alpha: 0.16 * (1 - band / 16) })
+  }
+  for (let row = 0; row * 64 < height; row += 1) {
+    for (let column = 0; column * 116 < width; column += 1) {
+      const x = column * 116 + (row % 2) * 48 + 12
+      const y = row * 64 + 22 + Math.sin(column * 2 + row) * 12
+      const length = 22 + ((row * 7 + column * 11) % 26)
+      sea.moveTo(x, y).quadraticCurveTo(x + length / 2, y + 5, x + length, y)
+        .stroke({ color: 0x78bec4, width: 1.3, alpha: 0.13 })
+      if ((row + column) % 3 === 0) {
+        sea.moveTo(x + 8, y + 7).lineTo(x + length - 4, y + 8)
+          .stroke({ color: 0x78bec4, width: 1, alpha: 0.07 })
+      }
+    }
+  }
+}
+
+function drawPalm(island: Graphics, x: number, y: number, size: number) {
+  island.ellipse(x + 6 * size, y + 3 * size, 15 * size, 6 * size)
+    .fill({ color: 0x183e30, alpha: 0.22 })
+  island.moveTo(x, y).quadraticCurveTo(x - 5 * size, y - 12 * size, x + 2 * size, y - 25 * size)
+    .stroke({ color: 0x70482e, width: 6 * size, cap: 'round' })
+  island.moveTo(x - size, y - 2 * size).quadraticCurveTo(x - 4 * size, y - 13 * size, x + size, y - 23 * size)
+    .stroke({ color: 0xba8550, width: 2 * size, cap: 'round' })
+  const crownX = x + 2 * size
+  const crownY = y - 25 * size
+  for (let leaf = 0; leaf < 6; leaf += 1) {
+    const angle = leaf * Math.PI / 3 + 0.2
+    const tipX = crownX + Math.cos(angle) * 23 * size
+    const tipY = crownY + Math.sin(angle) * 16 * size
+    const middleX = crownX + Math.cos(angle) * 12 * size
+    const middleY = crownY + Math.sin(angle) * 8 * size
+    island.moveTo(crownX, crownY)
+      .quadraticCurveTo(middleX - Math.sin(angle) * 8 * size, middleY + Math.cos(angle) * 8 * size, tipX, tipY)
+      .quadraticCurveTo(middleX, middleY, crownX, crownY)
+      .fill(leaf % 2 === 0 ? 0x226d42 : 0x39894b)
+    island.moveTo(crownX, crownY).lineTo(tipX, tipY)
+      .stroke({ color: 0x9aba5f, alpha: 0.45, width: size })
+  }
+  island.circle(crownX, crownY, 2.5 * size).fill(0xc09a52)
+}
+
+function createIsland(radius: number) {
+  const island = new Graphics()
+  // Só a espuma translúcida passa da costa; a areia termina no raio da colisão.
+  island.circle(0, 0, radius + 7).fill({ color: 0x53b9b1, alpha: 0.12 })
+  island.circle(0, 0, radius).fill(0xc49a58)
+  island.circle(-1, -2, radius - 3).fill(0xe6c682)
+  island.ellipse(-radius * 0.05, -radius * 0.08, radius * 0.78, radius * 0.75).fill(0x547e43)
+  island.ellipse(-radius * 0.12, -radius * 0.16, radius * 0.67, radius * 0.62).fill(0x71934d)
+  for (let detail = 0; detail < 9; detail += 1) {
+    const angle = detail * Math.PI * 2 / 9 + 0.15
+    const x = Math.cos(angle) * radius * 0.87
+    const y = Math.sin(angle) * radius * 0.87
+    island.ellipse(x, y, radius * 0.045, radius * 0.028).fill(detail % 3 === 0 ? 0x7d8170 : 0xf2d99e)
+    if (detail % 2 === 0) {
+      island.moveTo(Math.cos(angle) * (radius + 3), Math.sin(angle) * (radius + 3))
+        .arc(0, 0, radius + 3, angle, angle + 0.28)
+        .stroke({ color: 0xd0ece1, width: 1.5, alpha: 0.42 })
+    }
+    island.circle(Math.cos(angle) * radius * 0.52, Math.sin(angle) * radius * 0.48, radius * 0.065)
+      .fill({ color: 0x395f38, alpha: 0.35 })
+  }
+  const palmScale = radius / 88
+  drawPalm(island, -25 * palmScale, -8 * palmScale, palmScale)
+  drawPalm(island, 25 * palmScale, 4 * palmScale, palmScale * 0.9)
+  drawPalm(island, -3 * palmScale, 36 * palmScale, palmScale * 0.85)
+  return island
+}
 
 function distanceSquared(aX: number, aY: number, bX: number, bY: number) {
   const x = aX - bX
@@ -48,10 +125,59 @@ function createShip(color: number, texture?: Texture) {
   return ship
 }
 
-function createHealthBar() { return new Graphics() }
+type HealthTextures = Partial<Record<string, Texture>>
+const HEALTH_IMAGES = ['health_frame', 'health_fill_green', 'health_fill_amber', 'health_fill_red', 'enemy_health_frame', 'enemy_health_fill_green', 'enemy_health_fill_red']
+
+function createHealthBar(textures: HealthTextures, enemy = false) {
+  const bar = new Graphics()
+  const width = enemy ? 64 : 96
+  const height = enemy ? 16 : 18
+  const prefix = enemy ? 'enemy_health' : 'health'
+  const fills = new Graphics({ label: 'fills' })
+  const mask = new Graphics({ label: 'fill-mask' })
+  if (textures[`${prefix}_frame`]) {
+    const frame = new Sprite(textures[`${prefix}_frame`])
+    frame.position.set(-width / 2, -height / 2)
+    frame.width = width
+    frame.height = height
+    bar.addChild(frame, fills, mask)
+    for (const color of enemy ? ['green', 'red'] : ['green', 'amber', 'red']) {
+      const fill = new Sprite({ texture: textures[`${prefix}_fill_${color}`], label: color })
+      fill.position.copyFrom(frame.position)
+      fill.width = width
+      fill.height = height
+      fills.addChild(fill)
+    }
+    fills.mask = mask
+  }
+  // Números complementam o preenchimento e a cor também nas barras dos inimigos.
+  const value = new Text({ text: '', label: 'value', style: { fontSize: 11, fontWeight: 'bold', fill: '#fff7df', stroke: { color: '#061d2c', width: 3 } } })
+  value.anchor.set(0.5, 0)
+  value.y = height / 2 + 1
+  bar.addChild(value)
+  return bar
+}
+
 function drawHealthBar(bar: Graphics, x: number, y: number, health: number, maxHealth: number) {
-  bar.clear().roundRect(-24, -4, 48, 8, 3).fill(0x2b2020)
-  bar.roundRect(-22, -2, Math.max(0, 44 * health / maxHealth), 4, 2).fill(health / maxHealth > 0.5 ? 0x75d16e : 0xe86950)
+  const ratio = Math.max(0, Math.min(1, health / maxHealth))
+  const enemy = maxHealth === ENEMY_MAX_HEALTH
+  const fills = bar.getChildByLabel('fills') as Graphics | null
+  if (fills) {
+    const width = enemy ? 64 : 96
+    const height = enemy ? 16 : 18
+    const scale = enemy ? width / 160 : width / 256
+    const rect = enemy ? { x: 24, y: 12, w: 112, h: 15 } : { x: 30, y: 15, w: 196, h: 20 }
+    const mask = bar.getChildByLabel('fill-mask') as Graphics
+    mask.clear().rect(-width / 2 + rect.x * scale, -height / 2 + rect.y * scale, rect.w * scale * ratio, rect.h * scale).fill(0xffffff)
+    const color = ratio > 0.5 ? 'green' : !enemy && ratio > 1 / 3 ? 'amber' : 'red'
+    for (const fill of fills.children) fill.visible = fill.label === color
+  } else {
+    // Mantemos a barra geométrica caso uma imagem local não possa ser carregada.
+    bar.clear().roundRect(-24, -4, 48, 8, 3).fill(0x2b2020)
+    bar.roundRect(-22, -2, 44 * ratio, 4, 2).fill(ratio > 0.5 ? 0x75d16e : 0xe86950)
+  }
+  const value = bar.getChildByLabel('value') as Text
+  value.text = `${health}/${maxHealth}`
   bar.position.set(x, y - 48)
 }
 
@@ -71,6 +197,7 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
     const canvasHost = host
     const app = new Application()
     let initialized = false
+    let cleanupScenery: (() => void) | undefined
     const pressed = new Set<string>()
     const touchPressed = touchPressedRef.current
     const isPressed = (code: string) => pressed.has(code) || touchPressed.has(code)
@@ -128,7 +255,7 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
     }
 
     async function mount() {
-      await app.init({ background: '#0b5672', resizeTo: canvasHost, antialias: true, resolution: Math.min(window.devicePixelRatio, 2) })
+      await app.init({ background: '#09364d', resizeTo: canvasHost, antialias: true, resolution: Math.min(window.devicePixelRatio, 2) })
       initialized = true
 
       if (!active) { app.destroy(true); return }
@@ -160,7 +287,28 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
 } catch {
   if (active) setAssetStatus('fallback')
 }
-      const island = new Graphics().circle(0, 0, ISLAND_RADIUS).fill(0x79a64d).stroke({ color: 0x315923, width: 9 })
+      const healthTextures: HealthTextures = {}
+      const healthResults = await Promise.allSettled(HEALTH_IMAGES.map(async (name) => {
+        const texture = await Assets.load<Texture>(pirateAsset(`ui/hud/${name}.png`))
+        return [name, texture] as const
+      }))
+      if (!active) return
+      if (healthResults.every((result) => result.status === 'fulfilled')) {
+        for (const result of healthResults) {
+          if (result.status === 'fulfilled') healthTextures[result.value[0]] = result.value[1]
+        }
+      }
+      const sea = new Graphics()
+      const resizeSea = () => drawSea(sea, app.screen.width, app.screen.height)
+      resizeSea()
+      app.renderer.on('resize', resizeSea)
+      app.stage.addChild(sea)
+      const island = createIsland(ISLAND_RADIUS)
+      cleanupScenery = () => {
+        app.renderer.off('resize', resizeSea)
+        sea.destroy()
+        island.destroy()
+      }
       islandX = app.screen.width * 0.52
       islandY = app.screen.height * 0.45
       island.position.set(islandX, islandY)
@@ -169,7 +317,7 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
       const player = createShip(0xf2c35e, playerTexture)
       player.position.set(app.screen.width * 0.5, app.screen.height * 0.78)
       app.stage.addChild(player)
-      const playerHealthBar = createHealthBar()
+      const playerHealthBar = createHealthBar(healthTextures)
       app.stage.addChild(playerHealthBar)
       reportHud()
 
@@ -185,7 +333,7 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
         chaser = createShip(0xd65c4b, chaserTexture)
         chaser.position.set(point.x, point.y)
         app.stage.addChild(chaser)
-        chaserHealthBar = createHealthBar()
+        chaserHealthBar = createHealthBar(healthTextures, true)
         app.stage.addChild(chaserHealthBar)
       }
 
@@ -199,7 +347,7 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
         shooter = createShip(0x6bc4d4, shooterTexture)
         shooter.position.set(point.x, point.y)
         app.stage.addChild(shooter)
-        shooterHealthBar = createHealthBar()
+        shooterHealthBar = createHealthBar(healthTextures, true)
         app.stage.addChild(shooterHealthBar)
       }
 
@@ -307,7 +455,7 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
             explode(chaser.x, chaser.y)
             chaser.destroy()
             chaser = null
-            chaserHealthBar?.destroy()
+            chaserHealthBar?.destroy({ children: true })
             chaserHealthBar = null
             playerHealth -= 1
             player.tint = playerHealth === 2 ? 0xffd17f : playerHealth === 1 ? 0xff7f7f : 0x555555
@@ -343,7 +491,7 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
               explode(chaser.x, chaser.y)
               chaser.destroy()
               chaser = null
-              chaserHealthBar?.destroy()
+              chaserHealthBar?.destroy({ children: true })
               chaserHealthBar = null
               score += 1
               reportHud()
@@ -357,7 +505,7 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
               explode(shooter.x, shooter.y)
               shooter.destroy()
               shooter = null
-              shooterHealthBar?.destroy()
+              shooterHealthBar?.destroy({ children: true })
               shooterHealthBar = null
               score += 1
               reportHud()
@@ -386,7 +534,8 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
       window.removeEventListener('keyup', onKeyUp)
       document.removeEventListener('visibilitychange', onVisibilityChange)
       touchPressed.clear()
-      if (initialized) app.destroy(true)
+      cleanupScenery?.()
+      if (initialized) app.destroy(true, { children: true })
     }
   }, [config, onHudChange, onEnd])
 
@@ -396,5 +545,32 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
     onPointerCancel: () => touchPressedRef.current.delete(code),
     onPointerLeave: () => touchPressedRef.current.delete(code),
   })
-  return <main className="game-screen"><header className="game-header"><span>Hull: {hud.health}/3 · Score: {hud.score} · Time: {hud.timeLeft}s</span><div className="game-actions"><button type="button" className="button button-secondary" onClick={() => togglePauseRef.current()}>{hud.paused ? 'Resume' : 'Pause'}</button><button type="button" className="button button-secondary" onClick={onExit}>Exit game</button></div></header>{assetStatus !== 'ready' && <div className="asset-message" role="status">{assetStatus === 'loading' ? 'Loading battle assets…' : 'Asset fallback enabled.'}</div>}{hud.paused && <div className="pause-message" role="status">Paused — press P or Resume to continue.</div>}<div className="game-canvas" ref={hostRef} aria-label="Pirate Battle game arena" /><nav className="touch-controls" aria-label="Touch controls"><div><button type="button" aria-label="Turn left" {...touchControl('KeyA')}>↶</button><button type="button" aria-label="Move forward" {...touchControl('KeyW')}>▲</button><button type="button" aria-label="Turn right" {...touchControl('KeyD')}>↷</button></div><div><button type="button" aria-label="Fire port broadside" {...touchControl('KeyQ')}>Q</button><button type="button" aria-label="Fire front cannon" {...touchControl('Space')}>●</button><button type="button" aria-label="Fire starboard broadside" {...touchControl('KeyE')}>E</button></div></nav></main>
+  return <main className="game-screen">
+    <header className="game-header">
+      <div className="official-hud">
+        <span className="hull-counter"><img className="hud-icon" src={pirateAsset('ui/hud/icon_heart.png')} alt="" aria-hidden="true" /><HealthMeter health={hud.health} maxHealth={3} /><span>Hull: {hud.health}/3</span></span>
+        <span className="hud-counter"><img className="hud-icon" src={pirateAsset('ui/hud/icon_score.png')} alt="" aria-hidden="true" />Score: {hud.score}</span>
+        <span className="hud-counter"><img className="hud-icon" src={pirateAsset('ui/hud/icon_time.png')} alt="" aria-hidden="true" />Time: {hud.timeLeft}s</span>
+      </div>
+      <div className="game-actions">
+        <button type="button" className="button button-secondary" onClick={() => togglePauseRef.current()}><OfficialIcon name={hud.paused ? 'play' : 'pause'} />{hud.paused ? 'Resume' : 'Pause'}</button>
+        <button type="button" className="button button-secondary" onClick={onExit}><OfficialIcon name="home" />Exit game</button>
+      </div>
+    </header>
+    {assetStatus !== 'ready' && <div className="asset-message" role="status">{assetStatus === 'loading' ? 'Loading battle assets…' : 'Asset fallback enabled.'}</div>}
+    {hud.paused && <div className="pause-message official-panel" role="status"><OfficialIcon name="pause" />Paused — press P or Resume to continue.</div>}
+    <div className="game-canvas" ref={hostRef} aria-label="Pirate Battle game arena" />
+    <nav className="touch-controls" aria-label="Touch controls">
+      <div>
+        <button type="button" aria-label="Turn left" {...touchControl('KeyA')}><OfficialIcon name="turn_left" /></button>
+        <button type="button" aria-label="Move forward" {...touchControl('KeyW')}><OfficialIcon name="forward" /></button>
+        <button type="button" aria-label="Turn right" {...touchControl('KeyD')}><OfficialIcon name="turn_right" /></button>
+      </div>
+      <div>
+        <button type="button" aria-label="Fire port broadside" {...touchControl('KeyQ')}><OfficialIcon name="fire_left" /></button>
+        <button type="button" aria-label="Fire front cannon" {...touchControl('Space')}><OfficialIcon name="fire_front" /></button>
+        <button type="button" aria-label="Fire starboard broadside" {...touchControl('KeyE')}><OfficialIcon name="fire_right" /></button>
+      </div>
+    </nav>
+  </main>
 }

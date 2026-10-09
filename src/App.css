@@ -49,3 +49,98 @@ h2 { margin-top: 2rem; }.lead { color: #d0e6dd; font-size: 1.1rem; line-height: 
     gap: .5rem;
   }
 }
+
+/* As nove fatias preservam os cantos da moldura retina em qualquer altura. */
+.menu-card, .official-panel {
+  border: solid transparent;
+  border-width: 20px 16px;
+  border-image: url('/assets/pirate-battle/ui/menu/panel_menu.png') 80 64 fill / 20px 16px / 0 stretch;
+  border-radius: 0;
+  background: transparent;
+}
+.menu-card { width: min(100%, 46rem); padding: clamp(1rem, 3vw, 2rem); }
+.official-title { margin: 0 auto; width: min(100%, 384px); line-height: 0; }
+.official-title img { width: 100%; height: auto; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+.official-icon { width: 24px; height: 24px; flex: 0 0 24px; object-fit: contain; pointer-events: none; user-select: none; }
+
+/* O miolo do botão se adapta ao texto HTML; os cantos ficam no tamanho original. */
+.button-primary, .button-secondary, .tabs button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .4rem;
+  min-height: 44px;
+  padding: .35rem .6rem;
+  border: solid transparent;
+  border-width: 10px 16px;
+  border-image: url('/assets/pirate-battle/ui/menu/button_secondary_normal.png') 40 64 fill / 10px 16px / 0 stretch;
+  border-radius: 0;
+  background: transparent;
+  color: #fff7df;
+}
+.button-primary, .tabs button[aria-selected="true"] {
+  border-image-source: url('/assets/pirate-battle/ui/menu/button_primary_normal.png');
+  color: #302319;
+}
+@media (hover: hover) {
+  .button-primary:hover:not(:disabled), .tabs button[aria-selected="true"]:hover {
+    border-image-source: url('/assets/pirate-battle/ui/menu/button_primary_hover.png');
+  }
+}
+.button-primary:active:not(:disabled), .tabs button[aria-selected="true"]:active { border-image-source: url('/assets/pirate-battle/ui/menu/button_primary_pressed.png'); }
+.button-secondary:active:not(:disabled), .tabs button:active { border-image-source: url('/assets/pirate-battle/ui/menu/button_secondary_pressed.png'); }
+.button:disabled { cursor: default; }
+.button-primary:disabled { border-image-source: url('/assets/pirate-battle/ui/menu/button_primary_disabled.png'); }
+.button-secondary:disabled { opacity: .55; }
+.button-text { display: inline-flex; align-items: center; gap: .4rem; min-height: 44px; }
+.button:focus-visible, .tabs button:focus-visible, .touch-controls button:focus-visible, input:focus-visible, select:focus-visible {
+  outline: 3px solid #ffe18c;
+  outline-offset: 3px;
+}
+.tabs { flex-wrap: wrap; border: 0; gap: .35rem; }
+.tabs button { flex: 1 1 auto; font-size: .85rem; }
+.menu-actions { gap: .6rem; }
+.controls, .network-controls { border-color: #d6ac5966; }
+.options-form input, .network-controls select { border-color: #b18c4e; background: #111f2b; }
+.data-panel li, .result-stats div { background: #101f2bd9; border: 1px solid #d6ac5933; }
+.data-panel li { flex-wrap: wrap; overflow-wrap: anywhere; }
+.pager { flex-wrap: wrap; }
+.pager .button { min-height: 44px; }
+.registration-status { line-height: 1.5; }
+
+.game-header { flex-wrap: wrap; padding: .4rem .75rem; gap: .4rem; background: #152a38; }
+.official-hud { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; }
+.hud-icon { width: 24px; height: 24px; object-fit: contain; pointer-events: none; }
+.hud-counter {
+  display: inline-flex; align-items: center; justify-content: center; gap: .3rem;
+  width: 140px; height: 49px; padding: 8px; font-size: .85rem;
+  background: url('/assets/pirate-battle/ui/hud/counter_panel.png') center / 100% 100% no-repeat;
+}
+.hull-counter { display: inline-flex; align-items: center; position: relative; padding-left: 27px; height: 49px; width: 219px; }
+.hull-counter > .hud-icon { position: absolute; left: 0; }
+.health-meter { position: absolute; left: 27px; width: 192px; height: 36px; pointer-events: none; }
+.health-meter img { position: absolute; inset: 0; width: 100%; height: 100%; }
+.hull-counter > span:last-child { position: relative; margin: 0 auto; font-size: .8rem; text-shadow: 0 1px 3px #000, 0 0 3px #000; }
+.game-actions .button { min-height: 44px; font-size: .85rem; }
+.pause-message { top: 7rem; display: flex; align-items: center; gap: .5rem; width: max-content; max-width: calc(100vw - 2rem); padding: .6rem; line-height: 1.5; pointer-events: none; }
+
+/* Só a decoração muda: os eventos de toque e a área segura continuam existentes. */
+.touch-controls button {
+  display: flex; align-items: center; justify-content: center;
+  width: 56px; height: 56px; flex: 0 0 56px; padding: 0; border: 0;
+  background: url('/assets/pirate-battle/ui/controls/button_round_normal.png') center / contain no-repeat;
+}
+.touch-controls .official-icon { width: 28px; height: 28px; flex-basis: 28px; }
+@media (hover: hover) {
+  .touch-controls button:hover { background-image: url('/assets/pirate-battle/ui/controls/button_round_hover.png'); }
+}
+.touch-controls button:active { background: url('/assets/pirate-battle/ui/controls/button_round_pressed.png') center / contain no-repeat; }
+@media (max-width: 34rem) {
+  .game-actions .button { padding: .2rem .35rem; }
+  .official-hud { gap: .15rem; }
+  .hud-counter { width: 122px; height: 43px; }
+  .game-actions { margin-left: auto; }
+  .pause-message { top: 10rem; }
+  .result-stats { flex-wrap: wrap; }
+}
