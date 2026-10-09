@@ -1,1 +1,12 @@
-ZXhwb3J0IHR5cGUgTmV0d29ya1NjZW5hcmlvID0gJ25vcm1hbCcgfCAnc2xvdycgfCAnZW1wdHknIHwgJ3JhbmtpbmctZXJyb3InIHwgJ2hpc3RvcnktZXJyb3InCgpjb25zdCBTQ0VOQVJJT19LRVkgPSAncGlyYXRlLWJhdHRsZTpuZXR3b3JrLXNjZW5hcmlvJwoKZXhwb3J0IGNvbnN0IHNjZW5hcmlvczogTmV0d29ya1NjZW5hcmlvW10gPSBbJ25vcm1hbCcsICdzbG93JywgJ2VtcHR5JywgJ3JhbmtpbmctZXJyb3InLCAnaGlzdG9yeS1lcnJvciddCgpleHBvcnQgZnVuY3Rpb24gZ2V0TmV0d29ya1NjZW5hcmlvKCk6IE5ldHdvcmtTY2VuYXJpbyB7CiAgY29uc3QgdmFsdWUgPSBsb2NhbFN0b3JhZ2UuZ2V0SXRlbShTQ0VOQVJJT19LRVkpCiAgcmV0dXJuIHNjZW5hcmlvcy5pbmNsdWRlcyh2YWx1ZSBhcyBOZXR3b3JrU2NlbmFyaW8pID8gdmFsdWUgYXMgTmV0d29ya1NjZW5hcmlvIDogJ25vcm1hbCcKfQoKZXhwb3J0IGZ1bmN0aW9uIHNldE5ldHdvcmtTY2VuYXJpbyhzY2VuYXJpbzogTmV0d29ya1NjZW5hcmlvKSB7IGxvY2FsU3RvcmFnZS5zZXRJdGVtKFNDRU5BUklPX0tFWSwgc2NlbmFyaW8pIH0K
+export type NetworkScenario = 'normal' | 'slow' | 'empty' | 'ranking-error' | 'history-error'
+
+const SCENARIO_KEY = 'pirate-battle:network-scenario'
+
+export const scenarios: NetworkScenario[] = ['normal', 'slow', 'empty', 'ranking-error', 'history-error']
+
+export function getNetworkScenario(): NetworkScenario {
+  const value = localStorage.getItem(SCENARIO_KEY)
+  return scenarios.includes(value as NetworkScenario) ? value as NetworkScenario : 'normal'
+}
+
+export function setNetworkScenario(scenario: NetworkScenario) { localStorage.setItem(SCENARIO_KEY, scenario) }
