@@ -1,1 +1,33 @@
-aW1wb3J0IHsgZGVsYXksIGh0dHAsIEh0dHBSZXNwb25zZSB9IGZyb20gJ21zdycKaW1wb3J0IHR5cGUgeyBNYXRjaFJlY29yZCwgUmFua2luZ0VudHJ5IH0gZnJvbSAnLi4vZGF0YS9jb250cmFjdHMnCmltcG9ydCB7IHJlYWRNYXRjaGVzLCBzYXZlTWF0Y2ggfSBmcm9tICcuL3N0b3JlJwppbXBvcnQgeyBnZXROZXR3b3JrU2NlbmFyaW8gfSBmcm9tICcuL25ldHdvcmtTY2VuYXJpbycKCmNvbnN0IFBBR0VfU0laRSA9IDUKY29uc3QgYnlTY29yZVRoZW5EYXRlID0gPFQgZXh0ZW5kcyB7IHNjb3JlOiBudW1iZXI7IGNvbXBsZXRlZEF0OiBzdHJpbmcgfT4oYTogVCwgYjogVCkgPT4gYi5zY29yZSAtIGEuc2NvcmUgfHwgYS5jb21wbGV0ZWRBdC5sb2NhbGVDb21wYXJlKGIuY29tcGxldGVkQXQpCmNvbnN0IHBhZ2VSZXN1bHQgPSA8VD4oaXRlbXM6IFRbXSwgcGFnZTogbnVtYmVyKSA9PiAoeyBpdGVtczogaXRlbXMuc2xpY2UoKHBhZ2UgLSAxKSAqIFBBR0VfU0laRSwgcGFnZSAqIFBBR0VfU0laRSksIHBhZ2UsIHBhZ2VTaXplOiBQQUdFX1NJWkUsIHRvdGFsOiBpdGVtcy5sZW5ndGggfSkKCmV4cG9ydCBjb25zdCBoYW5kbGVycyA9IFsKICBodHRwLmdldCgnL2FwaS9yYW5raW5nJywgYXN5bmMgKHsgcmVxdWVzdCB9KSA9PiB7CiAgICBjb25zdCBzY2VuYXJpbyA9IGdldE5ldHdvcmtTY2VuYXJpbygpCiAgICBpZiAoc2NlbmFyaW8gPT09ICdyYW5raW5nLWVycm9yJykgcmV0dXJuIEh0dHBSZXNwb25zZS5qc29uKHsgbWVzc2FnZTogJ1Jhbmtpbmcgc2VydmljZSB1bmF2YWlsYWJsZS4nIH0sIHsgc3RhdHVzOiA1MDMgfSkKICAgIGlmIChzY2VuYXJpbyA9PT0gJ3Nsb3cnKSBhd2FpdCBkZWxheSg5MDApCiAgICBjb25zdCBwYWdlID0gTnVtYmVyKG5ldyBVUkwocmVxdWVzdC51cmwpLnNlYXJjaFBhcmFtcy5nZXQoJ3BhZ2UnKSA/PyAnMScpCiAgICBjb25zdCByYW5raW5nOiBSYW5raW5nRW50cnlbXSA9IHJlYWRNYXRjaGVzKCkubWFwKCh7IGlkLCBwbGF5ZXJJZCwgcGxheWVyTmFtZSwgY29tcGxldGVkQXQsIHNjb3JlLCBjb25maWd1cmF0aW9uIH0pID0+ICh7IGlkLCBwbGF5ZXJJZCwgcGxheWVyTmFtZSwgY29tcGxldGVkQXQsIHNjb3JlLCBjb25maWd1cmF0aW9uIH0pKS5zb3J0KGJ5U2NvcmVUaGVuRGF0ZSkKICAgIHJldHVybiBzY2VuYXJpbyA9PT0gJ2VtcHR5JyA/IEh0dHBSZXNwb25zZS5qc29uKHBhZ2VSZXN1bHQoW10sIHBhZ2UpKSA6IEh0dHBSZXNwb25zZS5qc29uKHBhZ2VSZXN1bHQocmFua2luZywgcGFnZSkpCiAgfSksCiAgaHR0cC5nZXQoJy9hcGkvbWF0Y2hlcycsIGFzeW5jICh7IHJlcXVlc3QgfSkgPT4gewogICAgY29uc3Qgc2NlbmFyaW8gPSBnZXROZXR3b3JrU2NlbmFyaW8oKQogICAgaWYgKHNjZW5hcmlvID09PSAnaGlzdG9yeS1lcnJvcicpIHJldHVybiBIdHRwUmVzcG9uc2UuanNvbih7IG1lc3NhZ2U6ICdIaXN0b3J5IHNlcnZpY2UgdW5hdmFpbGFibGUuJyB9LCB7IHN0YXR1czogNTAzIH0pCiAgICBpZiAoc2NlbmFyaW8gPT09ICdzbG93JykgYXdhaXQgZGVsYXkoOTAwKQogICAgY29uc3QgdXJsID0gbmV3IFVSTChyZXF1ZXN0LnVybCkKICAgIGNvbnN0IHBsYXllcklkID0gdXJsLnNlYXJjaFBhcmFtcy5nZXQoJ3BsYXllcklkJykKICAgIGNvbnN0IHBhZ2UgPSBOdW1iZXIodXJsLnNlYXJjaFBhcmFtcy5nZXQoJ3BhZ2UnKSA/PyAnMScpCiAgICBjb25zdCBtYXRjaGVzID0gcmVhZE1hdGNoZXMoKS5maWx0ZXIoKG1hdGNoKSA9PiBtYXRjaC5wbGF5ZXJJZCA9PT0gcGxheWVySWQpLnNvcnQoKGEsIGIpID0+IGIuY29tcGxldGVkQXQubG9jYWxlQ29tcGFyZShhLmNvbXBsZXRlZEF0KSkKICAgIHJldHVybiBzY2VuYXJpbyA9PT0gJ2VtcHR5JyA/IEh0dHBSZXNwb25zZS5qc29uKHBhZ2VSZXN1bHQoW10sIHBhZ2UpKSA6IEh0dHBSZXNwb25zZS5qc29uKHBhZ2VSZXN1bHQobWF0Y2hlcywgcGFnZSkpCiAgfSksCiAgaHR0cC5wb3N0KCcvYXBpL21hdGNoZXMnLCBhc3luYyAoeyByZXF1ZXN0IH0pID0+IHsKICAgIGNvbnN0IHJlY29yZCA9IGF3YWl0IHJlcXVlc3QuanNvbigpIGFzIE1hdGNoUmVjb3JkCiAgICByZXR1cm4gSHR0cFJlc3BvbnNlLmpzb24oc2F2ZU1hdGNoKHJlY29yZCksIHsgc3RhdHVzOiAyMDEgfSkKICB9KSwKXQo=
+import { delay, http, HttpResponse } from 'msw'
+import type { MatchRecord, RankingEntry } from '../data/contracts'
+import { readMatches, saveMatch } from './store'
+import { getNetworkScenario } from './networkScenario'
+
+const PAGE_SIZE = 5
+const byScoreThenDate = <T extends { score: number; completedAt: string }>(a: T, b: T) => b.score - a.score || a.completedAt.localeCompare(b.completedAt)
+const pageResult = <T>(items: T[], page: number) => ({ items: items.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), page, pageSize: PAGE_SIZE, total: items.length })
+
+export const handlers = [
+  http.get('/api/ranking', async ({ request }) => {
+    const scenario = getNetworkScenario()
+    if (scenario === 'ranking-error') return HttpResponse.json({ message: 'Ranking service unavailable.' }, { status: 503 })
+    if (scenario === 'slow') await delay(900)
+    const page = Number(new URL(request.url).searchParams.get('page') ?? '1')
+    const ranking: RankingEntry[] = readMatches().map(({ id, playerId, playerName, completedAt, score, configuration }) => ({ id, playerId, playerName, completedAt, score, configuration })).sort(byScoreThenDate)
+    return scenario === 'empty' ? HttpResponse.json(pageResult([], page)) : HttpResponse.json(pageResult(ranking, page))
+  }),
+  http.get('/api/matches', async ({ request }) => {
+    const scenario = getNetworkScenario()
+    if (scenario === 'history-error') return HttpResponse.json({ message: 'History service unavailable.' }, { status: 503 })
+    if (scenario === 'slow') await delay(900)
+    const url = new URL(request.url)
+    const playerId = url.searchParams.get('playerId')
+    const page = Number(url.searchParams.get('page') ?? '1')
+    const matches = readMatches().filter((match) => match.playerId === playerId).sort((a, b) => b.completedAt.localeCompare(a.completedAt))
+    return scenario === 'empty' ? HttpResponse.json(pageResult([], page)) : HttpResponse.json(pageResult(matches, page))
+  }),
+  http.post('/api/matches', async ({ request }) => {
+    const record = await request.json() as MatchRecord
+    return HttpResponse.json(saveMatch(record), { status: 201 })
+  }),
+]
