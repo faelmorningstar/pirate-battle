@@ -1,1 +1,8 @@
-aW1wb3J0IHsgcmVzZXRNYXRjaGVzIH0gZnJvbSAnLi4vbW9ja3Mvc3RvcmUnCmltcG9ydCB7IGdldE5ldHdvcmtTY2VuYXJpbywgc2NlbmFyaW9zLCBzZXROZXR3b3JrU2NlbmFyaW8sIHR5cGUgTmV0d29ya1NjZW5hcmlvIH0gZnJvbSAnLi4vbW9ja3MvbmV0d29ya1NjZW5hcmlvJwoKZXhwb3J0IGZ1bmN0aW9uIE5ldHdvcmtDb250cm9scygpIHsKICBjb25zdCBzY2VuYXJpbyA9IGdldE5ldHdvcmtTY2VuYXJpbygpCiAgY29uc3QgY2hhbmdlU2NlbmFyaW8gPSAodmFsdWU6IE5ldHdvcmtTY2VuYXJpbykgPT4geyBzZXROZXR3b3JrU2NlbmFyaW8odmFsdWUpOyB3aW5kb3cubG9jYXRpb24ucmVsb2FkKCkgfQogIHJldHVybiA8c2VjdGlvbiBjbGFzc05hbWU9Im5ldHdvcmstY29udHJvbHMiIGFyaWEtbGFiZWw9Ik5ldHdvcmsgbW9jayBjb250cm9scyI+PGgyPk1vY2sgbmV0d29yayBzY2VuYXJpbzwvaDI+PGxhYmVsPlNjZW5hcmlvPHNlbGVjdCB2YWx1ZT17c2NlbmFyaW99IG9uQ2hhbmdlPXsoZXZlbnQpID0+IGNoYW5nZVNjZW5hcmlvKGV2ZW50LnRhcmdldC52YWx1ZSBhcyBOZXR3b3JrU2NlbmFyaW8pfT57c2NlbmFyaW9zLm1hcCgoaXRlbSkgPT4gPG9wdGlvbiBrZXk9e2l0ZW19IHZhbHVlPXtpdGVtfT57aXRlbX08L29wdGlvbj4pfTwvc2VsZWN0PjwvbGFiZWw+PGJ1dHRvbiBjbGFzc05hbWU9ImJ1dHRvbiBidXR0b24tdGV4dCIgdHlwZT0iYnV0dG9uIiBvbkNsaWNrPXsoKSA9PiB7IHJlc2V0TWF0Y2hlcygpOyB3aW5kb3cubG9jYXRpb24ucmVsb2FkKCkgfX0+UmVzZXQgbW9jayBkYXRhPC9idXR0b24+PC9zZWN0aW9uPgp9Cg==
+import { resetMatches } from '../mocks/store'
+import { getNetworkScenario, scenarios, setNetworkScenario, type NetworkScenario } from '../mocks/networkScenario'
+
+export function NetworkControls() {
+  const scenario = getNetworkScenario()
+  const changeScenario = (value: NetworkScenario) => { setNetworkScenario(value); window.location.reload() }
+  return <section className="network-controls" aria-label="Network mock controls"><h2>Mock network scenario</h2><label>Scenario<select value={scenario} onChange={(event) => changeScenario(event.target.value as NetworkScenario)}>{scenarios.map((item) => <option key={item} value={item}>{item}</option>)}</select></label><button className="button button-text" type="button" onClick={() => { resetMatches(); window.location.reload() }}>Reset mock data</button></section>
+}
