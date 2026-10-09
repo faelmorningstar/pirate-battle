@@ -17,3 +17,35 @@ h2 { margin-top: 2rem; }.lead { color: #d0e6dd; font-size: 1.1rem; line-height: 
 /* Keep controls available on phones and tablets, including landscape Safari. */
 @media (min-width: 64rem) and (min-height: 40rem) { .touch-controls { display: none; } }
 @media (max-width: 34rem) { .app-shell { padding: 1rem; }.game-header { font-size: .82rem; }.game-actions .button { min-height: 2.3rem; padding: .45rem .65rem; } }
+
+
+/* Keep gameplay controls inside touch-device viewports. */
+@media (hover: none), (pointer: coarse) {
+  .game-screen {
+    height: 100vh;
+    height: 100dvh;
+    min-height: 20rem;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    overflow: hidden;
+  }
+
+  .game-canvas {
+    overflow: hidden;
+  }
+
+  .touch-controls {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    padding-bottom: calc(.75rem + env(safe-area-inset-bottom));
+  }
+}
+
+@media (max-width: 28rem) {
+  .touch-controls {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+  }
+}
