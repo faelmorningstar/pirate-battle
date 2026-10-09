@@ -20,7 +20,7 @@ function App() {
   const [hud, setHud] = useState<GameHud>(INITIAL_HUD)
   const [result, setResult] = useState<GameResult | null>(null)
   const [registration, setRegistration] = useState<RegistrationState>('idle')
-  const registerMatch = useRegisterMatch()
+  const { mutate: registerMatch } = useRegisterMatch()
 
   useEffect(() => { localStorage.setItem('pirate-battle:config', JSON.stringify(config)) }, [config])
   useEffect(() => { if (result) localStorage.setItem('pirate-battle:last-result', JSON.stringify(result)) }, [result])
@@ -32,7 +32,7 @@ function App() {
     setRegistration('saving')
     setScreen('result')
     const record: MatchRecord = { id: crypto.randomUUID(), playerId: PLAYER_ID, playerName: 'Captain Rafael', completedAt: new Date().toISOString(), score: nextResult.score, durationSeconds: nextResult.durationSeconds, endReason: nextResult.reason, configuration: { ...config } }
-    registerMatch.mutate(record, { onSuccess: () => setRegistration('saved'), onError: () => setRegistration('failed') })
+    registerMatch(record, { onSuccess: () => setRegistration('saved'), onError: () => setRegistration('failed') })
   }, [config, registerMatch])
 
   if (screen === 'game') return <GameCanvas config={config} hud={hud} onHudChange={setHud} onEnd={endGame} onExit={exitGame} />
