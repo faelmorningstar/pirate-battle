@@ -1,1 +1,460 @@
-LyogZXNsaW50LWRpc2FibGUgKi8KLyogdHNsaW50OmRpc2FibGUgKi8KCi8qKgogKiBNb2NrIFNlcnZpY2UgV29ya2VyLgogKiBAc2VlIGh0dHBzOi8vZ2l0aHViLmNvbS9tc3dqcy9tc3cKICogLSBQbGVhc2UgZG8gTk9UIG1vZGlmeSB0aGlzIGZpbGUuCiAqLwoKY29uc3QgUEFDS0FHRV9WRVJTSU9OID0gJzMuMC4yJwpjb25zdCBJTlRFR1JJVFlfQ0hFQ0tTVU0gPSAnNWNkNWNmOGI1NGMzYTkwZjgyOTYwY2VkY2Q2Mzc3NzInCmNvbnN0IElTX01PQ0tFRF9SRVNQT05TRSA9IFN5bWJvbCgnaXNNb2NrZWRSZXNwb25zZScpCgpjb25zdCBhY3RpdmVDbGllbnRJZHMgPSBuZXcgU2V0KCkKLyoqCiAqIEB0eXBlIHtNYXA8c3RyaW5nLCBTZXQ8UHJvbWlzZTxSZXNwb25zZT4+Pn0KICovCmNvbnN0IHBlbmRpbmdSZXF1ZXN0cyA9IG5ldyBNYXAoKQoKYWRkRXZlbnRMaXN0ZW5lcignaW5zdGFsbCcsIGZ1bmN0aW9uICgpIHsKICBzZWxmLnNraXBXYWl0aW5nKCkKfSkKCmFkZEV2ZW50TGlzdGVuZXIoJ2FjdGl2YXRlJywgZnVuY3Rpb24gKGV2ZW50KSB7CiAgZXZlbnQud2FpdFVudGlsKHNlbGYuY2xpZW50cy5jbGFpbSgpKQp9KQoKYWRkRXZlbnRMaXN0ZW5lcignbWVzc2FnZScsIGZ1bmN0aW9uIChldmVudCkgewogIGNvbnN0IGNsaWVudElkID0gUmVmbGVjdC5nZXQoZXZlbnQuc291cmNlIHx8IHt9LCAnaWQnKQoKICBpZiAoIWNsaWVudElkIHx8ICFzZWxmLmNsaWVudHMpIHsKICAgIHJldHVybgogIH0KCiAgZXZlbnQud2FpdFVudGlsKAogICAgKGFzeW5jICgpID0+IHsKICAgICAgaWYgKGV2ZW50LmRhdGEgPT09ICdDTElFTlRfQ0xPU0UnKSB7CiAgICAgICAgY29uc3QgYWxsQ2xpZW50cyA9IGF3YWl0IHNlbGYuY2xpZW50cy5tYXRjaEFsbCh7CiAgICAgICAgICB0eXBlOiAnd2luZG93JywKICAgICAgICB9KQoKICAgICAgICBhY3RpdmVDbGllbnRJZHMuZGVsZXRlKGNsaWVudElkKQoKICAgICAgICAvLyBBd2FpdCBhbnkgcGVuZGluZyByZXF1ZXN0cyBmcm9tIHRoZSBjbG9zaW5nIGNsaWVudC4KICAgICAgICAvLyBUaGlzIG1ha2VzIHN1cmUgdGhhdCB0aG9zZSByZXF1ZXN0cyBhcmUgaGFuZGxlZCBhbmQgbm90IHBhc3N0aHJvdWdoLgogICAgICAgIGNvbnN0IHBlbmRpbmcgPSBwZW5kaW5nUmVxdWVzdHMuZ2V0KGNsaWVudElkKQogICAgICAgIGlmIChwZW5kaW5nICE9IG51bGwgJiYgcGVuZGluZy5zaXplID4gMCkgewogICAgICAgICAgYXdhaXQgUHJvbWlzZS5hbGxTZXR0bGVkKHBlbmRpbmcpCiAgICAgICAgfQogICAgICAgIHBlbmRpbmdSZXF1ZXN0cy5kZWxldGUoY2xpZW50SWQpCgogICAgICAgIGNvbnN0IHJlbWFpbmluZ0NsaWVudHMgPSBhbGxDbGllbnRzLmZpbHRlcigoY2xpZW50KSA9PiB7CiAgICAgICAgICByZXR1cm4gY2xpZW50LmlkICE9PSBjbGllbnRJZAogICAgICAgIH0pCgogICAgICAgIC8vIFVucmVnaXN0ZXIgaXRzZWxmIHdoZW4gdGhlcmUgYXJlIG5vIG1vcmUgY2xpZW50cwogICAgICAgIGlmIChyZW1haW5pbmdDbGllbnRzLmxlbmd0aCA9PT0gMCkgewogICAgICAgICAgYXdhaXQgc2VsZi5yZWdpc3RyYXRpb24udW5yZWdpc3RlcigpCiAgICAgICAgfQoKICAgICAgICBjb25zdCBjbGllbnQgPSBhd2FpdCBzZWxmLmNsaWVudHMuZ2V0KGNsaWVudElkKQoKICAgICAgICBpZiAoY2xpZW50ICE9IG51bGwpIHsKICAgICAgICAgIGF3YWl0IHNlbmRUb0NsaWVudChjbGllbnQsIHsKICAgICAgICAgICAgdHlwZTogJ0NMSUVOVF9DTE9TRUQnLAogICAgICAgICAgfSkKICAgICAgICB9CgogICAgICAgIHJldHVybgogICAgICB9CgogICAgICAvKioKICAgICAgICogQG5vdGUgQ2hlY2sgZm9yIHRoZSBjbGllbnQgQUZURVIgaGFuZGxpbmcgIkNMSUVOVF9DTE9TRSIuCiAgICAgICAqIFRoaXMgcHJldmVudHMgZWFybHkgcmV0dXJuIG9uICIhY2xpZW50IiBpbiBjYXNlIHRoZSBwYWdlIGhhcyByZWxvYWRlZAogICAgICAgKiBhbmQgZGlzYXNzb2NpYXRlZCBpdHNlbGYgZnJvbSB0aGUgd29ya2VyLiBUaGlzIGVuc3VyZXMgc2VsZi11bnJlZ2lzdHJhdGlvbgogICAgICAgKiBzdGlsbCBmaXJlcyBmb3IgdGhvc2UgcGFnZXMuCiAgICAgICAqLwogICAgICBjb25zdCBjbGllbnQgPSBhd2FpdCBzZWxmLmNsaWVudHMuZ2V0KGNsaWVudElkKQoKICAgICAgaWYgKCFjbGllbnQpIHsKICAgICAgICByZXR1cm4KICAgICAgfQoKICAgICAgc3dpdGNoIChldmVudC5kYXRhKSB7CiAgICAgICAgY2FzZSAnS0VFUEFMSVZFX1JFUVVFU1QnOiB7CiAgICAgICAgICBhd2FpdCBzZW5kVG9DbGllbnQoY2xpZW50LCB7CiAgICAgICAgICAgIHR5cGU6ICdLRUVQQUxJVkVfUkVTUE9OU0UnLAogICAgICAgICAgfSkKICAgICAgICAgIGJyZWFrCiAgICAgICAgfQoKICAgICAgICBjYXNlICdJTlRFR1JJVFlfQ0hFQ0tfUkVRVUVTVCc6IHsKICAgICAgICAgIGF3YWl0IHNlbmRUb0NsaWVudChjbGllbnQsIHsKICAgICAgICAgICAgdHlwZTogJ0lOVEVHUklUWV9DSEVDS19SRVNQT05TRScsCiAgICAgICAgICAgIHBheWxvYWQ6IHsKICAgICAgICAgICAgICBwYWNrYWdlVmVyc2lvbjogUEFDS0FHRV9WRVJTSU9OLAogICAgICAgICAgICAgIGNoZWNrc3VtOiBJTlRFR1JJVFlfQ0hFQ0tTVU0sCiAgICAgICAgICAgIH0sCiAgICAgICAgICB9KQogICAgICAgICAgYnJlYWsKICAgICAgICB9CgogICAgICAgIGNhc2UgJ01PQ0tfQUNUSVZBVEUnOiB7CiAgICAgICAgICBhY3RpdmVDbGllbnRJZHMuYWRkKGNsaWVudElkKQoKICAgICAgICAgIGF3YWl0IHNlbmRUb0NsaWVudChjbGllbnQsIHsKICAgICAgICAgICAgdHlwZTogJ01PQ0tJTkdfRU5BQkxFRCcsCiAgICAgICAgICAgIHBheWxvYWQ6IHsKICAgICAgICAgICAgICBjbGllbnQ6IHsKICAgICAgICAgICAgICAgIGlkOiBjbGllbnQuaWQsCiAgICAgICAgICAgICAgICBmcmFtZVR5cGU6IGNsaWVudC5mcmFtZVR5cGUsCiAgICAgICAgICAgICAgfSwKICAgICAgICAgICAgfSwKICAgICAgICAgIH0pCiAgICAgICAgICBicmVhawogICAgICAgIH0KICAgICAgfQogICAgfSkoKSwKICApCn0pCgphZGRFdmVudExpc3RlbmVyKCdmZXRjaCcsIGZ1bmN0aW9uIChldmVudCkgewogIC8vIE9wZW5pbmcgdGhlIERldlRvb2xzIHRyaWdnZXJzIHRoZSAib25seS1pZi1jYWNoZWQiIHJlcXVlc3QKICAvLyB0aGF0IGNhbm5vdCBiZSBoYW5kbGVkIGJ5IHRoZSB3b3JrZXIuIEJ5cGFzcyBzdWNoIHJlcXVlc3RzLgogIGlmICgKICAgIGV2ZW50LnJlcXVlc3QuY2FjaGUgPT09ICdvbmx5LWlmLWNhY2hlZCcgJiYKICAgIGV2ZW50LnJlcXVlc3QubW9kZSAhPT0gJ3NhbWUtb3JpZ2luJwogICkgewogICAgcmV0dXJuCiAgfQoKICAvLyBCeXBhc3MgYWxsIHJlcXVlc3RzIHdoZW4gdGhlcmUgYXJlIG5vIGFjdGl2ZSBjbGllbnRzLgogIC8vIFByZXZlbnRzIHRoZSBzZWxmLXVucmVnaXN0ZXJlZCB3b3JrZWQgZnJvbSBoYW5kbGluZyByZXF1ZXN0cwogIC8vIGFmdGVyIGl0J3MgYmVlbiB0ZXJtaW5hdGVkIChzdGlsbCByZW1haW5zIGFjdGl2ZSB1bnRpbCB0aGUgbmV4dCByZWxvYWQpLgogIGlmIChhY3RpdmVDbGllbnRJZHMuc2l6ZSA9PT0gMCkgewogICAgcmV0dXJuCiAgfQoKICBjb25zdCByZXF1ZXN0SWQgPSBjcnlwdG8ucmFuZG9tVVVJRCgpCiAgZXZlbnQucmVzcG9uZFdpdGgoaGFuZGxlUmVxdWVzdChldmVudCwgcmVxdWVzdElkKSkKfSkKCi8qKgogKiBAcGFyYW0ge0ZldGNoRXZlbnR9IGV2ZW50CiAqIEBwYXJhbSB7c3RyaW5nfSByZXF1ZXN0SWQKICovCmFzeW5jIGZ1bmN0aW9uIGhhbmRsZVJlcXVlc3QoZXZlbnQsIHJlcXVlc3RJZCkgewogIGNvbnN0IGNsaWVudCA9IGF3YWl0IHJlc29sdmVNYWluQ2xpZW50KGV2ZW50KQogIGNvbnN0IHJlcXVlc3RDbG9uZUZvckV2ZW50cyA9IGV2ZW50LnJlcXVlc3QuY2xvbmUoKQoKICBjb25zdCByZXNwb25zZVByb21pc2UgPSBnZXRSZXNwb25zZShldmVudCwgY2xpZW50LCByZXF1ZXN0SWQpCgogIGlmIChjbGllbnQgIT0gbnVsbCkgewogICAgbGV0IHBlbmRpbmcgPSBwZW5kaW5nUmVxdWVzdHMuZ2V0KGNsaWVudC5pZCkKCiAgICBpZiAocGVuZGluZyA9PSBudWxsKSB7CiAgICAgIHBlbmRpbmdSZXF1ZXN0cy5zZXQoY2xpZW50LmlkLCAocGVuZGluZyA9IG5ldyBTZXQoKSkpCiAgICB9CgogICAgcGVuZGluZy5hZGQocmVzcG9uc2VQcm9taXNlKQogICAgcmVzcG9uc2VQcm9taXNlCiAgICAgIC5maW5hbGx5KCgpID0+IHBlbmRpbmcuZGVsZXRlKHJlc3BvbnNlUHJvbWlzZSkpCiAgICAgIC5jYXRjaCgoKSA9PiB7fSkKICB9CgogIGxldCByZXNwb25zZQoKICB0cnkgewogICAgcmVzcG9uc2UgPSBhd2FpdCByZXNwb25zZVByb21pc2UKICB9IGNhdGNoIChlcnJvcikgewogICAgLy8gVGhlIHJlcXVlc3QgaGFzIHNldHRsZWQgd2l0aG91dCBhIHJlc3BvbnNlIChlLmcuIGEgcGFzc3Rocm91Z2gKICAgIC8vIHJlcXVlc3QgZmFpbGVkIHdpdGggYSBuZXR3b3JrIGVycm9yKS4gTm90aWZ5IHRoZSBjbGllbnQgc28gaXQKICAgIC8vIGNhbiByZWxlYXNlIHRoZSByZXNvdXJjZXMgYXNzb2NpYXRlZCB3aXRoIHRoaXMgcmVxdWVzdC4KICAgIGlmIChjbGllbnQgJiYgYWN0aXZlQ2xpZW50SWRzLmhhcyhjbGllbnQuaWQpKSB7CiAgICAgIHNlbmRUb0NsaWVudChjbGllbnQsIHsKICAgICAgICB0eXBlOiAnUkVRVUVTVF9FUlJPUicsCiAgICAgICAgcGF5bG9hZDogewogICAgICAgICAgcmVxdWVzdDogewogICAgICAgICAgICBpZDogcmVxdWVzdElkLAogICAgICAgICAgfSwKICAgICAgICAgIGVycm9yOiBzZXJpYWxpemVFcnJvcihlcnJvciksCiAgICAgICAgfSwKICAgICAgfSkKICAgIH0KCiAgICB0aHJvdyBlcnJvcgogIH0KCiAgLy8gU2VuZCBiYWNrIHRoZSByZXNwb25zZSBjbG9uZSBmb3IgdGhlICJyZXNwb25zZToqIiBsaWZlLWN5Y2xlIGV2ZW50cy4KICAvLyBFbnN1cmUgTVNXIGlzIGFjdGl2ZSBhbmQgcmVhZHkgdG8gaGFuZGxlIHRoZSBtZXNzYWdlLCBvdGhlcndpc2UKICAvLyB0aGlzIG1lc3NhZ2Ugd2lsbCBwZW5kIGluZGVmaW5pdGVseS4KICBpZiAoY2xpZW50ICYmIGFjdGl2ZUNsaWVudElkcy5oYXMoY2xpZW50LmlkKSkgewogICAgY29uc3Qgc2VyaWFsaXplZFJlcXVlc3QgPSBhd2FpdCBzZXJpYWxpemVSZXF1ZXN0KHJlcXVlc3RDbG9uZUZvckV2ZW50cykKCiAgICAvLyBPbWl0IHRoZSBib2R5IG9mIHNlcnZlci1zZW50IGV2ZW50IHN0cmVhbSByZXNwb25zZXMuCiAgICAvLyBDbG9uaW5nIHN1Y2ggcmVzcG9uc2VzIHdvdWxkIHByZXZlbnQgY2xpZW50LXNpZGUgc3RyZWFtIGNhbmNlbGF0aW9ucwogICAgLy8gZnJvbSByZWFjaGluZyB0aGUgb3JpZ2luYWwgc3RyZWFtIChhIHRlZWQgc3RyZWFtIG9ubHkgY2FuY2VscyBpdHMKICAgIC8vIHNvdXJjZSBvbmNlIGJvdGggb2YgaXRzIGJyYW5jaGVzIGNhbmNlbCkgYW5kIHdvdWxkIGJ1ZmZlciB0aGUKICAgIC8vIGVudGlyZSBzdHJlYW0gaW50byB0aGUgdW5jb25zdW1lZCBjbG9uZSBpbmRlZmluaXRlbHkuCiAgICBjb25zdCBpc0V2ZW50U3RyZWFtUmVzcG9uc2UgPSByZXNwb25zZS5oZWFkZXJzCiAgICAgIC5nZXQoJ2NvbnRlbnQtdHlwZScpCiAgICAgID8udG9Mb3dlckNhc2UoKQogICAgICAuc3RhcnRzV2l0aCgndGV4dC9ldmVudC1zdHJlYW0nKQoKICAgIC8vIENsb25lIHRoZSByZXNwb25zZSBzbyBib3RoIHRoZSBjbGllbnQgYW5kIHRoZSBsaWJyYXJ5IGNvdWxkIGNvbnN1bWUgaXQuCiAgICBjb25zdCByZXNwb25zZUNsb25lID0gaXNFdmVudFN0cmVhbVJlc3BvbnNlID8gbnVsbCA6IHJlc3BvbnNlLmNsb25lKCkKCiAgICBzZW5kVG9DbGllbnQoCiAgICAgIGNsaWVudCwKICAgICAgewogICAgICAgIHR5cGU6ICdSRVNQT05TRScsCiAgICAgICAgcGF5bG9hZDogewogICAgICAgICAgaXNNb2NrZWRSZXNwb25zZTogSVNfTU9DS0VEX1JFU1BPTlNFIGluIHJlc3BvbnNlLAogICAgICAgICAgcmVxdWVzdDogewogICAgICAgICAgICBpZDogcmVxdWVzdElkLAogICAgICAgICAgICAuLi5zZXJpYWxpemVkUmVxdWVzdCwKICAgICAgICAgIH0sCiAgICAgICAgICByZXNwb25zZTogewogICAgICAgICAgICB0eXBlOiByZXNwb25zZS50eXBlLAogICAgICAgICAgICBzdGF0dXM6IHJlc3BvbnNlLnN0YXR1cywKICAgICAgICAgICAgc3RhdHVzVGV4dDogcmVzcG9uc2Uuc3RhdHVzVGV4dCwKICAgICAgICAgICAgaGVhZGVyczogT2JqZWN0LmZyb21FbnRyaWVzKHJlc3BvbnNlLmhlYWRlcnMuZW50cmllcygpKSwKICAgICAgICAgICAgYm9keTogcmVzcG9uc2VDbG9uZSA/IHJlc3BvbnNlQ2xvbmUuYm9keSA6IG51bGwsCiAgICAgICAgICB9LAogICAgICAgIH0sCiAgICAgIH0sCiAgICAgIHJlc3BvbnNlQ2xvbmUgJiYgcmVzcG9uc2VDbG9uZS5ib2R5CiAgICAgICAgPyBbc2VyaWFsaXplZFJlcXVlc3QuYm9keSwgcmVzcG9uc2VDbG9uZS5ib2R5XQogICAgICAgIDogW10sCiAgICApCiAgfQoKICByZXR1cm4gcmVzcG9uc2UKfQoKLyoqCiAqIFJlc29sdmUgdGhlIG1haW4gY2xpZW50IGZvciB0aGUgZ2l2ZW4gZXZlbnQuCiAqIENsaWVudCB0aGF0IGlzc3VlcyBhIHJlcXVlc3QgZG9lc24ndCBuZWNlc3NhcmlseSBlcXVhbCB0aGUgY2xpZW50CiAqIHRoYXQgcmVnaXN0ZXJlZCB0aGUgd29ya2VyLiBJdCdzIHdpdGggdGhlIGxhdHRlciB0aGUgd29ya2VyIHNob3VsZAogKiBjb21tdW5pY2F0ZSB3aXRoIGR1cmluZyB0aGUgcmVzcG9uc2UgcmVzb2x2aW5nIHBoYXNlLgogKiBAcGFyYW0ge0ZldGNoRXZlbnR9IGV2ZW50CiAqIEByZXR1cm5zIHtQcm9taXNlPENsaWVudCB8IHVuZGVmaW5lZD59CiAqLwphc3luYyBmdW5jdGlvbiByZXNvbHZlTWFpbkNsaWVudChldmVudCkgewogIGNvbnN0IGNsaWVudCA9IGF3YWl0IHNlbGYuY2xpZW50cy5nZXQoZXZlbnQuY2xpZW50SWQpCgogIGlmIChhY3RpdmVDbGllbnRJZHMuaGFzKGV2ZW50LmNsaWVudElkKSkgewogICAgcmV0dXJuIGNsaWVudAogIH0KCiAgaWYgKGNsaWVudD8uZnJhbWVUeXBlID09PSAndG9wLWxldmVsJykgewogICAgcmV0dXJuIGNsaWVudAogIH0KCiAgY29uc3QgYWxsQ2xpZW50cyA9IGF3YWl0IHNlbGYuY2xpZW50cy5tYXRjaEFsbCh7CiAgICB0eXBlOiAnd2luZG93JywKICB9KQoKICByZXR1cm4gYWxsQ2xpZW50cwogICAgLmZpbHRlcigoY2xpZW50KSA9PiB7CiAgICAgIC8vIEdldCBvbmx5IHRob3NlIGNsaWVudHMgdGhhdCBhcmUgY3VycmVudGx5IHZpc2libGUuCiAgICAgIHJldHVybiBjbGllbnQudmlzaWJpbGl0eVN0YXRlID09PSAndmlzaWJsZScKICAgIH0pCiAgICAuZmluZCgoY2xpZW50KSA9PiB7CiAgICAgIC8vIEZpbmQgdGhlIGNsaWVudCBJRCB0aGF0J3MgcmVjb3JkZWQgaW4gdGhlCiAgICAgIC8vIHNldCBvZiBjbGllbnRzIHRoYXQgaGF2ZSByZWdpc3RlcmVkIHRoZSB3b3JrZXIuCiAgICAgIHJldHVybiBhY3RpdmVDbGllbnRJZHMuaGFzKGNsaWVudC5pZCkKICAgIH0pCn0KCi8qKgogKiBAcGFyYW0ge0ZldGNoRXZlbnR9IGV2ZW50CiAqIEBwYXJhbSB7Q2xpZW50IHwgdW5kZWZpbmVkfSBjbGllbnQKICogQHBhcmFtIHtzdHJpbmd9IHJlcXVlc3RJZAogKiBAcmV0dXJucyB7UHJvbWlzZTxSZXNwb25zZT59CiAqLwphc3luYyBmdW5jdGlvbiBnZXRSZXNwb25zZShldmVudCwgY2xpZW50LCByZXF1ZXN0SWQpIHsKICAvLyBDbG9uZSB0aGUgcmVxdWVzdCBiZWNhdXNlIGl0IG1pZ2h0J3ZlIGJlZW4gYWxyZWFkeSB1c2VkCiAgLy8gKGkuZS4gaXRzIGJvZHkgaGFzIGJlZW4gcmVhZCBhbmQgc2VudCB0byB0aGUgY2xpZW50KS4KICBjb25zdCByZXF1ZXN0Q2xvbmUgPSBldmVudC5yZXF1ZXN0LmNsb25lKCkKCiAgLyoqCiAgICogQHBhcmFtIHt7IHJlcXVlc3Q/OiB7IGhlYWRlcnM/OiBBcnJheTxbc3RyaW5nLCBzdHJpbmddPiB9IH19IFtkYXRhXQogICAqLwogIGZ1bmN0aW9uIHBhc3N0aHJvdWdoKGRhdGEpIHsKICAgIGNvbnN0IGhlYWRlcnMgPSBuZXcgSGVhZGVycygpCiAgICBjb25zdCByZXF1ZXN0SGVhZGVycyA9IGRhdGE/LnJlcXVlc3Q/LmhlYWRlcnMKCiAgICBpZiAoQXJyYXkuaXNBcnJheShyZXF1ZXN0SGVhZGVycykpIHsKICAgICAgLy8gQXBwbHkgdGhlIHJlcXVlc3QgaGVhZGVycyBwcm92aWRlZCBieSB0aGUgY2xpZW50LgogICAgICAvLyBUaG9zZSByZWZsZWN0IGFueSBtb2RpZmljYXRpb25zIG1hZGUgaW4gdGhlIHJlcXVlc3QgaGFuZGxlcnMuCiAgICAgIC8vIFVzZSAiLmFwcGVuZCgpIiB0byBzdXBwb3J0IG11bHRpcGxlIGhlYWRlcnMgd2l0aCB0aGUgc2FtZSBuYW1lLgogICAgICBmb3IgKGNvbnN0IFtuYW1lLCB2YWx1ZV0gb2YgcmVxdWVzdEhlYWRlcnMpIHsKICAgICAgICBoZWFkZXJzLmFwcGVuZChuYW1lLCB2YWx1ZSkKICAgICAgfQogICAgfSBlbHNlIHsKICAgICAgZm9yIChjb25zdCBbbmFtZSwgdmFsdWVdIG9mIHJlcXVlc3RDbG9uZS5oZWFkZXJzKSB7CiAgICAgICAgaGVhZGVycy5hcHBlbmQobmFtZSwgdmFsdWUpCiAgICAgIH0KICAgIH0KCiAgICAvLyBSZW1vdmUgdGhlICJhY2NlcHQiIGhlYWRlciB2YWx1ZSB0aGF0IG1hcmtlZCB0aGlzIHJlcXVlc3QgYXMgcGFzc3Rocm91Z2guCiAgICAvLyBUaGlzIHByZXZlbnRzIHJlcXVlc3QgYWx0ZXJhdGlvbiBhbmQgYWxzbyBrZWVwcyBpdCBjb21wbGlhbnQgd2l0aCB0aGUKICAgIC8vIHVzZXItZGVmaW5lZCBDT1JTIHBvbGljaWVzLgogICAgY29uc3QgYWNjZXB0SGVhZGVyID0gaGVhZGVycy5nZXQoJ2FjY2VwdCcpCiAgICBpZiAoYWNjZXB0SGVhZGVyKSB7CiAgICAgIGNvbnN0IHZhbHVlcyA9IGFjY2VwdEhlYWRlci5zcGxpdCgnLCcpLm1hcCgodmFsdWUpID0+IHZhbHVlLnRyaW0oKSkKICAgICAgY29uc3QgZmlsdGVyZWRWYWx1ZXMgPSB2YWx1ZXMuZmlsdGVyKAogICAgICAgICh2YWx1ZSkgPT4gdmFsdWUgIT09ICdtc3cvcGFzc3Rocm91Z2gnLAogICAgICApCgogICAgICBpZiAoZmlsdGVyZWRWYWx1ZXMubGVuZ3RoID4gMCkgewogICAgICAgIGhlYWRlcnMuc2V0KCdhY2NlcHQnLCBmaWx0ZXJlZFZhbHVlcy5qb2luKCcsICcpKQogICAgICB9IGVsc2UgewogICAgICAgIGhlYWRlcnMuZGVsZXRlKCdhY2NlcHQnKQogICAgICB9CiAgICB9CgogICAgcmV0dXJuIGZldGNoKHJlcXVlc3RDbG9uZSwgeyBoZWFkZXJzIH0pCiAgfQoKICAvLyBCeXBhc3MgbW9ja2luZyB3aGVuIHRoZSBjbGllbnQgaXMgbm90IGFjdGl2ZS4KICBpZiAoIWNsaWVudCkgewogICAgcmV0dXJuIHBhc3N0aHJvdWdoKCkKICB9CgogIC8vIEJ5cGFzcyBpbml0aWFsIHBhZ2UgbG9hZCByZXF1ZXN0cyAoaS5lLiBzdGF0aWMgYXNzZXRzKS4KICAvLyBUaGUgYWJzZW5jZSBvZiB0aGUgaW1tZWRpYXRlL3BhcmVudCBjbGllbnQgaW4gdGhlIG1hcCBvZiB0aGUgYWN0aXZlIGNsaWVudHMKICAvLyBtZWFucyB0aGF0IE1TVyBoYXNuJ3QgZGlzcGF0Y2hlZCB0aGUgIk1PQ0tfQUNUSVZBVEUiIGV2ZW50IHlldAogIC8vIGFuZCBpcyBub3QgcmVhZHkgdG8gaGFuZGxlIHJlcXVlc3RzLgogIGlmICghYWN0aXZlQ2xpZW50SWRzLmhhcyhjbGllbnQuaWQpKSB7CiAgICByZXR1cm4gcGFzc3Rocm91Z2goKQogIH0KCiAgLy8gTm90aWZ5IHRoZSBjbGllbnQgdGhhdCBhIHJlcXVlc3QgaGFzIGJlZW4gaW50ZXJjZXB0ZWQuCiAgY29uc3Qgc2VyaWFsaXplZFJlcXVlc3QgPSBhd2FpdCBzZXJpYWxpemVSZXF1ZXN0KGV2ZW50LnJlcXVlc3QpCiAgY29uc3QgY2xpZW50TWVzc2FnZSA9IGF3YWl0IHNlbmRUb0NsaWVudCgKICAgIGNsaWVudCwKICAgIHsKICAgICAgdHlwZTogJ1JFUVVFU1QnLAogICAgICBwYXlsb2FkOiB7CiAgICAgICAgaWQ6IHJlcXVlc3RJZCwKICAgICAgICAuLi5zZXJpYWxpemVkUmVxdWVzdCwKICAgICAgfSwKICAgIH0sCiAgICBbc2VyaWFsaXplZFJlcXVlc3QuYm9keV0sCiAgKQoKICBzd2l0Y2ggKGNsaWVudE1lc3NhZ2UudHlwZSkgewogICAgY2FzZSAnTU9DS19SRVNQT05TRSc6IHsKICAgICAgcmV0dXJuIHJlc3BvbmRXaXRoTW9jayhjbGllbnRNZXNzYWdlLmRhdGEsIGV2ZW50KQogICAgfQoKICAgIGNhc2UgJ1BBU1NUSFJPVUdIJzogewogICAgICByZXR1cm4gcGFzc3Rocm91Z2goY2xpZW50TWVzc2FnZS5kYXRhKQogICAgfQogIH0KCiAgcmV0dXJuIHBhc3N0aHJvdWdoKCkKfQoKLyoqCiAqIEBwYXJhbSB7dW5rbm93bn0gZXJyb3IKICogQHJldHVybnMge3sgbmFtZTogc3RyaW5nLCBtZXNzYWdlOiBzdHJpbmcgfX0KICovCmZ1bmN0aW9uIHNlcmlhbGl6ZUVycm9yKGVycm9yKSB7CiAgaWYgKGVycm9yIGluc3RhbmNlb2YgRXJyb3IpIHsKICAgIHJldHVybiB7CiAgICAgIG5hbWU6IGVycm9yLm5hbWUsCiAgICAgIG1lc3NhZ2U6IGVycm9yLm1lc3NhZ2UsCiAgICB9CiAgfQoKICByZXR1cm4gewogICAgbmFtZTogJ0Vycm9yJywKICAgIG1lc3NhZ2U6IFN0cmluZyhlcnJvciksCiAgfQp9CgovKioKICogQHBhcmFtIHtDbGllbnR9IGNsaWVudAogKiBAcGFyYW0ge2FueX0gbWVzc2FnZQogKiBAcGFyYW0ge0FycmF5PFRyYW5zZmVyYWJsZT59IHRyYW5zZmVycmFibGVzCiAqIEByZXR1cm5zIHtQcm9taXNlPGFueT59CiAqLwpmdW5jdGlvbiBzZW5kVG9DbGllbnQoY2xpZW50LCBtZXNzYWdlLCB0cmFuc2ZlcnJhYmxlcyA9IFtdKSB7CiAgcmV0dXJuIG5ldyBQcm9taXNlKChyZXNvbHZlLCByZWplY3QpID0+IHsKICAgIGNvbnN0IGNoYW5uZWwgPSBuZXcgTWVzc2FnZUNoYW5uZWwoKQoKICAgIGNoYW5uZWwucG9ydDEub25tZXNzYWdlID0gKGV2ZW50KSA9PiB7CiAgICAgIGlmIChldmVudC5kYXRhICYmIGV2ZW50LmRhdGEuZXJyb3IpIHsKICAgICAgICByZXR1cm4gcmVqZWN0KGV2ZW50LmRhdGEuZXJyb3IpCiAgICAgIH0KCiAgICAgIHJlc29sdmUoZXZlbnQuZGF0YSkKICAgIH0KCiAgICBjbGllbnQucG9zdE1lc3NhZ2UobWVzc2FnZSwgWwogICAgICBjaGFubmVsLnBvcnQyLAogICAgICAuLi50cmFuc2ZlcnJhYmxlcy5maWx0ZXIoQm9vbGVhbiksCiAgICBdKQogIH0pCn0KCi8qKgogKiBAcGFyYW0ge1Jlc3BvbnNlfSByZXNwb25zZQogKiBAcGFyYW0ge0ZldGNoRXZlbnR9IGV2ZW50CiAqIEByZXR1cm5zIHtQcm9taXNlPFJlc3BvbnNlPn0KICovCmFzeW5jIGZ1bmN0aW9uIHJlc3BvbmRXaXRoTW9jayhyZXNwb25zZSwgZXZlbnQpIHsKICAvLyBTZXR0aW5nIHJlc3BvbnNlIHN0YXR1cyBjb2RlIHRvIDAgaXMgYSBuby1vcC4KICAvLyBIb3dldmVyLCB3aGVuIHJlc3BvbmRpbmcgd2l0aCBhICJSZXNwb25zZS5lcnJvcigpIiwgdGhlIHByb2R1Y2VkIFJlc3BvbnNlCiAgLy8gaW5zdGFuY2Ugd2lsbCBoYXZlIHN0YXR1cyBjb2RlIHNldCB0byAwLiBTaW5jZSBpdCdzIG5vdCBwb3NzaWJsZSB0byBjcmVhdGUKICAvLyBhIFJlc3BvbnNlIGluc3RhbmNlIHdpdGggc3RhdHVzIGNvZGUgMCwgaGFuZGxlIHRoYXQgdXNlLWNhc2Ugc2VwYXJhdGVseS4KICBpZiAocmVzcG9uc2Uuc3RhdHVzID09PSAwKSB7CiAgICByZXR1cm4gUmVzcG9uc2UuZXJyb3IoKQogIH0KCiAgbGV0IGJvZHkgPSByZXNwb25zZS5ib2R5CgogIC8vIEJ1ZmZlciB0aGUgc3RyZWFtZWQgbW9ja2VkIHJlc3BvbnNlIGJvZHkgZm9yIG5hdmlnYXRpb24gcmVxdWVzdHMuCiAgLy8gVGhlIHN0cmVhbSBpcyB0cmFuc2ZlcnJlZCBmcm9tIHRoZSBjbGllbnQgdGhhdCBpcyBiZWluZyBuYXZpZ2F0ZWQKICAvLyBhd2F5IGZyb20uIE9uY2UgdGhlIG5hdmlnYXRpb24gY29tbWl0cywgdGhhdCBjbGllbnQgZ2V0cyBkZXN0cm95ZWQKICAvLyBhbmQgdGhlIHN0cmVhbSB3aWxsIG5ldmVyIGNvbXBsZXRlLCByZXN1bHRpbmcgaW4gYW4gZW1wdHkgZG9jdW1lbnQuCiAgLy8gQnVmZmVyaW5nIGhlcmUga2VlcHMgImV2ZW50LnJlc3BvbmRXaXRoKCkiIHBlbmRpbmcgKHRoZSBuYXZpZ2F0aW9uCiAgLy8gY2Fubm90IGNvbW1pdCkgdW50aWwgdGhlIGVudGlyZSBib2R5IGFycml2ZXMgZnJvbSB0aGUgY2xpZW50LgogIGlmIChldmVudC5yZXF1ZXN0Lm1vZGUgPT09ICduYXZpZ2F0ZScgJiYgYm9keSBpbnN0YW5jZW9mIFJlYWRhYmxlU3RyZWFtKSB7CiAgICBib2R5ID0gYXdhaXQgbmV3IFJlc3BvbnNlKGJvZHkpLmFycmF5QnVmZmVyKCkKICB9CgogIGNvbnN0IG1vY2tlZFJlc3BvbnNlID0gbmV3IFJlc3BvbnNlKGJvZHksIHJlc3BvbnNlKQoKICBSZWZsZWN0LmRlZmluZVByb3BlcnR5KG1vY2tlZFJlc3BvbnNlLCBJU19NT0NLRURfUkVTUE9OU0UsIHsKICAgIHZhbHVlOiB0cnVlLAogICAgZW51bWVyYWJsZTogdHJ1ZSwKICB9KQoKICByZXR1cm4gbW9ja2VkUmVzcG9uc2UKfQoKLyoqCiAqIEBwYXJhbSB7UmVxdWVzdH0gcmVxdWVzdAogKi8KYXN5bmMgZnVuY3Rpb24gc2VyaWFsaXplUmVxdWVzdChyZXF1ZXN0KSB7CiAgcmV0dXJuIHsKICAgIHVybDogcmVxdWVzdC51cmwsCiAgICBtb2RlOiByZXF1ZXN0Lm1vZGUsCiAgICBtZXRob2Q6IHJlcXVlc3QubWV0aG9kLAogICAgaGVhZGVyczogT2JqZWN0LmZyb21FbnRyaWVzKHJlcXVlc3QuaGVhZGVycy5lbnRyaWVzKCkpLAogICAgY2FjaGU6IHJlcXVlc3QuY2FjaGUsCiAgICBjcmVkZW50aWFsczogcmVxdWVzdC5jcmVkZW50aWFscywKICAgIGRlc3RpbmF0aW9uOiByZXF1ZXN0LmRlc3RpbmF0aW9uLAogICAgaW50ZWdyaXR5OiByZXF1ZXN0LmludGVncml0eSwKICAgIHJlZGlyZWN0OiByZXF1ZXN0LnJlZGlyZWN0LAogICAgcmVmZXJyZXI6IHJlcXVlc3QucmVmZXJyZXIsCiAgICByZWZlcnJlclBvbGljeTogcmVxdWVzdC5yZWZlcnJlclBvbGljeSwKICAgIGJvZHk6IGF3YWl0IHJlcXVlc3QuYXJyYXlCdWZmZXIoKSwKICAgIGtlZXBhbGl2ZTogcmVxdWVzdC5rZWVwYWxpdmUsCiAgfQp9Cg==
+/* eslint-disable */
+/* tslint:disable */
+
+/**
+ * Mock Service Worker.
+ * @see https://github.com/mswjs/msw
+ * - Please do NOT modify this file.
+ */
+
+const PACKAGE_VERSION = '3.0.2'
+const INTEGRITY_CHECKSUM = '5cd5cf8b54c3a90f82960cedcd637772'
+const IS_MOCKED_RESPONSE = Symbol('isMockedResponse')
+
+const activeClientIds = new Set()
+/**
+ * @type {Map<string, Set<Promise<Response>>>}
+ */
+const pendingRequests = new Map()
+
+addEventListener('install', function () {
+  self.skipWaiting()
+})
+
+addEventListener('activate', function (event) {
+  event.waitUntil(self.clients.claim())
+})
+
+addEventListener('message', function (event) {
+  const clientId = Reflect.get(event.source || {}, 'id')
+
+  if (!clientId || !self.clients) {
+    return
+  }
+
+  event.waitUntil(
+    (async () => {
+      if (event.data === 'CLIENT_CLOSE') {
+        const allClients = await self.clients.matchAll({
+          type: 'window',
+        })
+
+        activeClientIds.delete(clientId)
+
+        // Await any pending requests from the closing client.
+        // This makes sure that those requests are handled and not passthrough.
+        const pending = pendingRequests.get(clientId)
+        if (pending != null && pending.size > 0) {
+          await Promise.allSettled(pending)
+        }
+        pendingRequests.delete(clientId)
+
+        const remainingClients = allClients.filter((client) => {
+          return client.id !== clientId
+        })
+
+        // Unregister itself when there are no more clients
+        if (remainingClients.length === 0) {
+          await self.registration.unregister()
+        }
+
+        const client = await self.clients.get(clientId)
+
+        if (client != null) {
+          await sendToClient(client, {
+            type: 'CLIENT_CLOSED',
+          })
+        }
+
+        return
+      }
+
+      /**
+       * @note Check for the client AFTER handling "CLIENT_CLOSE".
+       * This prevents early return on "!client" in case the page has reloaded
+       * and disassociated itself from the worker. This ensures self-unregistration
+       * still fires for those pages.
+       */
+      const client = await self.clients.get(clientId)
+
+      if (!client) {
+        return
+      }
+
+      switch (event.data) {
+        case 'KEEPALIVE_REQUEST': {
+          await sendToClient(client, {
+            type: 'KEEPALIVE_RESPONSE',
+          })
+          break
+        }
+
+        case 'INTEGRITY_CHECK_REQUEST': {
+          await sendToClient(client, {
+            type: 'INTEGRITY_CHECK_RESPONSE',
+            payload: {
+              packageVersion: PACKAGE_VERSION,
+              checksum: INTEGRITY_CHECKSUM,
+            },
+          })
+          break
+        }
+
+        case 'MOCK_ACTIVATE': {
+          activeClientIds.add(clientId)
+
+          await sendToClient(client, {
+            type: 'MOCKING_ENABLED',
+            payload: {
+              client: {
+                id: client.id,
+                frameType: client.frameType,
+              },
+            },
+          })
+          break
+        }
+      }
+    })(),
+  )
+})
+
+addEventListener('fetch', function (event) {
+  // Opening the DevTools triggers the "only-if-cached" request
+  // that cannot be handled by the worker. Bypass such requests.
+  if (
+    event.request.cache === 'only-if-cached' &&
+    event.request.mode !== 'same-origin'
+  ) {
+    return
+  }
+
+  // Bypass all requests when there are no active clients.
+  // Prevents the self-unregistered worked from handling requests
+  // after it's been terminated (still remains active until the next reload).
+  if (activeClientIds.size === 0) {
+    return
+  }
+
+  const requestId = crypto.randomUUID()
+  event.respondWith(handleRequest(event, requestId))
+})
+
+/**
+ * @param {FetchEvent} event
+ * @param {string} requestId
+ */
+async function handleRequest(event, requestId) {
+  const client = await resolveMainClient(event)
+  const requestCloneForEvents = event.request.clone()
+
+  const responsePromise = getResponse(event, client, requestId)
+
+  if (client != null) {
+    let pending = pendingRequests.get(client.id)
+
+    if (pending == null) {
+      pendingRequests.set(client.id, (pending = new Set()))
+    }
+
+    pending.add(responsePromise)
+    responsePromise
+      .finally(() => pending.delete(responsePromise))
+      .catch(() => {})
+  }
+
+  let response
+
+  try {
+    response = await responsePromise
+  } catch (error) {
+    // The request has settled without a response (e.g. a passthrough
+    // request failed with a network error). Notify the client so it
+    // can release the resources associated with this request.
+    if (client && activeClientIds.has(client.id)) {
+      sendToClient(client, {
+        type: 'REQUEST_ERROR',
+        payload: {
+          request: {
+            id: requestId,
+          },
+          error: serializeError(error),
+        },
+      })
+    }
+
+    throw error
+  }
+
+  // Send back the response clone for the "response:*" life-cycle events.
+  // Ensure MSW is active and ready to handle the message, otherwise
+  // this message will pend indefinitely.
+  if (client && activeClientIds.has(client.id)) {
+    const serializedRequest = await serializeRequest(requestCloneForEvents)
+
+    // Omit the body of server-sent event stream responses.
+    // Cloning such responses would prevent client-side stream cancelations
+    // from reaching the original stream (a teed stream only cancels its
+    // source once both of its branches cancel) and would buffer the
+    // entire stream into the unconsumed clone indefinitely.
+    const isEventStreamResponse = response.headers
+      .get('content-type')
+      ?.toLowerCase()
+      .startsWith('text/event-stream')
+
+    // Clone the response so both the client and the library could consume it.
+    const responseClone = isEventStreamResponse ? null : response.clone()
+
+    sendToClient(
+      client,
+      {
+        type: 'RESPONSE',
+        payload: {
+          isMockedResponse: IS_MOCKED_RESPONSE in response,
+          request: {
+            id: requestId,
+            ...serializedRequest,
+          },
+          response: {
+            type: response.type,
+            status: response.status,
+            statusText: response.statusText,
+            headers: Object.fromEntries(response.headers.entries()),
+            body: responseClone ? responseClone.body : null,
+          },
+        },
+      },
+      responseClone && responseClone.body
+        ? [serializedRequest.body, responseClone.body]
+        : [],
+    )
+  }
+
+  return response
+}
+
+/**
+ * Resolve the main client for the given event.
+ * Client that issues a request doesn't necessarily equal the client
+ * that registered the worker. It's with the latter the worker should
+ * communicate with during the response resolving phase.
+ * @param {FetchEvent} event
+ * @returns {Promise<Client | undefined>}
+ */
+async function resolveMainClient(event) {
+  const client = await self.clients.get(event.clientId)
+
+  if (activeClientIds.has(event.clientId)) {
+    return client
+  }
+
+  if (client?.frameType === 'top-level') {
+    return client
+  }
+
+  const allClients = await self.clients.matchAll({
+    type: 'window',
+  })
+
+  return allClients
+    .filter((client) => {
+      // Get only those clients that are currently visible.
+      return client.visibilityState === 'visible'
+    })
+    .find((client) => {
+      // Find the client ID that's recorded in the
+      // set of clients that have registered the worker.
+      return activeClientIds.has(client.id)
+    })
+}
+
+/**
+ * @param {FetchEvent} event
+ * @param {Client | undefined} client
+ * @param {string} requestId
+ * @returns {Promise<Response>}
+ */
+async function getResponse(event, client, requestId) {
+  // Clone the request because it might've been already used
+  // (i.e. its body has been read and sent to the client).
+  const requestClone = event.request.clone()
+
+  /**
+   * @param {{ request?: { headers?: Array<[string, string]> } }} [data]
+   */
+  function passthrough(data) {
+    const headers = new Headers()
+    const requestHeaders = data?.request?.headers
+
+    if (Array.isArray(requestHeaders)) {
+      // Apply the request headers provided by the client.
+      // Those reflect any modifications made in the request handlers.
+      // Use ".append()" to support multiple headers with the same name.
+      for (const [name, value] of requestHeaders) {
+        headers.append(name, value)
+      }
+    } else {
+      for (const [name, value] of requestClone.headers) {
+        headers.append(name, value)
+      }
+    }
+
+    // Remove the "accept" header value that marked this request as passthrough.
+    // This prevents request alteration and also keeps it compliant with the
+    // user-defined CORS policies.
+    const acceptHeader = headers.get('accept')
+    if (acceptHeader) {
+      const values = acceptHeader.split(',').map((value) => value.trim())
+      const filteredValues = values.filter(
+        (value) => value !== 'msw/passthrough',
+      )
+
+      if (filteredValues.length > 0) {
+        headers.set('accept', filteredValues.join(', '))
+      } else {
+        headers.delete('accept')
+      }
+    }
+
+    return fetch(requestClone, { headers })
+  }
+
+  // Bypass mocking when the client is not active.
+  if (!client) {
+    return passthrough()
+  }
+
+  // Bypass initial page load requests (i.e. static assets).
+  // The absence of the immediate/parent client in the map of the active clients
+  // means that MSW hasn't dispatched the "MOCK_ACTIVATE" event yet
+  // and is not ready to handle requests.
+  if (!activeClientIds.has(client.id)) {
+    return passthrough()
+  }
+
+  // Notify the client that a request has been intercepted.
+  const serializedRequest = await serializeRequest(event.request)
+  const clientMessage = await sendToClient(
+    client,
+    {
+      type: 'REQUEST',
+      payload: {
+        id: requestId,
+        ...serializedRequest,
+      },
+    },
+    [serializedRequest.body],
+  )
+
+  switch (clientMessage.type) {
+    case 'MOCK_RESPONSE': {
+      return respondWithMock(clientMessage.data, event)
+    }
+
+    case 'PASSTHROUGH': {
+      return passthrough(clientMessage.data)
+    }
+  }
+
+  return passthrough()
+}
+
+/**
+ * @param {unknown} error
+ * @returns {{ name: string, message: string }}
+ */
+function serializeError(error) {
+  if (error instanceof Error) {
+    return {
+      name: error.name,
+      message: error.message,
+    }
+  }
+
+  return {
+    name: 'Error',
+    message: String(error),
+  }
+}
+
+/**
+ * @param {Client} client
+ * @param {any} message
+ * @param {Array<Transferable>} transferrables
+ * @returns {Promise<any>}
+ */
+function sendToClient(client, message, transferrables = []) {
+  return new Promise((resolve, reject) => {
+    const channel = new MessageChannel()
+
+    channel.port1.onmessage = (event) => {
+      if (event.data && event.data.error) {
+        return reject(event.data.error)
+      }
+
+      resolve(event.data)
+    }
+
+    client.postMessage(message, [
+      channel.port2,
+      ...transferrables.filter(Boolean),
+    ])
+  })
+}
+
+/**
+ * @param {Response} response
+ * @param {FetchEvent} event
+ * @returns {Promise<Response>}
+ */
+async function respondWithMock(response, event) {
+  // Setting response status code to 0 is a no-op.
+  // However, when responding with a "Response.error()", the produced Response
+  // instance will have status code set to 0. Since it's not possible to create
+  // a Response instance with status code 0, handle that use-case separately.
+  if (response.status === 0) {
+    return Response.error()
+  }
+
+  let body = response.body
+
+  // Buffer the streamed mocked response body for navigation requests.
+  // The stream is transferred from the client that is being navigated
+  // away from. Once the navigation commits, that client gets destroyed
+  // and the stream will never complete, resulting in an empty document.
+  // Buffering here keeps "event.respondWith()" pending (the navigation
+  // cannot commit) until the entire body arrives from the client.
+  if (event.request.mode === 'navigate' && body instanceof ReadableStream) {
+    body = await new Response(body).arrayBuffer()
+  }
+
+  const mockedResponse = new Response(body, response)
+
+  Reflect.defineProperty(mockedResponse, IS_MOCKED_RESPONSE, {
+    value: true,
+    enumerable: true,
+  })
+
+  return mockedResponse
+}
+
+/**
+ * @param {Request} request
+ */
+async function serializeRequest(request) {
+  return {
+    url: request.url,
+    mode: request.mode,
+    method: request.method,
+    headers: Object.fromEntries(request.headers.entries()),
+    cache: request.cache,
+    credentials: request.credentials,
+    destination: request.destination,
+    integrity: request.integrity,
+    redirect: request.redirect,
+    referrer: request.referrer,
+    referrerPolicy: request.referrerPolicy,
+    body: await request.arrayBuffer(),
+    keepalive: request.keepalive,
+  }
+}
