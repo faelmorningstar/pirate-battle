@@ -93,17 +93,30 @@ MSW intercepts these browser requests:
 | `GET /api/matches?playerId=...&page=n` | Paged match history |
 | `POST /api/matches` | Registers a completed session idempotently by match ID |
 
-The menu exposes a **Mock network scenario** selector. It is persisted locally and reloads the application to keep behaviour reproducible.
+Home exposes the existing **Mock network scenario** selector. Selection persists under `pirate-battle:network-scenario` and now applies immediately, resets read caches and latency counters, and announces a description to assistive technology. No reload is needed to recover a pending write.
 
-| Scenario | Expected behaviour |
-| --- | --- |
-| `normal` | Fixtures and newly completed matches are returned |
-| `slow` | Match history waits 900 ms before responding |
-| `empty` | Ranking and history return no records |
-| `ranking-error` | Ranking returns HTTP 503 |
-| `history-error` | History returns HTTP 503 |
+- `normal`: original fixtures and successful requests.
+- `empty`: both lists return no records.
+- `paginated`: twelve additional local fixtures yield three pages in Ranking and Match History (five entries per page). Original normal fixtures remain unchanged.
+- `slow`: fixed 900 ms read latency for both lists.
+- `variable-latency`: deterministic 1200/150/700 ms cycle per endpoint; selection and refresh restart the sequence.
+- `out-of-order`: odd reads wait 1200 ms and even reads 150 ms. Data is captured before the delay, allowing an older response to arrive last.
+- `timeout`: read responses wait 4500 ms, exceeding the unchanged Axios 4000 ms timeout.
+- `connection-error`: reads fail at the connection level.
+- `http-400` / `http-503`: both read endpoints return HTTP 400 / 503.
+- `ranking-error` / `history-error`: only the named list returns HTTP 503; the other list remains available.
+- `post-timeout`: POST saves the match immediately, but delays its response 4500 ms; retry confirms the same ID.
+- `post-unavailable`: POST returns HTTP 503 before saving; reads remain available.
 
-**Reset mock data** clears locally stored matches and restores the fixture set.
+**Reset mock data** restores `normal`, initial fixtures and latency sequences, and clears confirmed mock matches and pending registrations. Gameplay options and sound preferences are preserved.
+
+To reproduce read failures, choose a scenario and open either data tab; **Try again** retries that query. Switching back to Home and selecting `normal` clears the failed read cache. Reads retry transient failures once after 250 ms; HTTP 4xx has no automatic retry. Cached tabs refresh on reopening, and obsolete queries are cancelled through Axios.
+
+To reproduce uncertain registration, choose `post-timeout` or `post-unavailable`, then complete a battle normally. The result shows the pending state and **Retry pending matches**; starting another battle stays available. Refresh restores the queue on Home. Select `normal` to recover automatically, or retry explicitly. Browser `online` events also retry pending entries; a recovery event during an in-flight request is retained until that request settles.
+
+Each completed session uses one ID, persisted with its full record under `pirate-battle:pending-matches` **before** POST. Repeated clicks, refresh and timeout reuse that ID, while MSW returns an existing record idempotently. Confirmation removes only that pending entry and invalidates both data tabs. Several pending sessions can coexist without overwriting each other. If browser storage is unavailable, an accessible warning asks the player to keep the page open; durable recovery requires working localStorage.
+
+The audit and exact coverage are documented in [NETWORK_AUDIT.md](./NETWORK_AUDIT.md). Network-only checks: `npm run test:e2e -- tests/network.spec.ts`. Phase 7 adds 19 scenarios in both desktop/mobile profiles (38 executions), preserving the previous 58, for **96 total**.
 
 ## Accessibility and responsive behaviour
 
@@ -140,8 +153,8 @@ Generate and compare with the same Playwright Chromium version, OS and available
 
 ## Known limitations
 
-- The test suite covers gameplay, interface, audio state and four versioned visual states; the full requested data/network E2E matrix and additional visual states remain follow-up work.
+- The test suite covers gameplay, interface, audio state, the requested deterministic network scenarios and four versioned visual states. Additional visual states remain follow-up work.
 - Playwright traces are generated on failure; a committed HTML test report is not included.
-- Network scenarios cover normal, slow, empty and read errors. Timeout-after-write and pending-write recovery are planned next.
+- Network storage is a browser-local MSW implementation, not a remote backend. It requires localStorage for durable records and does not provide cross-device synchronization or transactional guarantees between concurrent tabs.
 - Performance evidence is documented through implementation choices, but a recorded three-minute profiling report is not yet included.
 - Real iPhone/Safari playback and hardware performance measurements need manual device validation; Chromium tests do not measure audible output.

@@ -79,6 +79,24 @@ MSW owns the REST implementation. It uses shared TypeScript contracts and localS
 
 The ranking is sorted by score descending and completion timestamp ascending for deterministic ties. History is filtered to the local player and sorted by most recent completion.
 
+### Phase 7: failures, pending writes and recovery
+
+The existing three MSW handlers remain the sole network mock layer. `networkScenario.ts` supplies fourteen persisted scenarios and deterministic per-endpoint latency counters; `store.ts` keeps normal fixtures unchanged and adds pagination fixtures only when requested. Read handlers capture their data before delaying so out-of-order responses can genuinely contain older data. `post-timeout` saves before delaying its response; `post-unavailable` fails before any write. Runtime record validation is shared by HTTP, confirmed storage and pending storage.
+
+Axios keeps its 4000 ms timeout. Query functions consume TanStack Query's `AbortSignal` and pass it to Axios: unused/obsolete reads abort instead of populating cache later. Query keys retain endpoint/player/page separation. Both panels always refetch on mount, keeping cache available for background updates. Transient read failures retry once after 250 ms; HTTP 4xx does not retry. Error/loading/empty states use accessible alerts/status; existing visual styles and pagination remain unchanged. The cancellation follows the [TanStack Query guidance](https://tanstack.com/query/latest/docs/framework/react/guides/query-cancellation).
+
+App assigns one UUID on session start and guards repeated completion callbacks. `usePendingMatches` persists the completed immutable record before calling the existing TanStack mutation. Its queue lives under `pirate-battle:pending-matches`, separate from the mock's confirmed `pirate-battle:matches`. A synchronous per-ID in-flight set coalesces repeated clicks. Mutation retry is explicit, never an uncontrolled background loop. Successful confirmation removes only its own ID from the latest queue, preserving newer pending sessions; registration success invalidates Ranking and Match History. Errors keep the record intact.
+
+The queue is restored on refresh and exposed on Home/result with a semantic status and **Retry pending matches**. Gameplay never waits for registration and its HUD is untouched. A user retry, scenario change or browser `online` event retries the same records. If recovery arrives during a write, one deferred retry is kept and runs only if the record remains pending after the current attempt. Reset clears the queue and increments a generation guard so older callbacks cannot restore it. Confirmed IDs are deduplicated synchronously by the original store.
+
+The scenario selector changes live, announces its description, and resets both read caches and latency counters. Its existing reset action restores the normal scenario and initial mock data, including clearing pending records, without changing options or sound. No new gameplay probe, mock server, dependency, asset or visual baseline is introduced.
+
+Run `npm run test:e2e -- tests/network.spec.ts` for the 19 network tests in each profile (38 executions), or `npm run test:e2e` for all 96. Tests use isolated browser contexts and the real MSW/Axios/Query integration. Completed matches use the existing simulation clock. Coverage includes pagination, loading/empty/error, deterministic fixed/variable latency, actual inverted response arrival, stale UI protection, bounded retries, both isolated failures, write timeout, refresh during/after writes, repeated clicks, multiple pending sessions, online/scenario recovery and reset. See [NETWORK_AUDIT.md](./NETWORK_AUDIT.md).
+
+Durable records require working localStorage; a queue write failure is surfaced to the player and retains the in-memory record. This mock is browser-local, with no remote backend, cross-device synchronization or multi-tab transaction isolation. Mobile Chromium coverage does not substitute for Safari validation. Actual loss of connectivity is represented deterministically by MSW errors and browser online events.
+
+Phase 7 validation (2026-10-10): all 96 E2E executions passed in 3.3 minutes, including the unchanged four visual baselines. Build and lint passed; the existing bundle-size warning remains (main chunk approximately 620 kB). A local production-preview smoke check confirmed normal ranking, HTTP 503, scenario recovery and history pagination with MSW, without page exceptions or the development probe. No temporary report/trace was versioned.
+
 ## Performance choices
 
 - React does not own per-frame positions.
@@ -95,7 +113,7 @@ Phase 5 adds three configuration scenarios in both profiles: Options bounds/pers
 
 Phase 5 validation (2026-10-10): `npm run test:e2e` passed all 54 desktop/mobile executions; `npm run build` and `npm run lint` passed. The existing large-bundle warning remains (main chunk approximately 615 kB). Real Safari/iPhone behavior, performance profiling and the previously documented visual/data-network coverage remain outside this phase.
 
-Combat tests opt into `window.__PIRATE_BATTLE_TEST__` before loading the development page. The probe exposes read-only snapshots and clock advancement using the real simulation update, normally in 1/60-second steps. Tests use the existing input handlers and rendering, without entity-position, health or score setters. The hook is disabled by `import.meta.env.DEV` in production. Deterministic spawn ordering needs no seed. See [GAMEPLAY_AUDIT.md](./GAMEPLAY_AUDIT.md) for coverage and limits. Failure-after-write recovery, all paging states and profiling remain follow-up work.
+Combat tests opt into `window.__PIRATE_BATTLE_TEST__` before loading the development page. The probe exposes read-only snapshots and clock advancement using the real simulation update, normally in 1/60-second steps. Tests use the existing input handlers and rendering, without entity-position, health or score setters. The hook is disabled by `import.meta.env.DEV` in production. Deterministic spawn ordering needs no seed. See [GAMEPLAY_AUDIT.md](./GAMEPLAY_AUDIT.md) for coverage and limits. Profiling remains follow-up work; Phase 7 completes the specified network/pending-write scenarios.
 
 ## Versioned visual regression
 

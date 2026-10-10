@@ -9,17 +9,17 @@ function Pager({ page, total, pageSize, onChange }: { page: number; total: numbe
 export function RankingPanel() {
   const [page, setPage] = useState(1)
   const query = useRanking(page)
-  if (query.isLoading) return <p className="panel-message">Loading ranking…</p>
-  if (query.isError) return <div className="panel-message"><p>Could not load ranking.</p><button className="button button-secondary" type="button" onClick={() => void query.refetch()}>Try again</button></div>
-  if (!query.data?.items.length) return <p className="panel-message">No completed battles yet.</p>
-  return <section className="data-panel" aria-label="Ranking"><h2>Ranking</h2><ol>{query.data.items.map((entry, index) => <li key={entry.id}><span>#{(page - 1) * query.data.pageSize + index + 1} {entry.playerName}</span><strong>{entry.score}</strong></li>)}</ol><Pager page={page} total={query.data.total} pageSize={query.data.pageSize} onChange={setPage} /></section>
+  if (query.isLoading) return <p className="panel-message" role="status">Loading ranking…</p>
+  if (query.isError) return <div className="panel-message"><p role="alert">Could not load ranking.</p><button className="button button-secondary" type="button" onClick={() => void query.refetch()}>Try again</button></div>
+  if (!query.data?.items.length) return <p className="panel-message" role="status">No completed battles yet.</p>
+  return <section className="data-panel" aria-label="Ranking" aria-busy={query.isFetching}><h2>Ranking</h2><ol>{query.data.items.map((entry, index) => <li key={entry.id}><span>#{(page - 1) * query.data.pageSize + index + 1} {entry.playerName}</span><strong>{entry.score}</strong></li>)}</ol><Pager page={page} total={query.data.total} pageSize={query.data.pageSize} onChange={setPage} /></section>
 }
 
 export function MatchHistoryPanel() {
   const [page, setPage] = useState(1)
   const query = useMatchHistory(page)
-  if (query.isLoading) return <p className="panel-message">Loading match history…</p>
-  if (query.isError) return <div className="panel-message"><p>Could not load match history.</p><button className="button button-secondary" type="button" onClick={() => void query.refetch()}>Try again</button></div>
-  if (!query.data?.items.length) return <p className="panel-message">Your completed battles will appear here.</p>
-  return <section className="data-panel" aria-label="Match history"><h2>Match History</h2><ol>{query.data.items.map((match) => <li key={match.id}><span>{match.score} points · {match.durationSeconds}s · {match.endReason}</span><time dateTime={match.completedAt}>{new Date(match.completedAt).toLocaleDateString()}</time></li>)}</ol><Pager page={page} total={query.data.total} pageSize={query.data.pageSize} onChange={setPage} /></section>
+  if (query.isLoading) return <p className="panel-message" role="status">Loading match history…</p>
+  if (query.isError) return <div className="panel-message"><p role="alert">Could not load match history.</p><button className="button button-secondary" type="button" onClick={() => void query.refetch()}>Try again</button></div>
+  if (!query.data?.items.length) return <p className="panel-message" role="status">Your completed battles will appear here.</p>
+  return <section className="data-panel" aria-label="Match history" aria-busy={query.isFetching}><h2>Match History</h2><ol>{query.data.items.map((match) => <li key={match.id}><span>{match.score} points · {match.durationSeconds}s · {match.endReason}</span><time dateTime={match.completedAt}>{new Date(match.completedAt).toLocaleDateString()}</time></li>)}</ol><Pager page={page} total={query.data.total} pageSize={query.data.pageSize} onChange={setPage} /></section>
 }
