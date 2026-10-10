@@ -219,3 +219,27 @@ h2 { margin-top: 2rem; }.lead { color: #d0e6dd; font-size: 1.1rem; line-height: 
   .game-header img { pointer-events: none; }
   .pause-message, .asset-message { top: calc(100px + env(safe-area-inset-top)); }
 }
+
+/* O som usa a moldura existente, sem adicionar altura ao HUD. */
+.game-actions .sound-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  min-height: 48px;
+  flex: 0 0 48px;
+  padding: 0;
+  border: 0;
+  border-image: none;
+  border-radius: 50%;
+  background: url('/assets/pirate-battle/ui/controls/button_round_normal.png') center / contain no-repeat;
+  color: #fff7df;
+  pointer-events: auto;
+  touch-action: manipulation;
+}
+.sound-symbol { width: 22px; height: 22px; stroke: currentColor; stroke-width: 2; stroke-linecap: round; fill: none; pointer-events: none; }
+.game-actions .sound-toggle:active { background-image: url('/assets/pirate-battle/ui/controls/button_round_pressed.png'); }
+@media (hover: hover) {
+  .game-actions .sound-toggle:hover { background-image: url('/assets/pirate-battle/ui/controls/button_round_hover.png'); }
+}

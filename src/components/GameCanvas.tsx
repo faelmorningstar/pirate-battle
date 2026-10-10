@@ -4,10 +4,12 @@ import { HealthMeter, OfficialIcon } from './OfficialUi'
 import { pirateAsset } from '../game/assets'
 import { createCombatVisual, createTexturedIsland, createTexturedSea, loadArenaTextures } from '../game/arenaVisuals'
 import type { GameConfig } from '../game/config'
+import type { GameAudio } from '../game/audio'
+import { SoundButton } from './SoundButton'
 
 export type GameHud = { health: number; score: number; timeLeft: number; paused: boolean }
 export type GameResult = { score: number; durationSeconds: number; reason: 'time' | 'death' }
-type Props = { config: GameConfig; hud: GameHud; onHudChange: (hud: GameHud) => void; onEnd: (result: GameResult) => void; onExit: () => void }
+type Props = { config: GameConfig; hud: GameHud; onHudChange: (hud: GameHud) => void; onEnd: (result: GameResult) => void; onExit: () => void; audio: GameAudio; soundMuted: boolean; onToggleSound: () => void }
 type Projectile = { graphic: Graphics | Sprite; velocityX: number; velocityY: number; remainingLife: number; owner: 'player' | 'enemy' }
 
 const PLAYER_RADIUS = 26
@@ -186,7 +188,7 @@ function normalizeAngle(angle: number) {
   return Math.atan2(Math.sin(angle), Math.cos(angle))
 }
 
-export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
+export function GameCanvas({ config, hud, onHudChange, onEnd, onExit, audio, soundMuted, onToggleSound }: Props) {
   const hostRef = useRef<HTMLDivElement>(null)
   const togglePauseRef = useRef<() => void>(() => {})
   const touchPressedRef = useRef(new Set<string>())
@@ -235,6 +237,7 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
     const togglePause = () => {
       if (ended) return
       paused = !paused
+      audio.pauseBattle(paused)
       pressed.clear()
       reportHud()
     }
@@ -359,6 +362,7 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
       }
 
       const explode = (x: number, y: number) => {
+        audio.play('ship_explosion_1')
         const effect = createCombatVisual(arenaTextures.explosion, 12, 0xffb648)
         // A expansão parte do tamanho lógico, não do tamanho original do PNG.
         const initialScaleX = effect.scale.x
@@ -381,6 +385,7 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
       const fireFront = () => {
         if (fireCooldown > 0) return
         fireCooldown = FRONT_FIRE_COOLDOWN
+        audio.play('cannon_fire_1')
         const graphic = createCombatVisual(arenaTextures.cannonball, 6, 0x17120d, 0xffe2a4)
         const directionX = Math.sin(player.rotation)
         const directionY = -Math.cos(player.rotation)
@@ -394,6 +399,8 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
         if (isPort ? portFireCooldown > 0 : starboardFireCooldown > 0) return
         if (isPort) portFireCooldown = BROADSIDE_FIRE_COOLDOWN
         else starboardFireCooldown = BROADSIDE_FIRE_COOLDOWN
+        // Uma salva tem três projéteis, mas apenas um efeito sonoro.
+        audio.play('cannon_broadside')
         const broadsideAngle = player.rotation + (isPort ? -Math.PI / 2 : Math.PI / 2)
         const directionX = Math.sin(broadsideAngle)
         const directionY = -Math.cos(broadsideAngle)
@@ -410,6 +417,7 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
       const fireEnemy = () => {
         if (!shooter || shooterFireCooldown > 0) return
         shooterFireCooldown = SHOOTER_FIRE_COOLDOWN
+        audio.play('cannon_fire_1')
         const graphic = createCombatVisual(arenaTextures.cannonball, 6, 0x732c25, 0xffb070)
         if (graphic instanceof Sprite) graphic.tint = 0xf4ad97
         const directionX = Math.sin(shooter.rotation)
@@ -463,6 +471,7 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
             chaser.rotation += Math.PI / 2
           }
           if (distanceSquared(chaser.x, chaser.y, player.x, player.y) < (CHASER_RADIUS + PLAYER_RADIUS) ** 2) {
+            audio.play('ship_wood_hit_1')
             explode(chaser.x, chaser.y)
             chaser.destroy()
             chaser = null
@@ -497,6 +506,7 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
           const hitsShooter = projectile.owner === 'player' && shooter && distanceSquared(projectile.graphic.x, projectile.graphic.y, shooter.x, shooter.y) < (CHASER_RADIUS + 6) ** 2
           const hitsPlayer = projectile.owner === 'enemy' && distanceSquared(projectile.graphic.x, projectile.graphic.y, player.x, player.y) < (PLAYER_RADIUS + 6) ** 2
           if (hitsChaser && chaser) {
+            audio.play('ship_wood_hit_1')
             chaserHealth -= 1
             if (chaserHealth <= 0) {
               explode(chaser.x, chaser.y)
@@ -505,12 +515,14 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
               chaserHealthBar?.destroy({ children: true })
               chaserHealthBar = null
               score += 1
+              audio.play('score_point')
               reportHud()
               chaserRespawn = config.enemySpawnIntervalSeconds
               nextEnemy = 'shooter'
             } else chaser.tint = 0xffaaa0
           }
           if (hitsShooter && shooter) {
+            audio.play('ship_wood_hit_1')
             shooterHealth -= 1
             if (shooterHealth <= 0) {
               explode(shooter.x, shooter.y)
@@ -519,12 +531,14 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
               shooterHealthBar?.destroy({ children: true })
               shooterHealthBar = null
               score += 1
+              audio.play('score_point')
               reportHud()
               chaserRespawn = config.enemySpawnIntervalSeconds
               nextEnemy = 'chaser'
             } else shooter.tint = 0xffaaa0
           }
           if (hitsPlayer) {
+            audio.play('ship_wood_hit_1')
             playerHealth -= 1
             player.tint = playerHealth === 2 ? 0xffd17f : playerHealth === 1 ? 0xff7f7f : 0x555555
             reportHud()
@@ -541,6 +555,8 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
     void mount()
     return () => {
       active = false
+      // As transições pertencem ao App; este cleanup remove apenas sons de combate.
+      audio.stopCombat()
       window.removeEventListener('keydown', onKeyDown)
       window.removeEventListener('keyup', onKeyUp)
       document.removeEventListener('visibilitychange', onVisibilityChange)
@@ -548,7 +564,7 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
       cleanupScenery?.()
       if (initialized) app.destroy(true, { children: true })
     }
-  }, [config, onHudChange, onEnd])
+  }, [config, onHudChange, onEnd, audio])
 
   const touchControl = (code: string) => ({
     onPointerDown: (event: PointerEvent<HTMLButtonElement>) => { event.preventDefault(); touchPressedRef.current.add(code) },
@@ -564,6 +580,7 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
         <span className="hud-counter"><img className="hud-icon" src={pirateAsset('ui/hud/icon_time.png')} alt="" aria-hidden="true" />Time: {hud.timeLeft}s</span>
       </div>
       <div className="game-actions">
+        <SoundButton muted={soundMuted} onToggle={onToggleSound} />
         <button type="button" className="button button-secondary" onClick={() => togglePauseRef.current()}><OfficialIcon name={hud.paused ? 'play' : 'pause'} /><span className="game-action-label">{hud.paused ? 'Resume' : 'Pause'}</span></button>
         <button type="button" className="button button-secondary" onClick={onExit}><OfficialIcon name="home" /><span className="game-action-label">Exit game</span></button>
       </div>
