@@ -151,10 +151,18 @@ Review changed PNGs before accepting them. Baselines use desktop Chromium at 128
 
 Generate and compare with the same Playwright Chromium version, OS and available system fonts (the supplied baselines were generated on Windows). Font rasterization and WebGL can differ across operating systems; these snapshots do not replace real iPhone/Safari review.
 
+## Production profiling
+
+Run `npm run profile:game` separately from E2E and other heavy tasks. It builds the optimized app, serves `dist` locally on port 4188, and uses headless Playwright Chromium. Allow approximately four minutes: five real Play/play/Exit cycles followed by a real 180-second session. The external keyboard pilot uses actual controls and island collisions; it does not override gameplay, pause or accelerate time. Set `PROFILE_PORT` to change the preview port. Dependencies and the Playwright Chromium installation are required.
+
+The command writes [performance/profile-results.json](./performance/profile-results.json) and regenerates [PERFORMANCE_REPORT.md](./PERFORMANCE_REPORT.md), then closes browser and preview. The report documents the machine, render submission FPS, P95 intervals, entity peaks and CDP page-heap measurements before/after forced GC. Raw timestamps and the five memory cycles are retained; traces, screenshots and temporary logs are not deliverables. Profiling scripts are never imported into production code or the normal E2E suite.
+
+The recorded complete session averaged **26.05 FPS**, with **49 ms P95**, on software SwiftShader. Memory after GC increased across five cycles even though canvas/app cleanup and DOM/listener counts remained stable. This is evidence requiring further investigation, not proof of a leak or of performance on a physical GPU/iPhone. See the report for values and limitations.
+
 ## Known limitations
 
 - The test suite covers gameplay, interface, audio state, the requested deterministic network scenarios and four versioned visual states. Additional visual states remain follow-up work.
 - Playwright traces are generated on failure; a committed HTML test report is not included.
 - Network storage is a browser-local MSW implementation, not a remote backend. It requires localStorage for durable records and does not provide cross-device synchronization or transactional guarantees between concurrent tabs.
-- Performance evidence is documented through implementation choices, but a recorded three-minute profiling report is not yet included.
+- Production profiling now has recorded three-minute evidence; the 60 FPS target was not achieved in this software-rendered environment. Physical-device performance and heap-retention diagnosis remain follow-up work.
 - Real iPhone/Safari playback and hardware performance measurements need manual device validation; Chromium tests do not measure audible output.

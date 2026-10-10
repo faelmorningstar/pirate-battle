@@ -107,13 +107,25 @@ Phase 7 validation (2026-10-10): all 96 E2E executions passed in 3.3 minutes, in
 
 ## Testing strategy
 
+### Separate production profiling
+
+`npm run profile:game` runs the TypeScript/Vite production build and an exclusive local `dist` preview, followed by five real lifecycle cycles and a 180-second real session. It is separate from Playwright's normal test runner and must not run concurrently with E2E or other intensive work. Only existing keyboard handlers drive the game; no development simulation clock or gameplay setters are used.
+
+`scripts/profile-observer.mjs` is injected externally by Playwright through PixiJS's existing `__PIXI_APP_INIT__` hook. It observes screen-stage `postrender` submissions and classifies current entities by official texture paths. The observer drops application references on stage destruction; frame/sample arrays are disabled during memory cycles. Neither observer nor runner is imported by `src/`, so production gameplay and bundle contain no added profiling behavior.
+
+`scripts/profile-game.mjs` collects real timestamps, entity maxima, environment/CDP GPU information and page V8 heap/DOM counters. Lifecycle comparisons use the Home screen after forced GC, with uncollected and in-game values also preserved; the long session has no forced GC. The final long-session heap includes profiler arrays and is not used for cycle-growth comparisons. Ports, browser/server cleanup, completion by the real timer and page exceptions are checked. A premature death fails the profiling run and remains explicitly incomplete.
+
+The versionable evidence is `performance/profile-results.json`; `scripts/profile-report.mjs` renders `PERFORMANCE_REPORT.md` automatically, or can regenerate it via `node scripts/profile-report.mjs`. The report distinguishes render submission from physical presentation, V8 heap from process/GPU/worker memory, and observed growth from a proven leak. The completed software-rendered sample did not meet 60 FPS and its five post-GC heaps increased; these findings are documented rather than hidden. No traces/screenshots/temporary reports are added.
+
+Phase 8 validation (2026-10-10): the profiling completed a real timer-ended 180-second session and five lifecycle cycles, with no page exceptions. All 96 existing desktop/mobile E2E executions passed in 3.3 minutes, including unchanged visual baselines; `npm run build` and `npm run lint` passed. The existing approximately 620 kB main-chunk warning remains. No application, gameplay, asset, normal test or baseline file was modified.
+
 Playwright is configured for desktop Chromium and a mobile Chromium profile. The 26 pre-existing executions cover UI, options, ranking, arena loading/fallback/cleanup, mobile HUD and audio unlock/state/failures. Phase 4 adds 22 gameplay executions covering movement, rotation, collisions, weapon cooldowns, damage/scoring, enemy AI/spawns, end/restart and automatic pause.
 
 Phase 5 adds three configuration scenarios in both profiles: Options bounds/persistence, a deeply frozen running-session snapshot unaffected by later preferences, and independently copied adjustable defaults/legacy preference compatibility. The development probe includes the actual readonly session configuration so tests can check deep freezing and observe the same rules used by the game. Existing gameplay tests remain unchanged.
 
 Phase 5 validation (2026-10-10): `npm run test:e2e` passed all 54 desktop/mobile executions; `npm run build` and `npm run lint` passed. The existing large-bundle warning remains (main chunk approximately 615 kB). Real Safari/iPhone behavior, performance profiling and the previously documented visual/data-network coverage remain outside this phase.
 
-Combat tests opt into `window.__PIRATE_BATTLE_TEST__` before loading the development page. The probe exposes read-only snapshots and clock advancement using the real simulation update, normally in 1/60-second steps. Tests use the existing input handlers and rendering, without entity-position, health or score setters. The hook is disabled by `import.meta.env.DEV` in production. Deterministic spawn ordering needs no seed. See [GAMEPLAY_AUDIT.md](./GAMEPLAY_AUDIT.md) for coverage and limits. Profiling remains follow-up work; Phase 7 completes the specified network/pending-write scenarios.
+Combat tests opt into `window.__PIRATE_BATTLE_TEST__` before loading the development page. The probe exposes read-only snapshots and clock advancement using the real simulation update, normally in 1/60-second steps. Tests use the existing input handlers and rendering, without entity-position, health or score setters. The hook is disabled by `import.meta.env.DEV` in production. Deterministic spawn ordering needs no seed. See [GAMEPLAY_AUDIT.md](./GAMEPLAY_AUDIT.md) for coverage and limits. Phase 8 production profiling uses external observation instead of this development-only probe; Phase 7 completes the specified network/pending-write scenarios.
 
 ## Versioned visual regression
 
