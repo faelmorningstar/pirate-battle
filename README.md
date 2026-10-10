@@ -66,6 +66,23 @@ Touch controls support simultaneous holds, so movement, turning and attacks can 
 - Spawns alternate the two existing types at the configured interval, independently of earlier enemies being destroyed.
 - The simulation pauses on `P`, the Pause button, window focus loss or a hidden browser tab; resuming requires a player action.
 
+## Balance configuration and session options
+
+`src/game/config.ts` centralizes the typed balance in `DEFAULT_GAME_CONFIG`. Options still exposes only **Game session time** (inclusive 60–180 integer seconds, default 90) and **Enemy spawn time** (inclusive 1–12 integer seconds, default 4). `GAME_SESSION_LIMITS` defines these bounds. Preferences survive refresh under `pirate-battle:config`; existing saved preferences remain compatible. Invalid stored preferences fall back to defaults.
+
+Every Play/Play Again creates a deeply copied and frozen configuration snapshot. Later Options changes apply to the next session; they cannot modify a running or completed session's snapshot. Match records keep the existing two-field options format, taken from the completed session.
+
+Internal defaults, adjustable in `DEFAULT_GAME_CONFIG`:
+
+- Player: health 3, collision radius 26, speed 220 logical px/s, turn speed 2.8 rad/s.
+- Enemies: health 2 and collision radius 25; Chaser speed 118, rotation response 3 and contact damage 1; Shooter speed 92, rotation response 2.4 and attack range 300.
+- Island radius: 88 desktop / 68 touch. Ship artwork dimensions and responsive styles remain unchanged.
+- Spawns: first after 1 second, then the configured interval; cyclic Chaser/Shooter order, 56-pixel corner inset and 56 pixels of clearance beyond the player/enemy collision radii.
+- Projectiles: speed 620 logical px/s; enemy multiplier 0.72; damage 1 and collision radius 6 for all shots. Front lifetime 1.1 s, cooldown 0.35 s, visual radius 6 and muzzle offset 38. Each broadside lifetime 0.9 s, cooldown 0.8 s, visual radius 5, muzzle offset 33 and parallel offsets −15/0/15. Enemy lifetime 1.4 s, cooldown 1.35 s, visual radius 6 and muzzle offset 38.
+- Feedback: explosion lifetime 0.5 s, initial radius 12, expansion coefficient 4 and fade coefficient 2; ship impact highlight 0.18 s. Each player kill still awards 1 point.
+
+Change these source defaults to tune subsequent sessions without editing the combat rules. They are internal developer settings, not additional player controls. Phase 5 preserves all current values and behaviors; no new assets or external URLs are introduced.
+
 ## Mocked REST API
 
 MSW intercepts these browser requests:
@@ -105,6 +122,8 @@ Official assets are served locally from `public/assets/pirate-battle/`: ships, i
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for the React/PixiJS boundary, simulation lifecycle, collision rules, persistence and mocked-data design.
 
 See [GAMEPLAY_AUDIT.md](./GAMEPLAY_AUDIT.md) for the Phase 4 requirement table, corrections and deterministic combat coverage. The suite preserves the previous 26 executions and adds 22 gameplay executions across desktop/mobile Chromium.
+
+Phase 5 preserves those 48 executions and adds 6 configuration executions (three scenarios in both profiles), for 54 total. Run them with `npm run test:e2e`; configuration-only coverage is `npm run test:e2e -- tests/config.spec.ts`.
 
 ## Known limitations
 

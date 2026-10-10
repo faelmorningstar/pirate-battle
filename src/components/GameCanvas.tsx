@@ -16,19 +16,6 @@ type Props = { config: GameConfig; hud: GameHud; onHudChange: (hud: GameHud) => 
 type Projectile = { graphic: Graphics | Sprite; velocityX: number; velocityY: number; remainingLife: number; owner: 'player' | 'enemy' }
 type Enemy = { id: number; type: 'chaser' | 'shooter'; graphic: Container; healthBar: Graphics; health: number; fireCooldown: number }
 
-const PLAYER_RADIUS = 26
-const ISLAND_RADIUS = window.matchMedia('(pointer: coarse)').matches ? 68 : 88
-const PLAYER_SPEED = 220
-const TURN_SPEED = 2.8
-const PROJECTILE_SPEED = 620
-const FRONT_FIRE_COOLDOWN = 0.35
-const BROADSIDE_FIRE_COOLDOWN = 0.8
-const CHASER_RADIUS = 25
-const CHASER_SPEED = 118
-const SHOOTER_SPEED = 92
-const SHOOTER_ATTACK_RANGE = 300
-const SHOOTER_FIRE_COOLDOWN = 1.35
-const ENEMY_MAX_HEALTH = 2
 const PLAYER_SHIP_ASSET = pirateAsset('ships/ship_12.png')
 const CHASER_SHIP_ASSET = pirateAsset('ships/ship_5.png')
 const SHOOTER_SHIP_ASSET = pirateAsset('ships/ship_20.png')
@@ -167,9 +154,8 @@ function createHealthBar(textures: HealthTextures, enemy = false) {
   return bar
 }
 
-function drawHealthBar(bar: Graphics, x: number, y: number, health: number, maxHealth: number) {
+function drawHealthBar(bar: Graphics, x: number, y: number, health: number, maxHealth: number, enemy = false) {
   const ratio = Math.max(0, Math.min(1, health / maxHealth))
-  const enemy = maxHealth === ENEMY_MAX_HEALTH
   const fills = bar.getChildByLabel('fills') as Graphics | null
   if (fills) {
     const width = enemy ? 64 : 96
@@ -216,9 +202,10 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit, audio, sou
     let portFireCooldown = 0
     let starboardFireCooldown = 0
     const enemies: Enemy[] = []
-    let spawnCountdown = 1
-    let nextEnemy: 'chaser' | 'shooter' = 'chaser'
-    let playerHealth = 3
+    const islandRadius = window.matchMedia('(pointer: coarse)').matches ? config.arena.islandRadius.touch : config.arena.islandRadius.desktop
+    let spawnCountdown = config.spawns.initialDelaySeconds
+    let spawnIndex = 0
+    let playerHealth = config.player.maxHealth
     let score = 0
     let remainingTime = config.sessionDurationSeconds
     let reportedSecond = Math.ceil(remainingTime)
@@ -319,7 +306,7 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit, audio, sou
       resizeSea()
       app.renderer.on('resize', resizeSea)
       app.stage.addChild(sea)
-      const island = createTexturedIsland(ISLAND_RADIUS, arenaTextures) ?? createIsland(ISLAND_RADIUS)
+      const island = createTexturedIsland(islandRadius, arenaTextures) ?? createIsland(islandRadius)
       cleanupScenery = () => {
         app.renderer.off('resize', resizeSea)
         sea.destroy({ children: true })
@@ -331,7 +318,7 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit, audio, sou
       app.stage.addChild(island)
 
       const player = createShip(0xf2c35e, playerTexture)
-      prepareShipFeedback(player)
+      prepareShipFeedback(player, config.effects.impactSeconds)
       player.position.set(app.screen.width * 0.5, app.screen.height * 0.78)
       app.stage.addChild(player)
       const playerHealthBar = createHealthBar(healthTextures)
@@ -348,20 +335,20 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit, audio, sou
       const distanceToIsland = (point: { x: number; y: number }) => distanceSquared(point.x, point.y, islandX, islandY)
       const safePosition = (point: { x: number; y: number }, radius: number) => {
         const clamped = clampToArena(point, radius, app.screen.width, app.screen.height)
-        if (distanceToIsland(clamped) >= (radius + ISLAND_RADIUS) ** 2) return clamped
+        if (distanceToIsland(clamped) >= (radius + islandRadius) ** 2) return clamped
         // Só reposicionamos no resize ou na montagem, quando o espaço visível mudou.
         const candidates = [
           { x: radius, y: radius }, { x: app.screen.width - radius, y: radius },
           { x: radius, y: app.screen.height - radius }, { x: app.screen.width - radius, y: app.screen.height - radius },
-        ].filter((candidate) => distanceToIsland(candidate) >= (radius + ISLAND_RADIUS) ** 2)
+        ].filter((candidate) => distanceToIsland(candidate) >= (radius + islandRadius) ** 2)
         return candidates.sort((a, b) => distanceSquared(a.x, a.y, clamped.x, clamped.y) - distanceSquared(b.x, b.y, clamped.x, clamped.y))[0] ?? clamped
       }
       const resizeArena = () => {
         islandX = app.screen.width * 0.52
         islandY = app.screen.height * 0.45
         island.position.set(islandX, islandY)
-        player.position.copyFrom(safePosition(player, PLAYER_RADIUS))
-        for (const enemy of enemies) enemy.graphic.position.copyFrom(safePosition(enemy.graphic, CHASER_RADIUS))
+        player.position.copyFrom(safePosition(player, config.player.radius))
+        for (const enemy of enemies) enemy.graphic.position.copyFrom(safePosition(enemy.graphic, config.enemies.radius))
       }
       resizeArena()
       app.renderer.on('resize', resizeArena)
@@ -373,21 +360,22 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit, audio, sou
       }
 
       const spawnEnemy = () => {
+        const inset = config.spawns.inset
         const point = [
-          { x: 56, y: 56 }, { x: app.screen.width - 56, y: 56 },
-          { x: 56, y: app.screen.height - 56 }, { x: app.screen.width - 56, y: app.screen.height - 56 },
-        ].filter((candidate) => candidate.x >= CHASER_RADIUS && candidate.x <= app.screen.width - CHASER_RADIUS
-          && candidate.y >= CHASER_RADIUS && candidate.y <= app.screen.height - CHASER_RADIUS
-          && distanceToIsland(candidate) >= (CHASER_RADIUS + ISLAND_RADIUS) ** 2
-          && distanceSquared(candidate.x, candidate.y, player.x, player.y) >= (PLAYER_RADIUS + CHASER_RADIUS + 56) ** 2)
+          { x: inset, y: inset }, { x: app.screen.width - inset, y: inset },
+          { x: inset, y: app.screen.height - inset }, { x: app.screen.width - inset, y: app.screen.height - inset },
+        ].filter((candidate) => candidate.x >= config.enemies.radius && candidate.x <= app.screen.width - config.enemies.radius
+          && candidate.y >= config.enemies.radius && candidate.y <= app.screen.height - config.enemies.radius
+          && distanceToIsland(candidate) >= (config.enemies.radius + islandRadius) ** 2
+          && distanceSquared(candidate.x, candidate.y, player.x, player.y) >= (config.player.radius + config.enemies.radius + config.spawns.playerClearance) ** 2)
           .sort((a, b) => distanceSquared(b.x, b.y, player.x, player.y) - distanceSquared(a.x, a.y, player.x, player.y))[0]
         if (!point) return
-        const type = nextEnemy
-        nextEnemy = type === 'chaser' ? 'shooter' : 'chaser'
+        const type = config.spawns.distribution[spawnIndex % config.spawns.distribution.length]
+        spawnIndex += 1
         const graphic = createShip(type === 'chaser' ? 0xd65c4b : 0x6bc4d4, type === 'chaser' ? chaserTexture : shooterTexture)
         graphic.position.copyFrom(point)
-        prepareShipFeedback(graphic)
-        const enemy: Enemy = { id: ++enemyId, type, graphic, healthBar: createHealthBar(healthTextures, true), health: ENEMY_MAX_HEALTH, fireCooldown: 0 }
+        prepareShipFeedback(graphic, config.effects.impactSeconds)
+        const enemy: Enemy = { id: ++enemyId, type, graphic, healthBar: createHealthBar(healthTextures, true), health: config.enemies.maxHealth, fireCooldown: 0 }
         enemies.push(enemy)
         app.stage.addChild(graphic, enemy.healthBar)
         if (testHarness) spawnHistory.push({ id: enemy.id, type, time: config.sessionDurationSeconds - remainingTime, ...point, playerX: player.x, playerY: player.y })
@@ -399,7 +387,7 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit, audio, sou
       }
       const explode = (x: number, y: number) => {
         audio.play('ship_explosion_1')
-        const graphic = createCombatVisual(arenaTextures.explosion, 12, 0xffb648)
+        const graphic = createCombatVisual(arenaTextures.explosion, config.effects.explosionRadius, 0xffb648)
         graphic.position.set(x, y)
         app.stage.addChild(graphic)
         effects.push({ graphic, elapsed: 0, scaleX: graphic.scale.x, scaleY: graphic.scale.y })
@@ -413,43 +401,43 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit, audio, sou
       }
       const fireFront = () => {
         if (fireCooldown > 0) return
-        fireCooldown = FRONT_FIRE_COOLDOWN
+        fireCooldown = config.projectiles.front.cooldownSeconds
         shots.front += 1
         audio.play('cannon_fire_1')
-        addProjectile(player.x + Math.sin(player.rotation) * 38, player.y - Math.cos(player.rotation) * 38, player.rotation, 6, PROJECTILE_SPEED, 1.1, 'player')
+        addProjectile(player.x + Math.sin(player.rotation) * config.projectiles.front.muzzleOffset, player.y - Math.cos(player.rotation) * config.projectiles.front.muzzleOffset, player.rotation, config.projectiles.front.visualRadius, config.projectiles.speed, config.projectiles.front.lifetimeSeconds, 'player')
       }
       const fireBroadside = (side: 'port' | 'starboard') => {
         const isPort = side === 'port'
         if (isPort ? portFireCooldown > 0 : starboardFireCooldown > 0) return
-        if (isPort) portFireCooldown = BROADSIDE_FIRE_COOLDOWN
-        else starboardFireCooldown = BROADSIDE_FIRE_COOLDOWN
+        if (isPort) portFireCooldown = config.projectiles.broadside.cooldownSeconds
+        else starboardFireCooldown = config.projectiles.broadside.cooldownSeconds
         shots[side] += 1
         audio.play('cannon_broadside')
         const angle = player.rotation + (isPort ? -Math.PI / 2 : Math.PI / 2)
-        for (const offset of [-15, 0, 15]) {
-          addProjectile(player.x + Math.sin(angle) * 33 + Math.sin(player.rotation) * offset,
-            player.y - Math.cos(angle) * 33 - Math.cos(player.rotation) * offset, angle, 5, PROJECTILE_SPEED, 0.9, 'player')
+        for (const offset of config.projectiles.broadside.offsets) {
+          addProjectile(player.x + Math.sin(angle) * config.projectiles.broadside.muzzleOffset + Math.sin(player.rotation) * offset,
+            player.y - Math.cos(angle) * config.projectiles.broadside.muzzleOffset - Math.cos(player.rotation) * offset, angle, config.projectiles.broadside.visualRadius, config.projectiles.speed, config.projectiles.broadside.lifetimeSeconds, 'player')
         }
       }
       const fireEnemy = (enemy: Enemy) => {
         if (enemy.fireCooldown > 0) return
-        enemy.fireCooldown = SHOOTER_FIRE_COOLDOWN
+        enemy.fireCooldown = config.projectiles.enemy.cooldownSeconds
         shots.enemy += 1
         audio.play('cannon_fire_1')
-        addProjectile(enemy.graphic.x + Math.sin(enemy.graphic.rotation) * 38,
-          enemy.graphic.y - Math.cos(enemy.graphic.rotation) * 38, enemy.graphic.rotation, 6, PROJECTILE_SPEED * 0.72, 1.4, 'enemy')
+        addProjectile(enemy.graphic.x + Math.sin(enemy.graphic.rotation) * config.projectiles.enemy.muzzleOffset,
+          enemy.graphic.y - Math.cos(enemy.graphic.rotation) * config.projectiles.enemy.muzzleOffset, enemy.graphic.rotation, config.projectiles.enemy.visualRadius, config.projectiles.speed * config.projectiles.enemySpeedMultiplier, config.projectiles.enemy.lifetimeSeconds, 'enemy')
       }
       const moveShip = (ship: Container, radius: number, speed: number, seconds: number) => {
         const next = clampToArena({ x: ship.x + Math.sin(ship.rotation) * speed * seconds, y: ship.y - Math.cos(ship.rotation) * speed * seconds }, radius, app.screen.width, app.screen.height)
-        if (circleContact(ship, next, { x: islandX, y: islandY }, ISLAND_RADIUS + radius) !== undefined) return false
+        if (circleContact(ship, next, { x: islandX, y: islandY }, islandRadius + radius) !== undefined) return false
         ship.position.copyFrom(next)
         return true
       }
-      const damagePlayer = () => {
+      const damagePlayer = (damage: number) => {
         audio.play('ship_wood_hit_1')
-        playerHealth = Math.max(0, playerHealth - 1)
+        playerHealth = Math.max(0, playerHealth - damage)
         showShipImpact(player)
-        updateShipFeedback(player, playerHealth, 3, 0)
+        updateShipFeedback(player, playerHealth, config.player.maxHealth, 0)
         reportHud()
         if (playerHealth === 0) finish('death')
       }
@@ -469,9 +457,9 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit, audio, sou
           // O intervalo depende do relógio, não de destruir o inimigo anterior.
           spawnCountdown += config.enemySpawnIntervalSeconds
         }
-        if (isPressed('KeyA')) player.rotation -= TURN_SPEED * seconds
-        if (isPressed('KeyD')) player.rotation += TURN_SPEED * seconds
-        if (isPressed('KeyW')) moveShip(player, PLAYER_RADIUS, PLAYER_SPEED, seconds)
+        if (isPressed('KeyA')) player.rotation -= config.player.turnSpeed * seconds
+        if (isPressed('KeyD')) player.rotation += config.player.turnSpeed * seconds
+        if (isPressed('KeyW')) moveShip(player, config.player.radius, config.player.speed, seconds)
         if (isPressed('Space')) fireFront()
         if (isPressed('KeyQ')) fireBroadside('port')
         if (isPressed('KeyE')) fireBroadside('starboard')
@@ -481,15 +469,15 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit, audio, sou
           const ship = enemy.graphic
           enemy.fireCooldown = Math.max(0, enemy.fireCooldown - seconds)
           const targetAngle = Math.atan2(player.x - ship.x, -(player.y - ship.y))
-          ship.rotation += normalizeAngle(targetAngle - ship.rotation) * Math.min(1, seconds * (enemy.type === 'chaser' ? 3 : 2.4))
-          const inRange = distanceSquared(ship.x, ship.y, player.x, player.y) <= SHOOTER_ATTACK_RANGE ** 2
+          ship.rotation += normalizeAngle(targetAngle - ship.rotation) * Math.min(1, seconds * (enemy.type === 'chaser' ? config.enemies.chaser.rotationResponse : config.enemies.shooter.rotationResponse))
+          const inRange = distanceSquared(ship.x, ship.y, player.x, player.y) <= config.enemies.shooter.attackRange ** 2
           if (enemy.type === 'chaser' || !inRange) {
-            if (!moveShip(ship, CHASER_RADIUS, enemy.type === 'chaser' ? CHASER_SPEED : SHOOTER_SPEED, seconds)) ship.rotation += Math.PI / 2
+            if (!moveShip(ship, config.enemies.radius, enemy.type === 'chaser' ? config.enemies.chaser.speed : config.enemies.shooter.speed, seconds)) ship.rotation += Math.PI / 2
           } else fireEnemy(enemy)
-          if (enemy.type === 'chaser' && distanceSquared(ship.x, ship.y, player.x, player.y) < (CHASER_RADIUS + PLAYER_RADIUS) ** 2) {
+          if (enemy.type === 'chaser' && distanceSquared(ship.x, ship.y, player.x, player.y) < (config.enemies.radius + config.player.radius) ** 2) {
             explode(ship.x, ship.y)
             removeEnemy(enemy)
-            damagePlayer()
+            damagePlayer(config.enemies.chaser.contactDamage)
             if (ended) return
           }
         }
@@ -499,30 +487,30 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit, audio, sou
           const start = { x: projectile.graphic.x, y: projectile.graphic.y }
           const travelTime = Math.min(seconds, projectile.remainingLife)
           const end = { x: start.x + projectile.velocityX * travelTime, y: start.y + projectile.velocityY * travelTime }
-          let contact = circleContact(start, end, { x: islandX, y: islandY }, ISLAND_RADIUS)
+          let contact = circleContact(start, end, { x: islandX, y: islandY }, islandRadius)
           let hit: Enemy | 'player' | undefined
           if (projectile.owner === 'player') {
             for (const enemy of enemies) {
-              const targetContact = circleContact(start, end, enemy.graphic, CHASER_RADIUS + 6)
+              const targetContact = circleContact(start, end, enemy.graphic, config.enemies.radius + config.projectiles.collisionRadius)
               if (targetContact !== undefined && (contact === undefined || targetContact < contact)) { contact = targetContact; hit = enemy }
             }
           } else {
-            const targetContact = circleContact(start, end, player, PLAYER_RADIUS + 6)
+            const targetContact = circleContact(start, end, player, config.player.radius + config.projectiles.collisionRadius)
             if (targetContact !== undefined && (contact === undefined || targetContact < contact)) { contact = targetContact; hit = 'player' }
           }
           const outsideStart = start.x < 0 || start.x > app.screen.width || start.y < 0 || start.y > app.screen.height
           projectile.graphic.position.set(end.x, end.y)
           projectile.remainingLife -= seconds
-          if (!outsideStart && hit === 'player') damagePlayer()
+          if (!outsideStart && hit === 'player') damagePlayer(config.projectiles.damage)
           else if (!outsideStart && hit && hit !== 'player') {
             audio.play('ship_wood_hit_1')
-            hit.health -= 1
+            hit.health = Math.max(0, hit.health - config.projectiles.damage)
             showShipImpact(hit.graphic)
-            updateShipFeedback(hit.graphic, hit.health, ENEMY_MAX_HEALTH, 0)
+            updateShipFeedback(hit.graphic, hit.health, config.enemies.maxHealth, 0)
             if (hit.health === 0) {
               explode(hit.graphic.x, hit.graphic.y)
               removeEnemy(hit)
-              score += 1
+              score += config.scorePerKill
               audio.play('score_point')
               reportHud()
             }
@@ -534,22 +522,23 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit, audio, sou
         for (let index = effects.length - 1; index >= 0; index -= 1) {
           const effect = effects[index]
           effect.elapsed += seconds
-          effect.graphic.scale.set(effect.scaleX * (1 + effect.elapsed * 4), effect.scaleY * (1 + effect.elapsed * 4))
-          effect.graphic.alpha = Math.max(0, 1 - effect.elapsed * 2)
-          if (effect.elapsed >= 0.5) { effect.graphic.destroy({ children: true }); effects.splice(index, 1) }
+          effect.graphic.scale.set(effect.scaleX * (1 + effect.elapsed * config.effects.explosionExpansion), effect.scaleY * (1 + effect.elapsed * config.effects.explosionExpansion))
+          effect.graphic.alpha = Math.max(0, 1 - effect.elapsed * config.effects.explosionFade)
+          if (effect.elapsed >= config.effects.explosionSeconds) { effect.graphic.destroy({ children: true }); effects.splice(index, 1) }
         }
-        updateShipFeedback(player, playerHealth, 3, seconds)
-        drawHealthBar(playerHealthBar, player.x, player.y, playerHealth, 3)
+        updateShipFeedback(player, playerHealth, config.player.maxHealth, seconds)
+        drawHealthBar(playerHealthBar, player.x, player.y, playerHealth, config.player.maxHealth)
         for (const enemy of enemies) {
-          updateShipFeedback(enemy.graphic, enemy.health, ENEMY_MAX_HEALTH, seconds)
-          drawHealthBar(enemy.healthBar, enemy.graphic.x, enemy.graphic.y, enemy.health, ENEMY_MAX_HEALTH)
+          updateShipFeedback(enemy.graphic, enemy.health, config.enemies.maxHealth, seconds)
+          drawHealthBar(enemy.healthBar, enemy.graphic.x, enemy.graphic.y, enemy.health, config.enemies.maxHealth, true)
         }
       }
       const snapshot = (): GameplaySnapshot => finalSnapshot ? { ...finalSnapshot, active: false } : ({
+        config,
         active, ended, paused, health: playerHealth, score, time: remainingTime,
-        width: app.screen.width, height: app.screen.height, island: { x: islandX, y: islandY, radius: ISLAND_RADIUS },
-        player: { x: player.x, y: player.y, rotation: player.rotation, radius: PLAYER_RADIUS, damaged: player.getChildByLabel('damage')?.visible ?? false, impact: player.getChildByLabel('impact')?.visible ?? false },
-        enemies: enemies.map((enemy) => ({ id: enemy.id, type: enemy.type, x: enemy.graphic.x, y: enemy.graphic.y, rotation: enemy.graphic.rotation, health: enemy.health, radius: CHASER_RADIUS, damaged: enemy.graphic.getChildByLabel('damage')?.visible ?? false, impact: enemy.graphic.getChildByLabel('impact')?.visible ?? false })),
+        width: app.screen.width, height: app.screen.height, island: { x: islandX, y: islandY, radius: islandRadius },
+        player: { x: player.x, y: player.y, rotation: player.rotation, radius: config.player.radius, damaged: player.getChildByLabel('damage')?.visible ?? false, impact: player.getChildByLabel('impact')?.visible ?? false },
+        enemies: enemies.map((enemy) => ({ id: enemy.id, type: enemy.type, x: enemy.graphic.x, y: enemy.graphic.y, rotation: enemy.graphic.rotation, health: enemy.health, radius: config.enemies.radius, damaged: enemy.graphic.getChildByLabel('damage')?.visible ?? false, impact: enemy.graphic.getChildByLabel('impact')?.visible ?? false })),
         projectiles: projectiles.map((p) => ({ x: p.graphic.x, y: p.graphic.y, vx: p.velocityX, vy: p.velocityY, life: p.remainingLife, owner: p.owner })),
         cooldowns: { front: fireCooldown, port: portFireCooldown, starboard: starboardFireCooldown }, shots: { ...shots }, spawns: spawnHistory.map((spawn) => ({ ...spawn })), effects: effects.length,
       })
@@ -593,7 +582,7 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit, audio, sou
   return <main className="game-screen">
     <header className="game-header">
       <div className="official-hud">
-        <span className="hull-counter"><img className="hud-icon" src={pirateAsset('ui/hud/icon_heart.png')} alt="" aria-hidden="true" /><HealthMeter health={hud.health} maxHealth={3} /><span>Hull: {hud.health}/3</span></span>
+        <span className="hull-counter"><img className="hud-icon" src={pirateAsset('ui/hud/icon_heart.png')} alt="" aria-hidden="true" /><HealthMeter health={hud.health} maxHealth={config.player.maxHealth} /><span>Hull: {hud.health}/{config.player.maxHealth}</span></span>
         <span className="hud-counter"><img className="hud-icon" src={pirateAsset('ui/hud/icon_score.png')} alt="" aria-hidden="true" />Score: {hud.score}</span>
         <span className="hud-counter"><img className="hud-icon" src={pirateAsset('ui/hud/icon_time.png')} alt="" aria-hidden="true" />Time: {hud.timeLeft}s</span>
       </div>

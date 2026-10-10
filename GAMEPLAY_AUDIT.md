@@ -2,6 +2,8 @@
 
 Date: 2026-10-09. Official source: local `reference-assets/game-developer-challenge-main/README.md`, sections 2 (Gameplay, Arena/collisions/combat, Match rules, Animations/feedback), 3 (configuration), 4 (PixiJS), 7 (input/accessibility) and 8 (Playwright).
 
+Phase 5 follow-up (2026-10-10): typed balance and immutable session snapshots are now centralized in `src/game/config.ts`. The historical Phase 4 evidence and results below remain unchanged; its complete-balance-configuration limitation is resolved. See README/ARCHITECTURE for the current configuration and six additional configuration test executions.
+
 This phase audits gameplay, fixes demonstrated gaps and adds deterministic combat coverage. No new enemy type, weapon, score rule, sound or asset was introduced. Menus, HUD, touch-button layout, ranking, history and Options remain unchanged.
 
 ## Requirement coverage

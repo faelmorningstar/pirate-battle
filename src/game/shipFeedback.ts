@@ -1,9 +1,9 @@
 import { Container, Graphics } from 'pixi.js'
 
-type Feedback = { damage: Graphics; severe: Graphics; impact: Graphics; remaining: number }
+type Feedback = { damage: Graphics; severe: Graphics; impact: Graphics; remaining: number; duration: number }
 const feedback = new WeakMap<Container, Feedback>()
 
-export function prepareShipFeedback(ship: Container) {
+export function prepareShipFeedback(ship: Container, impactSeconds: number) {
   // Marcas persistentes complementam a cor; os desenhos são criados uma vez por navio.
   const damage = new Graphics({ label: 'damage' }).moveTo(-15, 18).lineTo(-5, 9).lineTo(-9, 1).lineTo(2, -9)
     .stroke({ color: 0x302018, width: 3 }).moveTo(-18, 20).lineTo(-6, 15).stroke({ color: 0xeac38b, width: 2 })
@@ -12,12 +12,12 @@ export function prepareShipFeedback(ship: Container) {
   const impact = new Graphics({ label: 'impact' }).circle(0, 0, 30).stroke({ color: 0xfff1b5, width: 4, alpha: 0.9 })
   damage.visible = severe.visible = impact.visible = false
   ship.addChild(damage, severe, impact)
-  feedback.set(ship, { damage, severe, impact, remaining: 0 })
+  feedback.set(ship, { damage, severe, impact, remaining: 0, duration: impactSeconds })
 }
 
 export function showShipImpact(ship: Container) {
   const state = feedback.get(ship)
-  if (state) { state.remaining = 0.18; state.impact.visible = true }
+  if (state) { state.remaining = state.duration; state.impact.visible = true }
 }
 
 export function updateShipFeedback(ship: Container, health: number, maxHealth: number, seconds: number) {
@@ -28,5 +28,5 @@ export function updateShipFeedback(ship: Container, health: number, maxHealth: n
   ship.tint = health === maxHealth ? 0xffffff : health / maxHealth > 1 / 3 ? 0xe9bd91 : 0xcd9583
   state.remaining = Math.max(0, state.remaining - seconds)
   state.impact.visible = state.remaining > 0
-  state.impact.alpha = state.remaining / 0.18
+  state.impact.alpha = state.remaining / state.duration
 }

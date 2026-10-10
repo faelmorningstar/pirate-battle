@@ -1,4 +1,4 @@
-import type { GameConfig } from '../game/config'
+import type { GameSessionOptions } from '../game/config'
 
 export type EndReason = 'time' | 'death'
 
@@ -10,7 +10,7 @@ export type MatchRecord = {
   score: number
   durationSeconds: number
   endReason: EndReason
-  configuration: GameConfig
+  configuration: GameSessionOptions
 }
 
 export type Page<T> = { items: T[]; page: number; pageSize: number; total: number }

@@ -56,12 +56,20 @@ The Chaser rotates toward the player and self-destructs on collision without sco
 
 ## Configuration and persistence
 
-`GameConfig` centralizes the two exposed balance values:
+`src/game/config.ts` is the single source of gameplay balance. `GameSessionOptions` contains only the two preferences exposed in Options; `GameConfig` combines those values with typed, readonly player/enemy stats, island radii, spawn ordering and clearance, projectile/weapon settings, score per kill and effect durations.
+
+`DEFAULT_GAME_CONFIG` preserves the existing numerical balance. `GAME_SESSION_LIMITS` supplies the inclusive integer limits used by the form and preference loader:
 
 - `sessionDurationSeconds` (60–180)
 - `enemySpawnIntervalSeconds` (1–12)
 
-Options are saved under `pirate-battle:config`. Each completed match saves the configuration snapshot used at its start. The last result is also persisted under `pirate-battle:last-result`.
+Only these two preferences are saved under the existing `pirate-battle:config` key. Older two-field records remain compatible; malformed/out-of-range preferences fall back to defaults and extra stored fields never override internal balance.
+
+Play and Play Again call `createGameConfigSnapshot` before mounting GameCanvas. It deeply clones the defaults plus session options and recursively freezes the resulting object and arrays. Readonly types protect compile-time callers; `Object.freeze` protects runtime mutation. App holds this snapshot separately from editable preferences, and GameCanvas consumes the same immutable object throughout movement, combat, spawns, damage and effects. Saving Options later changes the next session only. Texture caches, visual drawing dimensions and audio state are not part of the copied balance data.
+
+To tune balance, edit `DEFAULT_GAME_CONFIG` in `src/game/config.ts`; do not add new numbers inside simulation code. Velocities use logical pixels/second, player turning uses radians/second, enemy rotation responses retain their existing time-based interpolation coefficients, and durations/cooldowns use seconds. Spawn distribution is a nonempty ordered list of the two existing enemy types, repeated cyclically; broadside offsets remain three parallel projectiles. The desktop/touch island radii are selected from the session snapshot without changing responsive layout. Impact duration is passed to each ship's existing feedback objects at creation.
+
+Completed match records retain the existing two-field `configuration` API shape (`GameSessionOptions`), read from the finished session snapshot rather than current editable preferences. Existing fixtures, ranking/history behavior and local records do not require migration. The last result remains under `pirate-battle:last-result`.
 
 ## Ranking and match history
 
@@ -82,5 +90,9 @@ The ranking is sorted by score descending and completion timestamp ascending for
 ## Testing strategy
 
 Playwright is configured for desktop Chromium and a mobile Chromium profile. The 26 pre-existing executions cover UI, options, ranking, arena loading/fallback/cleanup, mobile HUD and audio unlock/state/failures. Phase 4 adds 22 gameplay executions covering movement, rotation, collisions, weapon cooldowns, damage/scoring, enemy AI/spawns, end/restart and automatic pause.
+
+Phase 5 adds three configuration scenarios in both profiles: Options bounds/persistence, a deeply frozen running-session snapshot unaffected by later preferences, and independently copied adjustable defaults/legacy preference compatibility. The development probe includes the actual readonly session configuration so tests can check deep freezing and observe the same rules used by the game. Existing gameplay tests remain unchanged.
+
+Phase 5 validation (2026-10-10): `npm run test:e2e` passed all 54 desktop/mobile executions; `npm run build` and `npm run lint` passed. The existing large-bundle warning remains (main chunk approximately 615 kB). Real Safari/iPhone behavior, performance profiling and the previously documented visual/data-network coverage remain outside this phase.
 
 Combat tests opt into `window.__PIRATE_BATTLE_TEST__` before loading the development page. The probe exposes read-only snapshots and clock advancement using the real simulation update, normally in 1/60-second steps. Tests use the existing input handlers and rendering, without entity-position, health or score setters. The hook is disabled by `import.meta.env.DEV` in production. Deterministic spawn ordering needs no seed. See [GAMEPLAY_AUDIT.md](./GAMEPLAY_AUDIT.md) for coverage and limits. Failure-after-write recovery, all paging states, versioned visual baselines and profiling remain follow-up work.

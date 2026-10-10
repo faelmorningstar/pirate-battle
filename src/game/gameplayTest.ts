@@ -1,4 +1,7 @@
+import type { GameConfig } from './config'
+
 export type GameplaySnapshot = {
+  config: GameConfig
   active: boolean; ended: boolean; paused: boolean; health: number; score: number; time: number
   width: number; height: number; island: { x: number; y: number; radius: number }
   player: { x: number; y: number; rotation: number; radius: number; damaged: boolean; impact: boolean }
