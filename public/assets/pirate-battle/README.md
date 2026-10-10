@@ -8,6 +8,7 @@ Phase 3 adds ten local WAV effects; ambient and sailing loops remain excluded.
 
 ## Copied files
 
+- `branding/logo_jungle_gaming.svg`
 - `ships/ship_12.png`
 - `ships/ship_20.png`
 - `ships/ship_5.png`
@@ -87,3 +88,7 @@ The HUD's official round button contains a decorative speaker symbol; its access
 At most four effects play together, with at most one source per WAV. Pending cues older than 500 ms are skipped. Pause/exit/end/mute stop previous effects and invalidate pending playback. Pause/resume/game-over cues are short one-shots, intentionally allowed to finish in their new screen/state; no loops remain playing. GameCanvas cleanup stops combat sounds, including delayed loads; App cleanup stops all sources, aborts downloads and closes the audio context, preserving React Strict Mode behavior. Hidden pages are silent.
 
 Neither `ocean_ambience_loop.wav` nor `ship_sailing_loop.wav` is copied or loaded.
+
+## Phase 6: official attribution
+
+`branding/logo_jungle_gaming.svg` is an unchanged copy of `assets/logo_jungle_gaming.svg` in the local challenge package above. The transparent white Jungle Gaming wordmark appears only below Home's main content, at 112×56 CSS pixels, with accessible attribution text. It is absent from Options, ranking, history, results and gameplay. Pirate Battle retains its official title and primary visual position. No external URL or additional branding file is used.

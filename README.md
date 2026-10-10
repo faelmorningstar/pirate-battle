@@ -115,7 +115,7 @@ The menu exposes a **Mock network scenario** selector. It is persisted locally a
 
 ## Assets
 
-Official assets are served locally from `public/assets/pirate-battle/`: ships, interface, arena tiles, cannonballs, a static explosion and ten sound effects. See that folder's [README](./public/assets/pirate-battle/README.md) for origin and individual uses. Graphics fallbacks keep the arena playable when visual assets fail. Audio unlocks from player gestures and has a persistent accessible mute control.
+Official assets are served locally from `public/assets/pirate-battle/`: ships, interface, arena tiles, cannonballs, a static explosion, ten sound effects and the supplied Jungle Gaming logo. The small accessible logo appears only below Home's main content. See that folder's [README](./public/assets/pirate-battle/README.md) for origin and individual uses. Graphics fallbacks keep the arena playable when visual assets fail. Audio unlocks from player gestures and has a persistent accessible mute control.
 
 ## Architecture and decisions
 
@@ -125,9 +125,22 @@ See [GAMEPLAY_AUDIT.md](./GAMEPLAY_AUDIT.md) for the Phase 4 requirement table, 
 
 Phase 5 preserves those 48 executions and adds 6 configuration executions (three scenarios in both profiles), for 54 total. Run them with `npm run test:e2e`; configuration-only coverage is `npm run test:e2e -- tests/config.spec.ts`.
 
+## Visual regression
+
+Phase 6 adds four screenshot tests, for **58 total executions**: desktop Home, desktop arena, mobile arena and desktop result. The four reviewed PNG baselines live in `tests/visual-baselines/`; temporary comparisons and traces remain ignored in `test-results/`.
+
+```bash
+npm run test:e2e -- tests/visual                    # compare against baselines
+npm run test:e2e -- tests/visual --update-snapshots # regenerate after intentional visual changes
+```
+
+Review changed PNGs before accepting them. Baselines use desktop Chromium at 1280×900 and mobile Chromium at 393×852, with screenshots in CSS pixels. Home captures the full page. The existing development-only gameplay clock freezes rendering between updates and advances the real simulation to 5.02 seconds for both arenas. Result uses the real timer-end path and waits for successful MSW registration. Tests fix dates, isolate stored preferences, use normal local network fixtures, await assets/fonts, remove hover/focus, and disable screenshot animations. Deterministic spawns need no random seed.
+
+Generate and compare with the same Playwright Chromium version, OS and available system fonts (the supplied baselines were generated on Windows). Font rasterization and WebGL can differ across operating systems; these snapshots do not replace real iPhone/Safari review.
+
 ## Known limitations
 
-- The test suite covers gameplay, interface and audio state; it is not yet the full requested data/network E2E matrix or versioned visual-regression suite.
+- The test suite covers gameplay, interface, audio state and four versioned visual states; the full requested data/network E2E matrix and additional visual states remain follow-up work.
 - Playwright traces are generated on failure; a committed HTML test report is not included.
 - Network scenarios cover normal, slow, empty and read errors. Timeout-after-write and pending-write recovery are planned next.
 - Performance evidence is documented through implementation choices, but a recorded three-minute profiling report is not yet included.
