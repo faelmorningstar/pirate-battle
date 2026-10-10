@@ -63,7 +63,8 @@ Touch controls support simultaneous holds, so movement, turning and attacks can 
 - Front cannon fires one projectile; each broadside fires three parallel projectiles.
 - Enemies require two hits and award one point when destroyed.
 - A session ends when time reaches zero or player health reaches zero.
-- The simulation pauses on `P`, the Pause button, or when the browser tab becomes hidden.
+- Spawns alternate the two existing types at the configured interval, independently of earlier enemies being destroyed.
+- The simulation pauses on `P`, the Pause button, window focus loss or a hidden browser tab; resuming requires a player action.
 
 ## Mocked REST API
 
@@ -97,16 +98,18 @@ The menu exposes a **Mock network scenario** selector. It is persisted locally a
 
 ## Assets
 
-The ship visuals are loaded from the official [Jungle Gaming challenge assets](https://github.com/junglegaming/game-developer-challenge). A PixiJS shape fallback keeps the arena playable if a visual asset cannot load.
+Official assets are served locally from `public/assets/pirate-battle/`: ships, interface, arena tiles, cannonballs, a static explosion and ten sound effects. See that folder's [README](./public/assets/pirate-battle/README.md) for origin and individual uses. Graphics fallbacks keep the arena playable when visual assets fail. Audio unlocks from player gestures and has a persistent accessible mute control.
 
 ## Architecture and decisions
 
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for the React/PixiJS boundary, simulation lifecycle, collision rules, persistence and mocked-data design.
 
+See [GAMEPLAY_AUDIT.md](./GAMEPLAY_AUDIT.md) for the Phase 4 requirement table, corrections and deterministic combat coverage. The suite preserves the previous 26 executions and adds 22 gameplay executions across desktop/mobile Chromium.
+
 ## Known limitations
 
-- The current test suite covers the critical smoke flows; it is not yet the full requested 12-scenario E2E matrix or visual-regression suite.
+- The test suite covers gameplay, interface and audio state; it is not yet the full requested data/network E2E matrix or versioned visual-regression suite.
 - Playwright traces are generated on failure; a committed HTML test report is not included.
 - Network scenarios cover normal, slow, empty and read errors. Timeout-after-write and pending-write recovery are planned next.
 - Performance evidence is documented through implementation choices, but a recorded three-minute profiling report is not yet included.
-- Sound assets are available but not yet wired into the game.
+- Real iPhone/Safari playback and hardware performance measurements need manual device validation; Chromium tests do not measure audible output.

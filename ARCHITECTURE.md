@@ -29,7 +29,9 @@ The simulation calls React only for meaningful state changes:
 
 Every ticker update uses `ticker.deltaMS / 1000`, so movement, cooldowns, projectile lifetimes, enemy spawns and the session timer are time-based instead of frame-based.
 
-The game is paused before any state update when manual pause is active, the Pause button is used, or `document.visibilityState` becomes hidden. Keyboard state is cleared on pause so resuming never applies held movement from the inactive period.
+The game is paused before any state update when manual pause is active, the Pause button is used, the window loses focus, or the document becomes hidden. Both keyboard and touch state are cleared on pause and resume; focus/visibility restoration never resumes automatically. Explosion expansion and damage feedback share the simulation clock. A fatal event returns immediately from the current update, preventing additional damage or score in that frame.
+
+Enemies live in a collection. After the existing one-second initial delay, an active-time spawn timer alternates Chaser/Shooter at the configured interval independently of enemy destruction. Spawn candidates retain the four original inset corners and are filtered for island clearance, arena bounds and player separation.
 
 ## Input
 
@@ -37,14 +39,16 @@ Keyboard input is captured only while `GameCanvas` is mounted and listeners are 
 
 ## Collision and combat
 
-All gameplay collision uses circle-distance checks:
+Gameplay uses the existing circle radii. Movement and projectile travel additionally use segment/circle intersection to prevent crossing an obstacle between updates:
 
 - ships cannot enter the island or leave the arena;
 - projectiles are removed once on target impact, island impact, expiration or leaving the arena;
 - player projectiles damage enemies; enemy projectiles damage the player;
 - destroyed enemies are removed from movement, firing and collision checks.
 
-The Chaser rotates toward the player and self-destructs on collision. The Shooter stops at its configured attack range and fires on a cooldown. Both have two health points. Health bars are Pixi graphics drawn above each ship.
+Projectiles travel no farther than their remaining lifetime and choose their earliest obstacle/target contact. An island wins a tied contact. A projectile applies damage to at most one target before being removed. Resizing recenters the island at the same relative coordinates and resolves ship positions that have become invalid in the smaller arena, without changing collision radii.
+
+The Chaser rotates toward the player and self-destructs on collision without scoring. The Shooter stops at its configured attack range and fires on its own cooldown. Both have two health points. Health bars use local official textures with numeric values, retaining a Graphics fallback. Persistent damage marks and a brief impact ring are created once per ship and destroyed with its children; color is not the only damage cue.
 
 ## Resource lifecycle
 
@@ -77,6 +81,6 @@ The ranking is sorted by score descending and completion timestamp ascending for
 
 ## Testing strategy
 
-Playwright is configured for desktop Chromium and a mobile Chromium profile. Current smoke tests cover option persistence, ranking mock loading and game-start/mobile-control availability. Test isolation clears localStorage before each test.
+Playwright is configured for desktop Chromium and a mobile Chromium profile. The 26 pre-existing executions cover UI, options, ranking, arena loading/fallback/cleanup, mobile HUD and audio unlock/state/failures. Phase 4 adds 22 gameplay executions covering movement, rotation, collisions, weapon cooldowns, damage/scoring, enemy AI/spawns, end/restart and automatic pause.
 
-Future coverage should add deterministic combat-time control, pause timing assertions, projectile damage/cooldown rules, failure-after-write recovery, all paging states and visual baselines.
+Combat tests opt into `window.__PIRATE_BATTLE_TEST__` before loading the development page. The probe exposes read-only snapshots and clock advancement using the real simulation update, normally in 1/60-second steps. Tests use the existing input handlers and rendering, without entity-position, health or score setters. The hook is disabled by `import.meta.env.DEV` in production. Deterministic spawn ordering needs no seed. See [GAMEPLAY_AUDIT.md](./GAMEPLAY_AUDIT.md) for coverage and limits. Failure-after-write recovery, all paging states, versioned visual baselines and profiling remain follow-up work.

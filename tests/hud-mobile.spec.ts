@@ -1,6 +1,8 @@
 import { expect, test } from '@playwright/test'
 
 test('keeps desktop HUD in flow and floats a compact touch HUD over the arena', async ({ page, isMobile }) => {
+  // A medição do HUD não depende do combate: congelamos só o relógio, sem enfraquecer as verificações.
+  await page.addInitScript(() => { window.__PIRATE_BATTLE_TEST__ = { manual: true } })
   await page.goto('/')
   await page.getByRole('button', { name: 'Play', exact: true }).click()
   await expect(page.locator('.game-canvas canvas')).toBeVisible()

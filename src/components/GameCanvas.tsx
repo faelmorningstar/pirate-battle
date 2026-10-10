@@ -1,16 +1,20 @@
 import { useEffect, useRef, useState, type PointerEvent } from 'react'
-import { Application, Assets, Graphics, Sprite, Text, Texture } from 'pixi.js'
+import { Application, Assets, Container, Graphics, Sprite, Text, Texture } from 'pixi.js'
 import { HealthMeter, OfficialIcon } from './OfficialUi'
 import { pirateAsset } from '../game/assets'
 import { createCombatVisual, createTexturedIsland, createTexturedSea, loadArenaTextures } from '../game/arenaVisuals'
 import type { GameConfig } from '../game/config'
 import type { GameAudio } from '../game/audio'
 import { SoundButton } from './SoundButton'
+import { circleContact, clampToArena } from '../game/collisions'
+import { prepareShipFeedback, showShipImpact, updateShipFeedback } from '../game/shipFeedback'
+import type { GameplaySnapshot } from '../game/gameplayTest'
 
 export type GameHud = { health: number; score: number; timeLeft: number; paused: boolean }
 export type GameResult = { score: number; durationSeconds: number; reason: 'time' | 'death' }
 type Props = { config: GameConfig; hud: GameHud; onHudChange: (hud: GameHud) => void; onEnd: (result: GameResult) => void; onExit: () => void; audio: GameAudio; soundMuted: boolean; onToggleSound: () => void }
 type Projectile = { graphic: Graphics | Sprite; velocityX: number; velocityY: number; remainingLife: number; owner: 'player' | 'enemy' }
+type Enemy = { id: number; type: 'chaser' | 'shooter'; graphic: Container; healthBar: Graphics; health: number; fireCooldown: number }
 
 const PLAYER_RADIUS = 26
 const ISLAND_RADIUS = window.matchMedia('(pointer: coarse)').matches ? 68 : 88
@@ -113,7 +117,7 @@ function distanceSquared(aX: number, aY: number, bX: number, bY: number) {
 }
 
 function createShip(color: number, texture?: Texture) {
-  const ship = new Graphics()
+  const ship = new Container()
   if (texture) {
     const sprite = new Sprite(texture)
     sprite.anchor.set(0.5)
@@ -122,9 +126,11 @@ function createShip(color: number, texture?: Texture) {
     ship.addChild(sprite)
     return ship
   }
-  ship.poly([0, -34, 25, 27, 10, 34, -10, 34, -25, 27]).fill(color).stroke({ color: 0x3a241b, width: 5 })
-  ship.rect(-4, -18, 8, 34).fill(0x5c3826)
-  ship.poly([2, -17, 2, 10, 23, 1]).fill(0xf2e4bc).stroke({ color: 0x6d4d37, width: 2 })
+  const fallback = new Graphics()
+  fallback.poly([0, -34, 25, 27, 10, 34, -10, 34, -25, 27]).fill(color).stroke({ color: 0x3a241b, width: 5 })
+  fallback.rect(-4, -18, 8, 34).fill(0x5c3826)
+  fallback.poly([2, -17, 2, 10, 23, 1]).fill(0xf2e4bc).stroke({ color: 0x6d4d37, width: 2 })
+  ship.addChild(fallback)
   return ship
 }
 
@@ -209,17 +215,11 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit, audio, sou
     let fireCooldown = 0
     let portFireCooldown = 0
     let starboardFireCooldown = 0
-    let chaser: Graphics | null = null
-    let shooter: Graphics | null = null
-    let chaserHealthBar: Graphics | null = null
-    let shooterHealthBar: Graphics | null = null
-    let chaserRespawn = 1
+    const enemies: Enemy[] = []
+    let spawnCountdown = 1
     let nextEnemy: 'chaser' | 'shooter' = 'chaser'
-    let shooterFireCooldown = 0
     let playerHealth = 3
     let score = 0
-    let chaserHealth = ENEMY_MAX_HEALTH
-    let shooterHealth = ENEMY_MAX_HEALTH
     let remainingTime = config.sessionDurationSeconds
     let reportedSecond = Math.ceil(remainingTime)
     let paused = false
@@ -232,6 +232,7 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit, audio, sou
       if (ended) return
       ended = true
       pressed.clear()
+      touchPressed.clear()
       onEnd({ score, durationSeconds: Math.round(config.sessionDurationSeconds - remainingTime), reason })
     }
     const togglePause = () => {
@@ -239,17 +240,21 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit, audio, sou
       paused = !paused
       audio.pauseBattle(paused)
       pressed.clear()
+      touchPressed.clear()
       reportHud()
     }
     const onVisibilityChange = () => {
       if (document.hidden && !paused && !ended) togglePause()
     }
+    const onBlur = () => { if (!paused && !ended) togglePause() }
     togglePauseRef.current = togglePause
     const onKeyDown = (event: KeyboardEvent) => {
+      if (ended || !active) return
       const accepted = ['KeyW', 'KeyA', 'KeyD', 'KeyQ', 'KeyE', 'Space', 'KeyP']
+      if (!accepted.includes(event.code)) return
       if (accepted.includes(event.code)) event.preventDefault()
       if (event.code === 'KeyP' && !event.repeat) togglePause()
-      pressed.add(event.code)
+      else if (!paused) pressed.add(event.code)
     }
     const onKeyUp = (event: KeyboardEvent) => pressed.delete(event.code)
     const removeProjectile = (projectile: Projectile) => {
@@ -266,6 +271,7 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit, audio, sou
       canvasHost.appendChild(app.canvas)
       window.addEventListener('keydown', onKeyDown)
       window.addEventListener('keyup', onKeyUp)
+      window.addEventListener('blur', onBlur)
       document.addEventListener('visibilitychange', onVisibilityChange)
 
       const arenaTexturesPromise = loadArenaTextures(ASSET_LOAD_TIMEOUT_MS)
@@ -325,110 +331,130 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit, audio, sou
       app.stage.addChild(island)
 
       const player = createShip(0xf2c35e, playerTexture)
+      prepareShipFeedback(player)
       player.position.set(app.screen.width * 0.5, app.screen.height * 0.78)
       app.stage.addChild(player)
       const playerHealthBar = createHealthBar(healthTextures)
       app.stage.addChild(playerHealthBar)
       reportHud()
 
-      const spawnChaser = () => {
-        const spawnPoints = [
-          { x: 56, y: 56 },
-          { x: app.screen.width - 56, y: 56 },
-          { x: 56, y: app.screen.height - 56 },
-          { x: app.screen.width - 56, y: app.screen.height - 56 },
-        ]
-        const point = spawnPoints.sort((a, b) => distanceSquared(b.x, b.y, player.x, player.y) - distanceSquared(a.x, a.y, player.x, player.y))[0]
-        chaserHealth = ENEMY_MAX_HEALTH
-        chaser = createShip(0xd65c4b, chaserTexture)
-        chaser.position.set(point.x, point.y)
-        app.stage.addChild(chaser)
-        chaserHealthBar = createHealthBar(healthTextures, true)
-        app.stage.addChild(chaserHealthBar)
+      const effects: { graphic: Graphics | Sprite; elapsed: number; scaleX: number; scaleY: number }[] = []
+      const shots = { front: 0, port: 0, starboard: 0, enemy: 0 }
+      const spawnHistory: GameplaySnapshot['spawns'] = []
+      const testHarness = import.meta.env.DEV ? window.__PIRATE_BATTLE_TEST__ : undefined
+      let enemyId = 0
+      let finalSnapshot: GameplaySnapshot | undefined
+
+      const distanceToIsland = (point: { x: number; y: number }) => distanceSquared(point.x, point.y, islandX, islandY)
+      const safePosition = (point: { x: number; y: number }, radius: number) => {
+        const clamped = clampToArena(point, radius, app.screen.width, app.screen.height)
+        if (distanceToIsland(clamped) >= (radius + ISLAND_RADIUS) ** 2) return clamped
+        // Só reposicionamos no resize ou na montagem, quando o espaço visível mudou.
+        const candidates = [
+          { x: radius, y: radius }, { x: app.screen.width - radius, y: radius },
+          { x: radius, y: app.screen.height - radius }, { x: app.screen.width - radius, y: app.screen.height - radius },
+        ].filter((candidate) => distanceToIsland(candidate) >= (radius + ISLAND_RADIUS) ** 2)
+        return candidates.sort((a, b) => distanceSquared(a.x, a.y, clamped.x, clamped.y) - distanceSquared(b.x, b.y, clamped.x, clamped.y))[0] ?? clamped
+      }
+      const resizeArena = () => {
+        islandX = app.screen.width * 0.52
+        islandY = app.screen.height * 0.45
+        island.position.set(islandX, islandY)
+        player.position.copyFrom(safePosition(player, PLAYER_RADIUS))
+        for (const enemy of enemies) enemy.graphic.position.copyFrom(safePosition(enemy.graphic, CHASER_RADIUS))
+      }
+      resizeArena()
+      app.renderer.on('resize', resizeArena)
+      const cleanupSea = cleanupScenery
+      cleanupScenery = () => {
+        finalSnapshot = snapshot()
+        app.renderer.off('resize', resizeArena)
+        cleanupSea?.()
       }
 
-      const spawnShooter = () => {
-        const spawnPoints = [
+      const spawnEnemy = () => {
+        const point = [
           { x: 56, y: 56 }, { x: app.screen.width - 56, y: 56 },
           { x: 56, y: app.screen.height - 56 }, { x: app.screen.width - 56, y: app.screen.height - 56 },
-        ]
-        const point = spawnPoints.sort((a, b) => distanceSquared(b.x, b.y, player.x, player.y) - distanceSquared(a.x, a.y, player.x, player.y))[0]
-        shooterHealth = ENEMY_MAX_HEALTH
-        shooter = createShip(0x6bc4d4, shooterTexture)
-        shooter.position.set(point.x, point.y)
-        app.stage.addChild(shooter)
-        shooterHealthBar = createHealthBar(healthTextures, true)
-        app.stage.addChild(shooterHealthBar)
+        ].filter((candidate) => candidate.x >= CHASER_RADIUS && candidate.x <= app.screen.width - CHASER_RADIUS
+          && candidate.y >= CHASER_RADIUS && candidate.y <= app.screen.height - CHASER_RADIUS
+          && distanceToIsland(candidate) >= (CHASER_RADIUS + ISLAND_RADIUS) ** 2
+          && distanceSquared(candidate.x, candidate.y, player.x, player.y) >= (PLAYER_RADIUS + CHASER_RADIUS + 56) ** 2)
+          .sort((a, b) => distanceSquared(b.x, b.y, player.x, player.y) - distanceSquared(a.x, a.y, player.x, player.y))[0]
+        if (!point) return
+        const type = nextEnemy
+        nextEnemy = type === 'chaser' ? 'shooter' : 'chaser'
+        const graphic = createShip(type === 'chaser' ? 0xd65c4b : 0x6bc4d4, type === 'chaser' ? chaserTexture : shooterTexture)
+        graphic.position.copyFrom(point)
+        prepareShipFeedback(graphic)
+        const enemy: Enemy = { id: ++enemyId, type, graphic, healthBar: createHealthBar(healthTextures, true), health: ENEMY_MAX_HEALTH, fireCooldown: 0 }
+        enemies.push(enemy)
+        app.stage.addChild(graphic, enemy.healthBar)
+        if (testHarness) spawnHistory.push({ id: enemy.id, type, time: config.sessionDurationSeconds - remainingTime, ...point, playerX: player.x, playerY: player.y })
       }
-
+      const removeEnemy = (enemy: Enemy) => {
+        enemies.splice(enemies.indexOf(enemy), 1)
+        enemy.graphic.destroy({ children: true })
+        enemy.healthBar.destroy({ children: true })
+      }
       const explode = (x: number, y: number) => {
         audio.play('ship_explosion_1')
-        const effect = createCombatVisual(arenaTextures.explosion, 12, 0xffb648)
-        // A expansão parte do tamanho lógico, não do tamanho original do PNG.
-        const initialScaleX = effect.scale.x
-        const initialScaleY = effect.scale.y
-        effect.position.set(x, y)
-        app.stage.addChild(effect)
-        let elapsed = 0
-        const animate = (ticker: { deltaMS: number }) => {
-          elapsed += ticker.deltaMS / 1000
-          effect.scale.set(initialScaleX * (1 + elapsed * 4), initialScaleY * (1 + elapsed * 4))
-          effect.alpha = Math.max(0, 1 - elapsed * 2)
-          if (elapsed >= 0.5) {
-            app.ticker.remove(animate)
-            effect.destroy()
-          }
-        }
-        app.ticker.add(animate)
+        const graphic = createCombatVisual(arenaTextures.explosion, 12, 0xffb648)
+        graphic.position.set(x, y)
+        app.stage.addChild(graphic)
+        effects.push({ graphic, elapsed: 0, scaleX: graphic.scale.x, scaleY: graphic.scale.y })
       }
-
+      const addProjectile = (x: number, y: number, angle: number, radius: number, speed: number, life: number, owner: Projectile['owner']) => {
+        const graphic = createCombatVisual(arenaTextures.cannonball, radius, owner === 'player' ? 0x17120d : 0x732c25, owner === 'player' ? 0xffe2a4 : 0xffb070)
+        if (owner === 'enemy' && graphic instanceof Sprite) graphic.tint = 0xf4ad97
+        graphic.position.set(x, y)
+        app.stage.addChild(graphic)
+        projectiles.push({ graphic, velocityX: Math.sin(angle) * speed, velocityY: -Math.cos(angle) * speed, remainingLife: life, owner })
+      }
       const fireFront = () => {
         if (fireCooldown > 0) return
         fireCooldown = FRONT_FIRE_COOLDOWN
+        shots.front += 1
         audio.play('cannon_fire_1')
-        const graphic = createCombatVisual(arenaTextures.cannonball, 6, 0x17120d, 0xffe2a4)
-        const directionX = Math.sin(player.rotation)
-        const directionY = -Math.cos(player.rotation)
-        graphic.position.set(player.x + directionX * 38, player.y + directionY * 38)
-        app.stage.addChild(graphic)
-        projectiles.push({ graphic, velocityX: directionX * PROJECTILE_SPEED, velocityY: directionY * PROJECTILE_SPEED, remainingLife: 1.1, owner: 'player' })
+        addProjectile(player.x + Math.sin(player.rotation) * 38, player.y - Math.cos(player.rotation) * 38, player.rotation, 6, PROJECTILE_SPEED, 1.1, 'player')
       }
-
       const fireBroadside = (side: 'port' | 'starboard') => {
         const isPort = side === 'port'
         if (isPort ? portFireCooldown > 0 : starboardFireCooldown > 0) return
         if (isPort) portFireCooldown = BROADSIDE_FIRE_COOLDOWN
         else starboardFireCooldown = BROADSIDE_FIRE_COOLDOWN
-        // Uma salva tem três projéteis, mas apenas um efeito sonoro.
+        shots[side] += 1
         audio.play('cannon_broadside')
-        const broadsideAngle = player.rotation + (isPort ? -Math.PI / 2 : Math.PI / 2)
-        const directionX = Math.sin(broadsideAngle)
-        const directionY = -Math.cos(broadsideAngle)
-        const forwardX = Math.sin(player.rotation)
-        const forwardY = -Math.cos(player.rotation)
+        const angle = player.rotation + (isPort ? -Math.PI / 2 : Math.PI / 2)
         for (const offset of [-15, 0, 15]) {
-          const graphic = createCombatVisual(arenaTextures.cannonball, 5, 0x17120d, 0xffe2a4)
-          graphic.position.set(player.x + directionX * 33 + forwardX * offset, player.y + directionY * 33 + forwardY * offset)
-          app.stage.addChild(graphic)
-          projectiles.push({ graphic, velocityX: directionX * PROJECTILE_SPEED, velocityY: directionY * PROJECTILE_SPEED, remainingLife: 0.9, owner: 'player' })
+          addProjectile(player.x + Math.sin(angle) * 33 + Math.sin(player.rotation) * offset,
+            player.y - Math.cos(angle) * 33 - Math.cos(player.rotation) * offset, angle, 5, PROJECTILE_SPEED, 0.9, 'player')
         }
       }
-
-      const fireEnemy = () => {
-        if (!shooter || shooterFireCooldown > 0) return
-        shooterFireCooldown = SHOOTER_FIRE_COOLDOWN
+      const fireEnemy = (enemy: Enemy) => {
+        if (enemy.fireCooldown > 0) return
+        enemy.fireCooldown = SHOOTER_FIRE_COOLDOWN
+        shots.enemy += 1
         audio.play('cannon_fire_1')
-        const graphic = createCombatVisual(arenaTextures.cannonball, 6, 0x732c25, 0xffb070)
-        if (graphic instanceof Sprite) graphic.tint = 0xf4ad97
-        const directionX = Math.sin(shooter.rotation)
-        const directionY = -Math.cos(shooter.rotation)
-        graphic.position.set(shooter.x + directionX * 38, shooter.y + directionY * 38)
-        app.stage.addChild(graphic)
-        projectiles.push({ graphic, velocityX: directionX * (PROJECTILE_SPEED * 0.72), velocityY: directionY * (PROJECTILE_SPEED * 0.72), remainingLife: 1.4, owner: 'enemy' })
+        addProjectile(enemy.graphic.x + Math.sin(enemy.graphic.rotation) * 38,
+          enemy.graphic.y - Math.cos(enemy.graphic.rotation) * 38, enemy.graphic.rotation, 6, PROJECTILE_SPEED * 0.72, 1.4, 'enemy')
       }
-
-      app.ticker.add((ticker) => {
-        if (ended || paused) return
+      const moveShip = (ship: Container, radius: number, speed: number, seconds: number) => {
+        const next = clampToArena({ x: ship.x + Math.sin(ship.rotation) * speed * seconds, y: ship.y - Math.cos(ship.rotation) * speed * seconds }, radius, app.screen.width, app.screen.height)
+        if (circleContact(ship, next, { x: islandX, y: islandY }, ISLAND_RADIUS + radius) !== undefined) return false
+        ship.position.copyFrom(next)
+        return true
+      }
+      const damagePlayer = () => {
+        audio.play('ship_wood_hit_1')
+        playerHealth = Math.max(0, playerHealth - 1)
+        showShipImpact(player)
+        updateShipFeedback(player, playerHealth, 3, 0)
+        reportHud()
+        if (playerHealth === 0) finish('death')
+      }
+      const update = (ticker: { deltaMS: number }) => {
+        if (!active || ended || paused) return
         const seconds = ticker.deltaMS / 1000
         remainingTime = Math.max(0, remainingTime - seconds)
         const nextSecond = Math.ceil(remainingTime)
@@ -437,119 +463,110 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit, audio, sou
         fireCooldown = Math.max(0, fireCooldown - seconds)
         portFireCooldown = Math.max(0, portFireCooldown - seconds)
         starboardFireCooldown = Math.max(0, starboardFireCooldown - seconds)
-        chaserRespawn -= seconds
-        shooterFireCooldown = Math.max(0, shooterFireCooldown - seconds)
-        if (!chaser && !shooter && chaserRespawn <= 0 && playerHealth > 0) {
-          if (nextEnemy === 'chaser') spawnChaser()
-          else spawnShooter()
+        spawnCountdown -= seconds
+        if (spawnCountdown <= 0) {
+          spawnEnemy()
+          // O intervalo depende do relógio, não de destruir o inimigo anterior.
+          spawnCountdown += config.enemySpawnIntervalSeconds
         }
         if (isPressed('KeyA')) player.rotation -= TURN_SPEED * seconds
         if (isPressed('KeyD')) player.rotation += TURN_SPEED * seconds
-        if (isPressed('KeyW')) {
-          const nextX = player.x + Math.sin(player.rotation) * PLAYER_SPEED * seconds
-          const nextY = player.y - Math.cos(player.rotation) * PLAYER_SPEED * seconds
-          const hitsIsland = distanceSquared(nextX, nextY, islandX, islandY) < (PLAYER_RADIUS + ISLAND_RADIUS) ** 2
-          if (!hitsIsland) {
-            player.x = Math.max(PLAYER_RADIUS, Math.min(app.screen.width - PLAYER_RADIUS, nextX))
-            player.y = Math.max(PLAYER_RADIUS, Math.min(app.screen.height - PLAYER_RADIUS, nextY))
-          }
-        }
+        if (isPressed('KeyW')) moveShip(player, PLAYER_RADIUS, PLAYER_SPEED, seconds)
         if (isPressed('Space')) fireFront()
         if (isPressed('KeyQ')) fireBroadside('port')
         if (isPressed('KeyE')) fireBroadside('starboard')
 
-        if (chaser) {
-          const targetAngle = Math.atan2(player.x - chaser.x, -(player.y - chaser.y))
-          chaser.rotation += normalizeAngle(targetAngle - chaser.rotation) * Math.min(1, seconds * 3)
-          const nextX = chaser.x + Math.sin(chaser.rotation) * CHASER_SPEED * seconds
-          const nextY = chaser.y - Math.cos(chaser.rotation) * CHASER_SPEED * seconds
-          const hitsIsland = distanceSquared(nextX, nextY, islandX, islandY) < (CHASER_RADIUS + ISLAND_RADIUS) ** 2
-          if (!hitsIsland) {
-            chaser.x = Math.max(CHASER_RADIUS, Math.min(app.screen.width - CHASER_RADIUS, nextX))
-            chaser.y = Math.max(CHASER_RADIUS, Math.min(app.screen.height - CHASER_RADIUS, nextY))
+        for (let index = enemies.length - 1; index >= 0; index -= 1) {
+          const enemy = enemies[index]
+          const ship = enemy.graphic
+          enemy.fireCooldown = Math.max(0, enemy.fireCooldown - seconds)
+          const targetAngle = Math.atan2(player.x - ship.x, -(player.y - ship.y))
+          ship.rotation += normalizeAngle(targetAngle - ship.rotation) * Math.min(1, seconds * (enemy.type === 'chaser' ? 3 : 2.4))
+          const inRange = distanceSquared(ship.x, ship.y, player.x, player.y) <= SHOOTER_ATTACK_RANGE ** 2
+          if (enemy.type === 'chaser' || !inRange) {
+            if (!moveShip(ship, CHASER_RADIUS, enemy.type === 'chaser' ? CHASER_SPEED : SHOOTER_SPEED, seconds)) ship.rotation += Math.PI / 2
+          } else fireEnemy(enemy)
+          if (enemy.type === 'chaser' && distanceSquared(ship.x, ship.y, player.x, player.y) < (CHASER_RADIUS + PLAYER_RADIUS) ** 2) {
+            explode(ship.x, ship.y)
+            removeEnemy(enemy)
+            damagePlayer()
+            if (ended) return
+          }
+        }
+        // Percorremos o trajeto e escolhemos só o primeiro impacto, inclusive contra a ilha.
+        for (let index = projectiles.length - 1; index >= 0; index -= 1) {
+          const projectile = projectiles[index]
+          const start = { x: projectile.graphic.x, y: projectile.graphic.y }
+          const travelTime = Math.min(seconds, projectile.remainingLife)
+          const end = { x: start.x + projectile.velocityX * travelTime, y: start.y + projectile.velocityY * travelTime }
+          let contact = circleContact(start, end, { x: islandX, y: islandY }, ISLAND_RADIUS)
+          let hit: Enemy | 'player' | undefined
+          if (projectile.owner === 'player') {
+            for (const enemy of enemies) {
+              const targetContact = circleContact(start, end, enemy.graphic, CHASER_RADIUS + 6)
+              if (targetContact !== undefined && (contact === undefined || targetContact < contact)) { contact = targetContact; hit = enemy }
+            }
           } else {
-            chaser.rotation += Math.PI / 2
+            const targetContact = circleContact(start, end, player, PLAYER_RADIUS + 6)
+            if (targetContact !== undefined && (contact === undefined || targetContact < contact)) { contact = targetContact; hit = 'player' }
           }
-          if (distanceSquared(chaser.x, chaser.y, player.x, player.y) < (CHASER_RADIUS + PLAYER_RADIUS) ** 2) {
-            audio.play('ship_wood_hit_1')
-            explode(chaser.x, chaser.y)
-            chaser.destroy()
-            chaser = null
-            chaserHealthBar?.destroy({ children: true })
-            chaserHealthBar = null
-            playerHealth -= 1
-            player.tint = playerHealth === 2 ? 0xffd17f : playerHealth === 1 ? 0xff7f7f : 0x555555
-            reportHud()
-            chaserRespawn = config.enemySpawnIntervalSeconds
-            nextEnemy = 'shooter'
-            if (playerHealth <= 0) finish('death')
-          }
-        }
-        if (shooter) {
-          const targetAngle = Math.atan2(player.x - shooter.x, -(player.y - shooter.y))
-          shooter.rotation += normalizeAngle(targetAngle - shooter.rotation) * Math.min(1, seconds * 2.4)
-          const distanceToPlayer = Math.sqrt(distanceSquared(shooter.x, shooter.y, player.x, player.y))
-          if (distanceToPlayer > SHOOTER_ATTACK_RANGE) {
-            const nextX = shooter.x + Math.sin(shooter.rotation) * SHOOTER_SPEED * seconds
-            const nextY = shooter.y - Math.cos(shooter.rotation) * SHOOTER_SPEED * seconds
-            const hitsIsland = distanceSquared(nextX, nextY, islandX, islandY) < (CHASER_RADIUS + ISLAND_RADIUS) ** 2
-            if (!hitsIsland) { shooter.x = Math.max(CHASER_RADIUS, Math.min(app.screen.width - CHASER_RADIUS, nextX)); shooter.y = Math.max(CHASER_RADIUS, Math.min(app.screen.height - CHASER_RADIUS, nextY)) }
-          } else fireEnemy()
-        }
-        for (const projectile of [...projectiles]) {
-          projectile.graphic.x += projectile.velocityX * seconds
-          projectile.graphic.y += projectile.velocityY * seconds
+          const outsideStart = start.x < 0 || start.x > app.screen.width || start.y < 0 || start.y > app.screen.height
+          projectile.graphic.position.set(end.x, end.y)
           projectile.remainingLife -= seconds
-          const hitsIsland = distanceSquared(projectile.graphic.x, projectile.graphic.y, islandX, islandY) < ISLAND_RADIUS ** 2
-          const outside = projectile.graphic.x < 0 || projectile.graphic.x > app.screen.width || projectile.graphic.y < 0 || projectile.graphic.y > app.screen.height
-          const hitsChaser = projectile.owner === 'player' && chaser && distanceSquared(projectile.graphic.x, projectile.graphic.y, chaser.x, chaser.y) < (CHASER_RADIUS + 6) ** 2
-          const hitsShooter = projectile.owner === 'player' && shooter && distanceSquared(projectile.graphic.x, projectile.graphic.y, shooter.x, shooter.y) < (CHASER_RADIUS + 6) ** 2
-          const hitsPlayer = projectile.owner === 'enemy' && distanceSquared(projectile.graphic.x, projectile.graphic.y, player.x, player.y) < (PLAYER_RADIUS + 6) ** 2
-          if (hitsChaser && chaser) {
+          if (!outsideStart && hit === 'player') damagePlayer()
+          else if (!outsideStart && hit && hit !== 'player') {
             audio.play('ship_wood_hit_1')
-            chaserHealth -= 1
-            if (chaserHealth <= 0) {
-              explode(chaser.x, chaser.y)
-              chaser.destroy()
-              chaser = null
-              chaserHealthBar?.destroy({ children: true })
-              chaserHealthBar = null
+            hit.health -= 1
+            showShipImpact(hit.graphic)
+            updateShipFeedback(hit.graphic, hit.health, ENEMY_MAX_HEALTH, 0)
+            if (hit.health === 0) {
+              explode(hit.graphic.x, hit.graphic.y)
+              removeEnemy(hit)
               score += 1
               audio.play('score_point')
               reportHud()
-              chaserRespawn = config.enemySpawnIntervalSeconds
-              nextEnemy = 'shooter'
-            } else chaser.tint = 0xffaaa0
+            }
           }
-          if (hitsShooter && shooter) {
-            audio.play('ship_wood_hit_1')
-            shooterHealth -= 1
-            if (shooterHealth <= 0) {
-              explode(shooter.x, shooter.y)
-              shooter.destroy()
-              shooter = null
-              shooterHealthBar?.destroy({ children: true })
-              shooterHealthBar = null
-              score += 1
-              audio.play('score_point')
-              reportHud()
-              chaserRespawn = config.enemySpawnIntervalSeconds
-              nextEnemy = 'chaser'
-            } else shooter.tint = 0xffaaa0
-          }
-          if (hitsPlayer) {
-            audio.play('ship_wood_hit_1')
-            playerHealth -= 1
-            player.tint = playerHealth === 2 ? 0xffd17f : playerHealth === 1 ? 0xff7f7f : 0x555555
-            reportHud()
-            if (playerHealth <= 0) finish('death')
-          }
-          if (projectile.remainingLife <= 0 || hitsIsland || outside || hitsChaser || hitsShooter || hitsPlayer) removeProjectile(projectile)
+          const outside = end.x < 0 || end.x > app.screen.width || end.y < 0 || end.y > app.screen.height
+          if (projectile.remainingLife <= 0 || contact !== undefined || outside || outsideStart) removeProjectile(projectile)
+          if (ended) return
         }
+        for (let index = effects.length - 1; index >= 0; index -= 1) {
+          const effect = effects[index]
+          effect.elapsed += seconds
+          effect.graphic.scale.set(effect.scaleX * (1 + effect.elapsed * 4), effect.scaleY * (1 + effect.elapsed * 4))
+          effect.graphic.alpha = Math.max(0, 1 - effect.elapsed * 2)
+          if (effect.elapsed >= 0.5) { effect.graphic.destroy({ children: true }); effects.splice(index, 1) }
+        }
+        updateShipFeedback(player, playerHealth, 3, seconds)
         drawHealthBar(playerHealthBar, player.x, player.y, playerHealth, 3)
-        if (chaser && chaserHealthBar) drawHealthBar(chaserHealthBar, chaser.x, chaser.y, chaserHealth, ENEMY_MAX_HEALTH)
-        if (shooter && shooterHealthBar) drawHealthBar(shooterHealthBar, shooter.x, shooter.y, shooterHealth, ENEMY_MAX_HEALTH)
+        for (const enemy of enemies) {
+          updateShipFeedback(enemy.graphic, enemy.health, ENEMY_MAX_HEALTH, seconds)
+          drawHealthBar(enemy.healthBar, enemy.graphic.x, enemy.graphic.y, enemy.health, ENEMY_MAX_HEALTH)
+        }
+      }
+      const snapshot = (): GameplaySnapshot => finalSnapshot ? { ...finalSnapshot, active: false } : ({
+        active, ended, paused, health: playerHealth, score, time: remainingTime,
+        width: app.screen.width, height: app.screen.height, island: { x: islandX, y: islandY, radius: ISLAND_RADIUS },
+        player: { x: player.x, y: player.y, rotation: player.rotation, radius: PLAYER_RADIUS, damaged: player.getChildByLabel('damage')?.visible ?? false, impact: player.getChildByLabel('impact')?.visible ?? false },
+        enemies: enemies.map((enemy) => ({ id: enemy.id, type: enemy.type, x: enemy.graphic.x, y: enemy.graphic.y, rotation: enemy.graphic.rotation, health: enemy.health, radius: CHASER_RADIUS, damaged: enemy.graphic.getChildByLabel('damage')?.visible ?? false, impact: enemy.graphic.getChildByLabel('impact')?.visible ?? false })),
+        projectiles: projectiles.map((p) => ({ x: p.graphic.x, y: p.graphic.y, vx: p.velocityX, vy: p.velocityY, life: p.remainingLife, owner: p.owner })),
+        cooldowns: { front: fireCooldown, port: portFireCooldown, starboard: starboardFireCooldown }, shots: { ...shots }, spawns: spawnHistory.map((spawn) => ({ ...spawn })), effects: effects.length,
       })
+      if (testHarness?.manual) {
+        // Instrumentação opt-in de desenvolvimento: observa entidades e controla só o relógio.
+        app.ticker.stop()
+        testHarness.game = {
+          snapshot,
+          frame: (seconds) => { update({ deltaMS: seconds * 1000 }); if (active && !ended) app.render() },
+          advance: (seconds) => {
+            for (let remaining = seconds; remaining > 0.000001 && active && !ended; remaining -= 1 / 60) update({ deltaMS: Math.min(remaining, 1 / 60) * 1000 })
+            if (active && !ended) app.render()
+          },
+        }
+      } else app.ticker.add(update)
+      update({ deltaMS: 0 })
+
     }
 
     void mount()
@@ -559,6 +576,7 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit, audio, sou
       audio.stopCombat()
       window.removeEventListener('keydown', onKeyDown)
       window.removeEventListener('keyup', onKeyUp)
+      window.removeEventListener('blur', onBlur)
       document.removeEventListener('visibilitychange', onVisibilityChange)
       touchPressed.clear()
       cleanupScenery?.()
