@@ -144,3 +144,78 @@ h2 { margin-top: 2rem; }.lead { color: #d0e6dd; font-size: 1.1rem; line-height: 
   .pause-message { top: 10rem; }
   .result-stats { flex-wrap: wrap; }
 }
+
+/* No toque, o HUD fica sobre o mapa e libera a altura antes reservada ao cabeçalho. */
+@media (hover: none), (pointer: coarse) {
+  .game-screen {
+    position: relative;
+    grid-template-rows: minmax(0, 1fr) auto;
+  }
+  .game-header {
+    position: absolute;
+    z-index: 4;
+    top: calc(6px + env(safe-area-inset-top));
+    left: calc(8px + env(safe-area-inset-left));
+    right: calc(8px + env(safe-area-inset-right));
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+    padding: 0;
+    background: transparent;
+    pointer-events: none;
+  }
+  .official-hud {
+    display: grid;
+    grid-template-columns: 104px minmax(0, 1fr) minmax(0, 1fr);
+    gap: 4px;
+    width: min(100%, 380px);
+    justify-self: center;
+  }
+  .hull-counter, .hud-counter {
+    width: auto;
+    height: 30px;
+    padding: 3px 5px;
+    gap: 3px;
+    border-radius: 8px;
+    background: #102a38d9;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  .hud-icon { width: 14px; height: 14px; }
+  .hull-counter { padding-left: 18px; }
+  .hull-counter > .hud-icon { left: 3px; }
+  .hull-counter .health-meter { left: 18px; width: 84px; height: 26px; }
+  .hull-counter > span:last-child { font-size: 12px; }
+  .game-actions { justify-self: end; gap: 8px; margin: 0; }
+  .game-actions .button {
+    width: 48px;
+    height: 48px;
+    min-height: 48px;
+    padding: 0;
+    border: 0;
+    border-image: none;
+    border-radius: 50%;
+    background: url('/assets/pirate-battle/ui/controls/button_round_normal.png') center / contain no-repeat;
+    filter: drop-shadow(0 1px 3px #061d2c99);
+    pointer-events: auto;
+    touch-action: manipulation;
+  }
+  .game-actions .button:active {
+    background-image: url('/assets/pirate-battle/ui/controls/button_round_pressed.png');
+  }
+  .game-actions .official-icon { width: 24px; height: 24px; }
+  /* O texto continua dando o nome ao botão, mesmo quando só o ícone é visível. */
+  .game-action-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+  .game-header img { pointer-events: none; }
+  .pause-message, .asset-message { top: calc(100px + env(safe-area-inset-top)); }
+}

@@ -2,12 +2,13 @@ import { useEffect, useRef, useState, type PointerEvent } from 'react'
 import { Application, Assets, Graphics, Sprite, Text, Texture } from 'pixi.js'
 import { HealthMeter, OfficialIcon } from './OfficialUi'
 import { pirateAsset } from '../game/assets'
+import { createCombatVisual, createTexturedIsland, createTexturedSea, loadArenaTextures } from '../game/arenaVisuals'
 import type { GameConfig } from '../game/config'
 
 export type GameHud = { health: number; score: number; timeLeft: number; paused: boolean }
 export type GameResult = { score: number; durationSeconds: number; reason: 'time' | 'death' }
 type Props = { config: GameConfig; hud: GameHud; onHudChange: (hud: GameHud) => void; onEnd: (result: GameResult) => void; onExit: () => void }
-type Projectile = { graphic: Graphics; velocityX: number; velocityY: number; remainingLife: number; owner: 'player' | 'enemy' }
+type Projectile = { graphic: Graphics | Sprite; velocityX: number; velocityY: number; remainingLife: number; owner: 'player' | 'enemy' }
 
 const PLAYER_RADIUS = 26
 const ISLAND_RADIUS = window.matchMedia('(pointer: coarse)').matches ? 68 : 88
@@ -250,7 +251,7 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
     const onKeyUp = (event: KeyboardEvent) => pressed.delete(event.code)
     const removeProjectile = (projectile: Projectile) => {
       projectile.graphic.removeFromParent()
-      projectile.graphic.destroy()
+      projectile.graphic.destroy({ children: true })
       projectiles.splice(projectiles.indexOf(projectile), 1)
     }
 
@@ -264,6 +265,7 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
       window.addEventListener('keyup', onKeyUp)
       document.addEventListener('visibilitychange', onVisibilityChange)
 
+      const arenaTexturesPromise = loadArenaTextures(ASSET_LOAD_TIMEOUT_MS)
       let playerTexture: Texture | undefined
       let chaserTexture: Texture | undefined
       let shooterTexture: Texture | undefined
@@ -298,16 +300,21 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
           if (result.status === 'fulfilled') healthTextures[result.value[0]] = result.value[1]
         }
       }
-      const sea = new Graphics()
-      const resizeSea = () => drawSea(sea, app.screen.width, app.screen.height)
+      const arenaTextures = await arenaTexturesPromise
+      if (!active) return
+      const sea = arenaTextures.water ? createTexturedSea(arenaTextures.water) : new Graphics()
+      const resizeSea = () => {
+        if (sea instanceof Graphics) drawSea(sea, app.screen.width, app.screen.height)
+        else { sea.width = app.screen.width; sea.height = app.screen.height }
+      }
       resizeSea()
       app.renderer.on('resize', resizeSea)
       app.stage.addChild(sea)
-      const island = createIsland(ISLAND_RADIUS)
+      const island = createTexturedIsland(ISLAND_RADIUS, arenaTextures) ?? createIsland(ISLAND_RADIUS)
       cleanupScenery = () => {
         app.renderer.off('resize', resizeSea)
-        sea.destroy()
-        island.destroy()
+        sea.destroy({ children: true })
+        island.destroy({ children: true })
       }
       islandX = app.screen.width * 0.52
       islandY = app.screen.height * 0.45
@@ -352,13 +359,16 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
       }
 
       const explode = (x: number, y: number) => {
-        const effect = new Graphics().circle(0, 0, 12).fill(0xffb648)
+        const effect = createCombatVisual(arenaTextures.explosion, 12, 0xffb648)
+        // A expansão parte do tamanho lógico, não do tamanho original do PNG.
+        const initialScaleX = effect.scale.x
+        const initialScaleY = effect.scale.y
         effect.position.set(x, y)
         app.stage.addChild(effect)
         let elapsed = 0
         const animate = (ticker: { deltaMS: number }) => {
           elapsed += ticker.deltaMS / 1000
-          effect.scale.set(1 + elapsed * 4)
+          effect.scale.set(initialScaleX * (1 + elapsed * 4), initialScaleY * (1 + elapsed * 4))
           effect.alpha = Math.max(0, 1 - elapsed * 2)
           if (elapsed >= 0.5) {
             app.ticker.remove(animate)
@@ -371,7 +381,7 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
       const fireFront = () => {
         if (fireCooldown > 0) return
         fireCooldown = FRONT_FIRE_COOLDOWN
-        const graphic = new Graphics().circle(0, 0, 6).fill(0x17120d).stroke({ color: 0xffe2a4, width: 2 })
+        const graphic = createCombatVisual(arenaTextures.cannonball, 6, 0x17120d, 0xffe2a4)
         const directionX = Math.sin(player.rotation)
         const directionY = -Math.cos(player.rotation)
         graphic.position.set(player.x + directionX * 38, player.y + directionY * 38)
@@ -390,7 +400,7 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
         const forwardX = Math.sin(player.rotation)
         const forwardY = -Math.cos(player.rotation)
         for (const offset of [-15, 0, 15]) {
-          const graphic = new Graphics().circle(0, 0, 5).fill(0x17120d).stroke({ color: 0xffe2a4, width: 2 })
+          const graphic = createCombatVisual(arenaTextures.cannonball, 5, 0x17120d, 0xffe2a4)
           graphic.position.set(player.x + directionX * 33 + forwardX * offset, player.y + directionY * 33 + forwardY * offset)
           app.stage.addChild(graphic)
           projectiles.push({ graphic, velocityX: directionX * PROJECTILE_SPEED, velocityY: directionY * PROJECTILE_SPEED, remainingLife: 0.9, owner: 'player' })
@@ -400,7 +410,8 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
       const fireEnemy = () => {
         if (!shooter || shooterFireCooldown > 0) return
         shooterFireCooldown = SHOOTER_FIRE_COOLDOWN
-        const graphic = new Graphics().circle(0, 0, 6).fill(0x732c25).stroke({ color: 0xffb070, width: 2 })
+        const graphic = createCombatVisual(arenaTextures.cannonball, 6, 0x732c25, 0xffb070)
+        if (graphic instanceof Sprite) graphic.tint = 0xf4ad97
         const directionX = Math.sin(shooter.rotation)
         const directionY = -Math.cos(shooter.rotation)
         graphic.position.set(shooter.x + directionX * 38, shooter.y + directionY * 38)
@@ -553,8 +564,8 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit }: Props) {
         <span className="hud-counter"><img className="hud-icon" src={pirateAsset('ui/hud/icon_time.png')} alt="" aria-hidden="true" />Time: {hud.timeLeft}s</span>
       </div>
       <div className="game-actions">
-        <button type="button" className="button button-secondary" onClick={() => togglePauseRef.current()}><OfficialIcon name={hud.paused ? 'play' : 'pause'} />{hud.paused ? 'Resume' : 'Pause'}</button>
-        <button type="button" className="button button-secondary" onClick={onExit}><OfficialIcon name="home" />Exit game</button>
+        <button type="button" className="button button-secondary" onClick={() => togglePauseRef.current()}><OfficialIcon name={hud.paused ? 'play' : 'pause'} /><span className="game-action-label">{hud.paused ? 'Resume' : 'Pause'}</span></button>
+        <button type="button" className="button button-secondary" onClick={onExit}><OfficialIcon name="home" /><span className="game-action-label">Exit game</span></button>
       </div>
     </header>
     {assetStatus !== 'ready' && <div className="asset-message" role="status">{assetStatus === 'loading' ? 'Loading battle assets…' : 'Asset fallback enabled.'}</div>}
