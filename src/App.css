@@ -105,6 +105,14 @@ h2 { margin-top: 2rem; }.lead { color: #d0e6dd; font-size: 1.1rem; line-height: 
 .menu-actions { gap: .6rem; }
 .controls, .network-controls { border-color: #d6ac5966; }
 .options-form input, .network-controls select { border-color: #b18c4e; background: #111f2b; }
+/* A seção nativa mantém navegação por teclado sem listeners adicionais. */
+.network-tools { min-width: 0; margin-top: 1rem; border-top: 1px solid #d6ac5966; padding-top: .5rem; overflow-wrap: anywhere; }
+.network-tools summary { min-height: 44px; padding: .7rem .2rem; cursor: pointer; color: #fff7df; font-weight: 700; }
+.network-tools summary:focus-visible { outline: 3px solid #ffe18c; outline-offset: 3px; }
+.network-tools > p { color: #d0e6dd; line-height: 1.5; }
+.network-tools .network-controls { min-width: 0; margin-top: .5rem; }
+.network-tools select { width: min(100%, 16rem); min-width: 0; min-height: 44px; }
+.network-tools .button { max-width: 100%; white-space: normal; }
 .data-panel li, .result-stats div { background: #101f2bd9; border: 1px solid #d6ac5933; }
 .data-panel li { flex-wrap: wrap; overflow-wrap: anywhere; }
 .pager { flex-wrap: wrap; }

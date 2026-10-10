@@ -7,9 +7,16 @@ const records = (page: Page): Promise<MatchRecord[]> => page.evaluate(() => JSON
 const notice = (page: Page) => page.getByRole('region', { name: 'Pending match registration' })
 const errors = new WeakMap<Page, string[]>()
 
-async function scenario(page: Page, value: NetworkScenario) {
+async function openNetworkTools(page: Page) {
   await page.getByRole('tab', { name: 'Home', exact: true }).click()
+  await page.getByRole('button', { name: 'Options', exact: true }).click()
+  await page.getByText('Network testing tools', { exact: true }).click()
+}
+
+async function scenario(page: Page, value: NetworkScenario) {
+  await openNetworkTools(page)
   await page.getByRole('combobox', { name: 'Scenario', exact: true }).selectOption(value)
+  await page.getByRole('button', { name: 'Cancel', exact: true }).click()
 }
 
 async function finish(page: Page) {
@@ -34,6 +41,34 @@ test.beforeEach(async ({ page }) => {
 })
 test.afterEach(async ({ page }) => { expect(errors.get(page)).toEqual([]) })
 
+test('Home hides network tools and Options exposes a collapsed accessible testing section', async ({ page }) => {
+  await expect(page.getByRole('combobox', { name: 'Scenario', exact: true })).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'Reset mock data' })).toHaveCount(0)
+  await expect(page.getByText('Network testing tools', { exact: true })).toHaveCount(0)
+  await page.getByRole('button', { name: 'Options', exact: true }).click()
+  const details = page.locator('details.network-tools')
+  const summary = details.locator('summary')
+  await expect(details).not.toHaveAttribute('open', '')
+  await expect(page.getByRole('combobox', { name: 'Scenario', exact: true })).toBeHidden()
+  await summary.focus()
+  await page.keyboard.press('Space')
+  await expect(details).toHaveAttribute('open', '')
+  await expect(summary).toBeFocused()
+  expect(await summary.evaluate((element) => getComputedStyle(element).outlineStyle)).toBe('solid')
+  await expect(details).toContainText('Simulate ranking and match history network conditions.')
+  const select = page.getByRole('combobox', { name: 'Scenario', exact: true })
+  await expect(select).toHaveValue('normal')
+  await select.selectOption('http-503')
+  await expect(select).toHaveValue('http-503')
+  await expect(details.getByRole('status')).not.toBeEmpty()
+  await page.setViewportSize({ width: 320, height: 740 })
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+  await page.getByRole('button', { name: 'Cancel', exact: true }).click()
+  await expect(select).toHaveCount(0)
+  await openNetworkTools(page)
+  await expect(select).toHaveValue('http-503')
+})
+
 test('normal registration refreshes both previously cached lists', async ({ page }) => {
   await page.getByRole('tab', { name: 'Ranking', exact: true }).click()
   await expect(page.getByText('Captain Ada')).toBeVisible()
@@ -54,7 +89,9 @@ test('normal registration refreshes both previously cached lists', async ({ page
 test('both lists paginate forwards and backwards with correct boundaries', async ({ page }) => {
   await scenario(page, 'paginated')
   await page.reload()
+  await openNetworkTools(page)
   await expect(page.getByRole('combobox', { name: 'Scenario', exact: true })).toHaveValue('paginated')
+  await page.getByRole('button', { name: 'Cancel', exact: true }).click()
   for (const tab of ['Ranking', 'Match History']) {
     await page.getByRole('tab', { name: tab, exact: true }).click()
     await expect(page.getByText('Page 1 of 3')).toBeVisible()
@@ -230,8 +267,12 @@ test('reset restores normal fixtures, pending queue and latency sequence without
   await expect(notice(page)).toContainText('pending')
   await page.getByRole('button', { name: 'Main Menu' }).click()
   const options = await page.evaluate(() => localStorage.getItem('pirate-battle:config'))
+  await openNetworkTools(page)
   await page.getByRole('button', { name: 'Reset mock data' }).click()
+  await expect(page.getByRole('button', { name: 'Options', exact: true })).toBeVisible()
+  await openNetworkTools(page)
   await expect(page.getByRole('combobox', { name: 'Scenario', exact: true })).toHaveValue('normal')
+  await page.getByRole('button', { name: 'Cancel', exact: true }).click()
   await expect(notice(page)).toHaveCount(0)
   expect(await page.evaluate(() => localStorage.getItem('pirate-battle:config'))).toBe(options)
   await page.getByRole('tab', { name: 'Ranking', exact: true }).click()

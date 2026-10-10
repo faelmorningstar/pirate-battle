@@ -30,7 +30,7 @@ Data: 10/10/2026. Base: especificação local do desafio, seções 5, 6 e 8; imp
 
 ## Reprodução e limites
 
-Use Home → Scenario; a descrição acessível informa a falha e os tempos. Para recuperar um registro, selecione normal ou acione Retry pending matches. Reset mock data restaura o ambiente inteiro de rede; não use reset para recuperar pendências, pois ele as descarta intencionalmente. Nenhuma tentativa cria um ID novo.
+Use Home → Options → Network testing tools → Scenario; a descrição acessível informa a falha e os tempos. Para recuperar um registro, selecione normal ou acione Retry pending matches. Reset mock data restaura o ambiente inteiro de rede; não use reset para recuperar pendências, pois ele as descarta intencionalmente. Nenhuma tentativa cria um ID novo.
 
 `npm run test:e2e -- tests/network.spec.ts` executa 19 cenários em desktop e mobile Chromium, totalizando 38 execuções adicionais. A suíte completa contém 96 execuções. Os testes usam os handlers originais ampliados, não interceptações alternativas de API. Cada contexto começa isolado; refresh dentro do teste conserva seus dados.
 

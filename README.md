@@ -93,7 +93,7 @@ MSW intercepts these browser requests:
 | `GET /api/matches?playerId=...&page=n` | Paged match history |
 | `POST /api/matches` | Registers a completed session idempotently by match ID |
 
-Home exposes the existing **Mock network scenario** selector. Selection persists under `pirate-battle:network-scenario` and now applies immediately, resets read caches and latency counters, and announces a description to assistive technology. No reload is needed to recover a pending write.
+Open **Home → Options → Network testing tools** to access the existing **Mock network scenario** selector. The native details section is closed by default and supports keyboard focus and activation. Selection persists under `pirate-battle:network-scenario` and now applies immediately, resets read caches and latency counters, and announces a description to assistive technology. No reload is needed to recover a pending write.
 
 - `normal`: original fixtures and successful requests.
 - `empty`: both lists return no records.
@@ -110,13 +110,15 @@ Home exposes the existing **Mock network scenario** selector. Selection persists
 
 **Reset mock data** restores `normal`, initial fixtures and latency sequences, and clears confirmed mock matches and pending registrations. Gameplay options and sound preferences are preserved.
 
-To reproduce read failures, choose a scenario and open either data tab; **Try again** retries that query. Switching back to Home and selecting `normal` clears the failed read cache. Reads retry transient failures once after 250 ms; HTTP 4xx has no automatic retry. Cached tabs refresh on reopening, and obsolete queries are cancelled through Axios.
+To reproduce read failures, choose a scenario and open either data tab; **Try again** retries that query. Returning to Options, expanding Network testing tools and selecting `normal` clears the failed read cache. Reads retry transient failures once after 250 ms; HTTP 4xx has no automatic retry. Cached tabs refresh on reopening, and obsolete queries are cancelled through Axios.
 
 To reproduce uncertain registration, choose `post-timeout` or `post-unavailable`, then complete a battle normally. The result shows the pending state and **Retry pending matches**; starting another battle stays available. Refresh restores the queue on Home. Select `normal` to recover automatically, or retry explicitly. Browser `online` events also retry pending entries; a recovery event during an in-flight request is retained until that request settles.
 
 Each completed session uses one ID, persisted with its full record under `pirate-battle:pending-matches` **before** POST. Repeated clicks, refresh and timeout reuse that ID, while MSW returns an existing record idempotently. Confirmation removes only that pending entry and invalidates both data tabs. Several pending sessions can coexist without overwriting each other. If browser storage is unavailable, an accessible warning asks the player to keep the page open; durable recovery requires working localStorage.
 
 The audit and exact coverage are documented in [NETWORK_AUDIT.md](./NETWORK_AUDIT.md). Network-only checks: `npm run test:e2e -- tests/network.spec.ts`. Phase 7 adds 19 scenarios in both desktop/mobile profiles (38 executions), preserving the previous 58, for **96 total**.
+
+The final UX adjustment adds one network-tools accessibility/navigation scenario in both profiles, for **98 total executions**. It checks the clean Home, initially collapsed Options section, keyboard focus/activation, scenario selection/default/persistence and narrow-screen overflow. Existing network behaviors remain covered; only the Home screenshot baseline changes to reflect the relocated controls.
 
 ## Accessibility and responsive behaviour
 
