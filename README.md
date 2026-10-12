@@ -127,7 +127,7 @@ The final UX adjustment adds one network-tools accessibility/navigation scenario
 - Score, hull, time and pause state are presented in the HTML HUD as well as visually in the canvas.
 - The Pixi canvas resizes with its container and caps device resolution at 2x.
 - Desktop keyboard and mobile touch controls are both available.
-- Touch phones/tablets use a fixed circular joystick at the lower left: drag upward to move forward, sideways to turn, or diagonally to combine both existing commands. A small dead zone prevents accidental input; releasing, pausing, losing focus or resizing returns the knob to center. Three separate fire buttons remain available for simultaneous movement/fire. The focused joystick also accepts arrow keys; desktop W/A/D and its layout remain unchanged. Pointer capture and safe-area spacing are used, without new assets or balance changes.
+- Touch phones/tablets use a fixed circular joystick at the lower left: drag in any direction to steer and move in 360 degrees. A circular 18% dead zone stops movement; beyond it, displacement smoothly scales speed up to the existing 220 pixels/second. Heading follows the shortest angular path with a mobile-only exponential response (12/s); releasing, pausing, losing focus or resizing returns the knob to center. Three separate fire buttons remain available for simultaneous movement/fire. The focused joystick also accepts arrow keys; desktop W/A/D and its layout remain unchanged. Pointer capture and safe-area spacing are used, without new assets or balance changes.
 
 ## Assets
 

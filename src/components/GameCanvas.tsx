@@ -6,7 +6,7 @@ import { createCombatVisual, createTexturedIsland, createTexturedSea, loadArenaT
 import type { GameConfig } from '../game/config'
 import type { GameAudio } from '../game/audio'
 import { SoundButton } from './SoundButton'
-import { MobileJoystick } from './MobileJoystick'
+import { MobileJoystick, type JoystickInput } from './MobileJoystick'
 import { circleContact, clampToArena } from '../game/collisions'
 import { prepareShipFeedback, showShipImpact, updateShipFeedback } from '../game/shipFeedback'
 import type { GameplaySnapshot } from '../game/gameplayTest'
@@ -185,7 +185,7 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit, audio, sou
   const hostRef = useRef<HTMLDivElement>(null)
   const togglePauseRef = useRef<() => void>(() => {})
   const touchPressedRef = useRef(new Set<string>())
-  const joystickPressedRef = useRef(new Set<string>())
+  const joystickRef = useRef<{ input: JoystickInput | null }>({ input: null })
   const [assetStatus, setAssetStatus] = useState<'loading' | 'ready' | 'fallback'>('loading')
 
   useEffect(() => {
@@ -197,8 +197,8 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit, audio, sou
     let cleanupScenery: (() => void) | undefined
     const pressed = new Set<string>()
     const touchPressed = touchPressedRef.current
-    const joystickPressed = joystickPressedRef.current
-    const isPressed = (code: string) => pressed.has(code) || touchPressed.has(code) || joystickPressed.has(code)
+    const joystick = joystickRef.current
+    const isPressed = (code: string) => pressed.has(code) || touchPressed.has(code)
     const projectiles: Projectile[] = []
     let active = true
     let fireCooldown = 0
@@ -223,7 +223,7 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit, audio, sou
       ended = true
       pressed.clear()
       touchPressed.clear()
-      joystickPressed.clear()
+      joystick.input = null
       onEnd({ score, durationSeconds: Math.round(config.sessionDurationSeconds - remainingTime), reason })
     }
     const togglePause = () => {
@@ -232,7 +232,7 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit, audio, sou
       audio.pauseBattle(paused)
       pressed.clear()
       touchPressed.clear()
-      joystickPressed.clear()
+      joystick.input = null
       reportHud()
     }
     const onVisibilityChange = () => {
@@ -462,9 +462,15 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit, audio, sou
           // O intervalo depende do relógio, não de destruir o inimigo anterior.
           spawnCountdown += config.enemySpawnIntervalSeconds
         }
-        if (isPressed('KeyA')) player.rotation -= config.player.turnSpeed * seconds
-        if (isPressed('KeyD')) player.rotation += config.player.turnSpeed * seconds
-        if (isPressed('KeyW')) moveShip(player, config.player.radius, config.player.speed, seconds)
+        if (joystick.input) {
+          // Resposta mobile independente do teclado: caminho curto, sem ultrapassar o rumo.
+          player.rotation += normalizeAngle(joystick.input.angle - player.rotation) * (1 - Math.exp(-12 * seconds))
+          moveShip(player, config.player.radius, config.player.speed * joystick.input.strength, seconds)
+        } else {
+          if (isPressed('KeyA')) player.rotation -= config.player.turnSpeed * seconds
+          if (isPressed('KeyD')) player.rotation += config.player.turnSpeed * seconds
+          if (isPressed('KeyW')) moveShip(player, config.player.radius, config.player.speed, seconds)
+        }
         if (isPressed('Space')) fireFront()
         if (isPressed('KeyQ')) fireBroadside('port')
         if (isPressed('KeyE')) fireBroadside('starboard')
@@ -573,7 +579,7 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit, audio, sou
       window.removeEventListener('blur', onBlur)
       document.removeEventListener('visibilitychange', onVisibilityChange)
       touchPressed.clear()
-      joystickPressed.clear()
+      joystick.input = null
       cleanupScenery?.()
       if (initialized) app.destroy(true, { children: true })
     }
@@ -602,7 +608,7 @@ export function GameCanvas({ config, hud, onHudChange, onEnd, onExit, audio, sou
     {hud.paused && <div className="pause-message official-panel" role="status"><OfficialIcon name="pause" />Paused — press P or Resume to continue.</div>}
     <div className="game-canvas" ref={hostRef} aria-label="Pirate Battle game arena" />
     <nav className="touch-controls" aria-label="Touch controls">
-      <MobileJoystick key={hud.paused ? 'paused' : 'active'} disabled={hud.paused} onInput={(codes) => { joystickPressedRef.current.clear(); if (!hud.paused) codes.forEach((code) => joystickPressedRef.current.add(code)) }} />
+      <MobileJoystick key={hud.paused ? 'paused' : 'active'} disabled={hud.paused} onInput={(input) => { joystickRef.current.input = hud.paused ? null : input }} />
       <div className="movement-buttons">
         <button type="button" aria-label="Turn left" {...touchControl('KeyA')}><OfficialIcon name="turn_left" /></button>
         <button type="button" aria-label="Move forward" {...touchControl('KeyW')}><OfficialIcon name="forward" /></button>
