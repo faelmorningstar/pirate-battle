@@ -34,7 +34,7 @@ test('starts a playable session with touch controls', async ({ page }) => {
 
   if (test.info().project.name === 'mobile-chromium') {
     await expect(
-      page.getByRole('button', { name: 'Move forward' }),
+      page.getByRole('group', { name: 'Movement joystick' }),
     ).toBeVisible()
   }
 })
@@ -79,7 +79,7 @@ test('keeps official UI readable within narrow and landscape viewports', async (
     await expect(page.getByText('Captain Ada')).toBeVisible()
     await page.getByRole('tab', { name: 'Home', exact: true }).click()
     await page.locator('.menu-actions').getByRole('button', { name: 'Play', exact: true }).click()
-    const forward = page.getByRole('button', { name: 'Move forward' })
+    const forward = test.info().project.name === 'mobile-chromium' ? page.getByRole('group', { name: 'Movement joystick' }) : page.getByRole('button', { name: 'Move forward' })
     await expect(forward).toBeVisible()
     const box = (await forward.boundingBox())!
     expect(box.width).toBeGreaterThanOrEqual(44)

@@ -250,6 +250,18 @@ h2 { margin-top: 2rem; }.lead { color: #d0e6dd; font-size: 1.1rem; line-height: 
 }
 .sound-symbol { width: 22px; height: 22px; stroke: currentColor; stroke-width: 2; stroke-linecap: round; fill: none; pointer-events: none; }
 .game-actions .sound-toggle:active { background-image: url('/assets/pirate-battle/ui/controls/button_round_pressed.png'); }
+.mobile-joystick { display: none; }
+/* A bola é decorativa; a base captura apenas o dedo que iniciou o movimento. */
+@media (hover: none), (pointer: coarse) {
+  .touch-controls { flex-direction: row; align-items: center; justify-content: space-between; gap: 8px; padding-left: calc(12px + env(safe-area-inset-left)); padding-right: calc(12px + env(safe-area-inset-right)); }
+  .touch-controls .movement-buttons { display: none; }
+  .touch-controls .mobile-joystick { display: block; position: relative; width: 108px; height: 108px; flex: 0 0 108px; border: 2px solid #d6ac59; border-radius: 50%; background: radial-gradient(circle, #246073d9, #102a38e6); touch-action: none; }
+  .mobile-joystick:focus-visible { outline: 3px solid #ffe18c; outline-offset: 3px; }
+  .mobile-joystick[aria-disabled="true"] { opacity: .6; }
+  .joystick-knob { position: absolute; width: 44px; height: 44px; left: calc(50% - 22px); top: calc(50% - 22px); border: 2px solid #ffe18c; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #f1c564, #9a642d); box-shadow: 0 2px 8px #0008; pointer-events: none; }
+  .touch-controls > div:last-child { gap: 4px; }
+  .touch-controls > div:last-child button { width: 48px; height: 48px; flex-basis: 48px; }
+}
 @media (hover: hover) {
   .game-actions .sound-toggle:hover { background-image: url('/assets/pirate-battle/ui/controls/button_round_hover.png'); }
 }

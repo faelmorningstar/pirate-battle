@@ -39,7 +39,7 @@ test('keeps desktop HUD in flow and floats a compact touch HUD over the arena', 
       await expect(button).toHaveCSS('pointer-events', 'auto')
       await expect(button.locator('img')).toHaveCSS('pointer-events', 'none')
     }
-    await expect(page.getByRole('button', { name: 'Move forward' })).toBeVisible()
+    await expect(page.getByRole('group', { name: 'Movement joystick' })).toBeVisible()
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
   }
   // Esconder a legenda visual não pode remover o foco nem o nome acessível.

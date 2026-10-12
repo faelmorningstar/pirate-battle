@@ -109,6 +109,10 @@ Phase 7 validation (2026-10-10): all 96 E2E executions passed in 3.3 minutes, in
 
 ## Testing strategy
 
+`MobileJoystick.tsx` maps a clamped pointer vector to existing W/A/D commands with an 18% per-axis dead zone. It has a separate pressed-key set from fire buttons and the keyboard, so releasing movement cannot cancel a simultaneous shot or keyboard hold. Touch-only CSS replaces the original movement buttons; desktop presentation and input stay intact. Pointer ID/capture, cancel/lost-capture, blur/visibility/resize and unmount cleanup release input; pause remounts only the control to reset its visual state, never the Pixi application. All gameplay speed/rotation values still come from the unchanged session configuration. The new input test uses CDP multi-touch through the real pointer handlers and the existing manual simulation clock; only the mobile arena baseline changes intentionally.
+
+Joystick validation (2026-10-11): all 100 desktop/mobile E2E executions passed, including unchanged desktop baselines; build and lint passed. The mobile arena baseline and a separate mobile capture were reviewed. Physical iPhone/Safari and Android devices remain manual checks; Chromium multi-touch tests do not certify their browser/OS behavior. No new assets, gameplay parameters or audio/network logic were introduced.
+
 ### Separate production profiling
 
 `npm run profile:game` runs the TypeScript/Vite production build and an exclusive local `dist` preview, followed by five real lifecycle cycles and a 180-second real session. It is separate from Playwright's normal test runner and must not run concurrently with E2E or other intensive work. Only existing keyboard handlers drive the game; no development simulation clock or gameplay setters are used.

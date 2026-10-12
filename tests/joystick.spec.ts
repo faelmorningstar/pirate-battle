@@ -1,0 +1,65 @@
+import { expect, test } from '@playwright/test'
+
+test('touch joystick moves and turns with simultaneous fire, releases and pauses; desktop retains keyboard', async ({ page, isMobile }) => {
+  const errors: string[] = []
+  page.on('pageerror', (error) => errors.push(error.message))
+  await page.addInitScript(() => { window.__PIRATE_BATTLE_TEST__ = { manual: true } })
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Play', exact: true }).click()
+  await expect.poll(() => page.evaluate(() => Boolean(window.__PIRATE_BATTLE_TEST__?.game))).toBe(true)
+  const state = () => page.evaluate(() => window.__PIRATE_BATTLE_TEST__!.game!.snapshot())
+  const advance = (time: number) => page.evaluate((seconds) => window.__PIRATE_BATTLE_TEST__!.game!.advance(seconds), time)
+  const joystick = page.getByRole('group', { name: 'Movement joystick' })
+  const initial = await state()
+  if (!isMobile) {
+    await expect(joystick).toBeHidden()
+    await page.keyboard.down('w')
+    await page.keyboard.down('d')
+    await advance(.1)
+    await page.keyboard.up('w')
+    await page.keyboard.up('d')
+    expect((await state()).player.y).toBeLessThan(initial.player.y)
+    expect((await state()).player.rotation).toBeCloseTo(.28, 4)
+  } else {
+    await expect(joystick).toBeVisible()
+    for (const name of ['Fire front cannon', 'Fire port broadside', 'Fire starboard broadside']) await expect(page.getByRole('button', { name })).toBeVisible()
+    const rect = (await joystick.boundingBox())!
+    const x = rect.x + rect.width / 2, y = rect.y + rect.height / 2
+    const cdp = await page.context().newCDPSession(page)
+    const touch = (type: 'touchStart' | 'touchMove' | 'touchEnd', points: { x: number; y: number; id: number }[]) => cdp.send('Input.dispatchTouchEvent', { type, touchPoints: points })
+    await touch('touchStart', [{ x, y, id: 1 }])
+    await advance(.1)
+    expect((await state()).player).toEqual(initial.player)
+    await touch('touchMove', [{ x: x + 20, y: y - 30, id: 1 }])
+    const fire = (await page.getByRole('button', { name: 'Fire front cannon' }).boundingBox())!
+    await touch('touchStart', [{ x: x + 20, y: y - 30, id: 1 }, { x: fire.x + fire.width / 2, y: fire.y + fire.height / 2, id: 2 }])
+    await advance(.1)
+    const moved = await state()
+    expect(moved.player.y).toBeLessThan(initial.player.y)
+    expect(moved.player.rotation).toBeCloseTo(.28, 4)
+    expect(moved.shots.front).toBe(1)
+    await touch('touchEnd', [])
+    await expect(joystick.locator('.joystick-knob')).toHaveCSS('transform', 'matrix(1, 0, 0, 1, 0, 0)')
+    await advance(.2)
+    expect((await state()).player).toEqual(moved.player)
+    expect((await state()).shots).toEqual(moved.shots)
+    // Arrastar fora da base mantém captura, mas nunca estica a bola além do círculo.
+    await touch('touchStart', [{ x, y, id: 3 }])
+    await touch('touchMove', [{ x: x - 100, y: y - 100, id: 3 }])
+    const offset = await joystick.locator('.joystick-knob').evaluate((element) => {
+      const matrix = new DOMMatrix(getComputedStyle(element).transform)
+      return Math.hypot(matrix.m41, matrix.m42)
+    })
+    expect(offset).toBeLessThanOrEqual(rect.width / 2 - 22 + .01)
+    await page.getByRole('button', { name: 'Pause', exact: true }).click()
+    await touch('touchEnd', [])
+    await expect(joystick.locator('.joystick-knob')).toHaveCSS('transform', 'matrix(1, 0, 0, 1, 0, 0)')
+    await page.getByRole('button', { name: 'Resume', exact: true }).click()
+    const resumed = await state()
+    await advance(.1)
+    expect((await state()).player).toEqual(resumed.player)
+    await page.screenshot({ path: test.info().outputPath('mobile-joystick.png') })
+  }
+  await page.getByRole('button', { name: 'Exit game' }).click()
+  expect(errors).toEqual([])
+})

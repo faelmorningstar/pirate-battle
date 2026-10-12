@@ -211,7 +211,9 @@ test('blur and hidden pages pause and clear keyboard and simultaneous touch hold
   await page.keyboard.down('w')
   if (testInfo.project.name === 'mobile-chromium') {
     await page.getByRole('button', { name: 'Fire front cannon' }).dispatchEvent('pointerdown', { pointerId: 11, pointerType: 'touch' })
-    await page.getByRole('button', { name: 'Move forward' }).dispatchEvent('pointerdown', { pointerId: 12, pointerType: 'touch' })
+    const joystick = page.getByRole('group', { name: 'Movement joystick' })
+    const rect = (await joystick.boundingBox())!
+    await joystick.dispatchEvent('pointerdown', { pointerId: 12, pointerType: 'touch', button: 0, clientX: rect.x + rect.width / 2, clientY: rect.y + 10 })
   } else await page.keyboard.down('Space')
   await advance(page, 0.05)
   await page.evaluate(() => window.dispatchEvent(new Event('blur')))
